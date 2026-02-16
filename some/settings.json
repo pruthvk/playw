@@ -1,0 +1,17 @@
+{
+  "categories": {
+    "executables": [
+      ".exe",
+      ".msi"
+    ],
+    "Docs": [
+      ".pdf",
+      ".docx"
+    ],
+    "Video": [],
+    "Images": [
+      ".jpeg",
+      ".png"
+    ]
+  }
+}

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Enterprise Career Engine Pro</title>
+<style>
+body{font-family:'Segoe UI',sans-serif;background:#f4f6f9;padding:30px;}
+.container{max-width:1200px;margin:auto;}
+.card{background:white;padding:20px;border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);margin-bottom:25px;}
+input,button{padding:6px;margin-right:6px;}
+button{border:none;border-radius:4px;cursor:pointer;}
+.add-btn{background:#1976d2;color:white;}
+.soft-btn{background:#f57c00;color:white;}
+.perm-btn{background:#b71c1c;color:white;}
+.undo-btn{background:#2e7d32;color:white;}
+.edit-btn{background:#0288d1;color:white;}
+.save-btn{background:#388e3c;color:white;}
+.cancel-btn{background:#757575;color:white;}
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+th,td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
+.strike{text-decoration:line-through;color:gray;opacity:0.6;}
+.total-big{font-size:26px;font-weight:bold;color:#1976d2;margin-top:10px;}
+.seniority-box{margin-top:10px;padding:10px;background:#e3f2fd;border-radius:6px;}
+.gap-row{background:#fff3e0;} /* light orange */
+.overlap-row{background:#ffe0e0;} /* light red */
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="card">
+<h2>Career Experience Dashboard</h2>
+
+Company:
+<input type="text" id="company">
+
+Start:
+<input type="date" id="startDate">
+
+End:
+<input type="date" id="endDate">
+
+<label>
+<input type="checkbox" id="stillWorking" onchange="handleStillWorking()">
+Still Working
+</label>
+
+<button class="add-btn" onclick="addExperience()">Add</button>
+<button class="undo-btn" onclick="undo()">Undo</button>
+<button class="undo-btn" onclick="redo()">Redo</button>
+</div>
+
+<div class="card">
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Company</th>
+<th>Start</th>
+<th>End</th>
+<th>Duration</th>
+<th>Status</th>
+<th>Overlap Duration</th> <!-- New Column -->
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="expTable"></tbody>
+</table>
+
+<div id="totalOutput"></div>
+<div id="seniorityOutput"></div>
+</div>
+
+</div>
+
+<script>
+let experiences=[];
+let historyStack=[];
+let redoStack=[];
+let editingIndex=null;
+
+/* STORAGE */
+function saveToStorage(){
+    localStorage.setItem("careerData",JSON.stringify(experiences));
+}
+function loadFromStorage(){
+    let data=localStorage.getItem("careerData");
+    if(data){
+        experiences=JSON.parse(data).map(e=>({
+            ...e,
+            start:new Date(e.start),
+            end:new Date(e.end)
+        }));
+    }
+}
+
+/* STILL WORKING */
+function handleStillWorking(){
+    let end=document.getElementById("endDate");
+    if(document.getElementById("stillWorking").checked){
+        end.value=new Date().toISOString().split('T')[0];
+        end.disabled=true;
+    }else{
+        end.disabled=false;
+    }
+}
+
+/* HISTORY */
+function pushHistory(){
+    historyStack.push(JSON.stringify(experiences));
+    redoStack=[];
+}
+function undo(){
+    if(historyStack.length){
+        redoStack.push(JSON.stringify(experiences));
+        experiences=JSON.parse(historyStack.pop());
+        rehydrate();
+        saveToStorage();
+        render();
+    }
+}
+function redo(){
+    if(redoStack.length){
+        historyStack.push(JSON.stringify(experiences));
+        experiences=JSON.parse(redoStack.pop());
+        rehydrate();
+        saveToStorage();
+        render();
+    }
+}
+function rehydrate(){
+    experiences=experiences.map(e=>({
+        ...e,
+        start:new Date(e.start),
+        end:new Date(e.end)
+    }));
+}
+
+/* UTILITIES */
+function daysBetween(s,e){
+    return Math.floor((e-s)/(1000*60*60*24))+1;
+}
+function convertToYMD(d){
+    let y=Math.floor(d/365);
+    d%=365;
+    let m=Math.floor(d/30);
+    let day=d%30;
+    return `${y}Y ${m}M ${day}D`;
+}
+function calculateSeniority(years){
+    if(years<2) return {level:"Junior",next:2};
+    if(years<5) return {level:"Mid-Level",next:5};
+    if(years<8) return {level:"Senior",next:8};
+    if(years<12) return {level:"Lead",next:12};
+    return {level:"Principal / Architect",next:null};
+}
+
+/* CRUD */
+function addExperience(){
+    let c=document.getElementById("company").value.trim();
+    let s=document.getElementById("startDate").value;
+    let e=document.getElementById("endDate").value;
+
+    if(!c||!s||!e){alert("Fill all fields");return;}
+    if(new Date(e)<new Date(s)){alert("Invalid dates");return;}
+
+    pushHistory();
+
+    experiences.push({
+        company:c,
+        start:new Date(s),
+        end:new Date(e),
+        deleted:false
+    });
+
+    saveToStorage();
+    clearInputs();
+    render();
+}
+
+function clearInputs(){
+    document.getElementById("company").value="";
+    document.getElementById("startDate").value="";
+    document.getElementById("endDate").value="";
+    document.getElementById("stillWorking").checked=false;
+    document.getElementById("endDate").disabled=false;
+}
+
+function toggleDelete(i){
+    pushHistory();
+    experiences[i].deleted=!experiences[i].deleted;
+    saveToStorage();
+    render();
+}
+
+function permanentlyDelete(i){
+    if(!confirm("Permanent delete. Continue?")) return;
+    pushHistory();
+    experiences.splice(i,1);
+    saveToStorage();
+    render();
+}
+
+/* EDITING */
+function startEdit(i){
+    editingIndex=i;
+    render();
+}
+function cancelEdit(){
+    editingIndex=null;
+    render();
+}
+function saveEdit(i){
+    let c=document.getElementById("editCompany"+i).value.trim();
+    let s=document.getElementById("editStart"+i).value;
+    let e=document.getElementById("editEnd"+i).value;
+
+    if(!c||!s||!e){alert("Fill all fields");return;}
+    if(new Date(e)<new Date(s)){alert("Invalid dates");return;}
+
+    pushHistory();
+
+    experiences[i].company=c;
+    experiences[i].start=new Date(s);
+    experiences[i].end=new Date(e);
+
+    editingIndex=null;
+    saveToStorage();
+    render();
+}
+
+/* CALCULATE TOTAL */
+function calculateTotal(){
+    let active=experiences.filter(e=>!e.deleted)
+        .sort((a,b)=>a.start-b.start);
+
+    let merged=[];
+    active.forEach(exp=>{
+        let placed=false;
+        for(let m of merged){
+            if(exp.start<=m.end){
+                m.end=new Date(Math.max(m.end,exp.end));
+                placed=true;break;
+            }
+        }
+        if(!placed){
+            merged.push({start:new Date(exp.start),end:new Date(exp.end)});
+        }
+    });
+
+    let total=0;
+    merged.forEach(m=>total+=daysBetween(m.start,m.end));
+    return total;
+}
+
+/* RENDER */
+function render(){
+    let tbody=document.getElementById("expTable");
+    tbody.innerHTML="";
+
+    // Sort experiences by start
+    experiences.sort((a,b)=>a.start-b.start);
+
+    let lastEnd=null;
+
+    experiences.forEach((exp,i)=>{
+        // Skip deleted for gap/overlap logic
+        if(exp.deleted) {
+            lastEnd = lastEnd && exp.end > lastEnd ? exp.end : lastEnd;
+        }
+
+        // Insert career gap if exists
+        if(lastEnd && !exp.deleted && exp.start > lastEnd){
+            let gapDays=daysBetween(new Date(lastEnd.getTime()+1*24*60*60*1000),new Date(exp.start.getTime()-1*24*60*60*1000));
+            let row=document.createElement("tr");
+            row.classList.add("gap-row");
+            row.innerHTML=`
+                <td>-</td>
+                <td colspan="3">Career Gap</td>
+                <td>${convertToYMD(gapDays)}</td>
+                <td>Gap</td>
+                <td>-</td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        // Check overlap and calculate overlap duration
+        let overlap=false;
+        let overlapDuration="";
+        if(lastEnd && !exp.deleted && exp.start <= lastEnd) {
+            overlap = true;
+            let overlapStart = new Date(Math.max(lastEnd, exp.start));
+            let overlapEnd = new Date(Math.min(lastEnd, exp.end));
+            let overlapDays = daysBetween(overlapStart, overlapEnd);
+            overlapDuration = convertToYMD(overlapDays); // Correct overlap duration
+        }
+
+        let row=document.createElement("tr");
+        if(exp.deleted) row.classList.add("strike");
+        if(overlap) row.classList.add("overlap-row");
+
+        if(editingIndex===i){
+            row.innerHTML=`
+            <td>${i+1}</td>
+            <td><input id="editCompany${i}" value="${exp.company}"></td>
+            <td><input type="date" id="editStart${i}" value="${exp.start.toISOString().split('T')[0]}"></td>
+            <td><input type="date" id="editEnd${i}" value="${exp.end.toISOString().split('T')[0]}"></td>
+            <td>-</td>
+            <td>Editing</td>
+            <td>-</td>
+            <td>
+                <button class="save-btn" onclick="saveEdit(${i})">Save</button>
+                <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+            </td>`;
+        }else{
+            let dur=convertToYMD(daysBetween(exp.start,exp.end));
+            row.innerHTML=`
+            <td>${i+1}</td>
+            <td>${exp.company}</td>
+            <td>${exp.start.toISOString().split('T')[0]}</td>
+            <td>${exp.end.toISOString().split('T')[0]}</td>
+            <td>${dur}</td>
+            <td>${exp.deleted?"Deleted":"Active"}</td>
+            <td>${overlap ? overlapDuration : "-"}</td> <!-- Overlap Column -->
+            <td>
+                <button class="edit-btn" onclick="startEdit(${i})">Edit</button>
+                <button class="soft-btn" onclick="toggleDelete(${i})">
+                    ${exp.deleted?"Undo":"Soft Delete"}
+                </button>
+                ${exp.deleted?`
+                    <button class="perm-btn" onclick="permanentlyDelete(${i})">
+                        Permanent
+                    </button>`:""}
+            </td>`;
+        }
+
+        tbody.appendChild(row);
+        if(!exp.deleted) lastEnd = lastEnd ? new Date(Math.max(lastEnd, exp.end)) : new Date(exp.end);
+    });
+
+    updateTotals();
+}
+
+function updateTotals(){
+    let total=calculateTotal();
+    document.getElementById("totalOutput").innerHTML=
+        `<div class="total-big">Total Experience: ${convertToYMD(total)}</div>`;
+
+    let years=total/365;
+    let s=calculateSeniority(years);
+    let next=s.next?`Next Level in ${(s.next-years).toFixed(2)} Years`:"Top Tier Achieved";
+
+    document.getElementById("seniorityOutput").innerHTML=
+        `<div class="seniority-box"><strong>${s.level}</strong><br>${next}</div>`;
+}
+
+/* INIT */
+loadFromStorage();
+render();
+</script>
+
+</body>
+</html>
