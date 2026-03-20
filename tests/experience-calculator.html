@@ -7,7 +7,7 @@
 body{font-family:'Segoe UI',sans-serif;background:#f4f6f9;padding:30px;}
 .container{max-width:1200px;margin:auto;}
 .card{background:white;padding:20px;border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);margin-bottom:25px;}
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);margin-bottom:25px;}
 input,button{padding:6px;margin-right:6px;}
 button{border:none;border-radius:4px;cursor:pointer;}
 .add-btn{background:#1976d2;color:white;}
@@ -22,343 +22,510 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
 .strike{text-decoration:line-through;color:gray;opacity:0.6;}
 .total-big{font-size:26px;font-weight:bold;color:#1976d2;margin-top:10px;}
 .seniority-box{margin-top:10px;padding:10px;background:#e3f2fd;border-radius:6px;}
-.gap-row{background:#fff3e0;} /* light orange */
-.overlap-row{background:#ffe0e0;} /* light red */
+.gap-row{background:#fff3e0;}
+.overlap-row{background:#ffe0e0;}
+
+/* Gantt */
+.gantt-wrapper{overflow-x:auto;margin-top:10px;}
+.gantt-grid{display:grid;font-size:13px;min-width:700px;}
+.gantt-header-label{background:#1976d2;color:white;padding:6px 4px;
+  text-align:center;font-weight:600;font-size:11px;border-right:1px solid #1565c0;}
+.gantt-row:hover .gantt-company,
+.gantt-row:hover .gantt-bar-cell{background:#f0f7ff;}
+.gantt-company{padding:7px 10px;border-bottom:1px solid #eee;
+  white-space:nowrap;font-weight:500;display:flex;align-items:center;gap:6px;
+  overflow:hidden;}
+.gantt-bar-cell{position:relative;border-bottom:1px solid #eee;padding:4px 0;min-height:34px;}
+.gantt-bar{position:absolute;top:6px;bottom:6px;border-radius:4px;
+  display:flex;align-items:center;overflow:hidden;
+  font-size:11px;color:white;font-weight:600;padding:0 6px;
+  box-sizing:border-box;white-space:nowrap;cursor:default;transition:opacity .2s;}
+.gantt-bar:hover{opacity:.82;}
+.gantt-bar.deleted{opacity:.28;filter:grayscale(1);}
+.gantt-bar.overlap{outline:2px dashed #b71c1c;outline-offset:-2px;}
+.gantt-gap-bar{position:absolute;top:10px;bottom:10px;background:#ffe082;
+  border-radius:3px;border:1px dashed #f9a825;}
+.gantt-year-tick{position:absolute;top:0;bottom:0;border-left:1px dashed #ccc;pointer-events:none;}
+.gantt-year-label{position:absolute;top:2px;font-size:10px;color:#999;
+  transform:translateX(-50%);white-space:nowrap;}
+.gantt-today{position:absolute;top:0;bottom:0;border-left:2px solid #e53935;pointer-events:none;}
+.gantt-today-label{position:absolute;top:2px;font-size:10px;color:#e53935;
+  font-weight:bold;transform:translateX(-50%);white-space:nowrap;}
+.gantt-legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;font-size:12px;}
+.gantt-legend-item{display:flex;align-items:center;gap:5px;}
+.gantt-legend-swatch{width:16px;height:12px;border-radius:3px;}
 </style>
 </head>
 <body>
 <div class="container">
 
 <div class="card">
-<h2>Career Experience Dashboard</h2>
-
-Company:
-<input type="text" id="company">
-
-Start:
-<input type="date" id="startDate">
-
-End:
-<input type="date" id="endDate">
-
-<label>
-<input type="checkbox" id="stillWorking" onchange="handleStillWorking()">
-Still Working
-</label>
-
-<button class="add-btn" onclick="addExperience()">Add</button>
-<button class="undo-btn" onclick="undo()">Undo</button>
-<button class="undo-btn" onclick="redo()">Redo</button>
+  <h2>Career Experience Dashboard</h2>
+  Company: <input type="text" id="company">
+  Start: <input type="date" id="startDate">
+  End: <input type="date" id="endDate">
+  <label>
+    <input type="checkbox" id="stillWorking" onchange="handleStillWorking()">
+    Still Working
+  </label>
+  <button class="add-btn" onclick="addExperience()">Add</button>
+  <button class="undo-btn" onclick="undo()">Undo</button>
+  <button class="undo-btn" onclick="redo()">Redo</button>
 </div>
 
 <div class="card">
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>Company</th>
-<th>Start</th>
-<th>End</th>
-<th>Duration</th>
-<th>Status</th>
-<th>Overlap Duration</th> <!-- New Column -->
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="expTable"></tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Company</th><th>Start</th><th>End</th>
+        <th>Duration</th><th>Status</th><th>Overlap Duration</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="expTable"></tbody>
+  </table>
+  <div id="totalOutput"></div>
+  <div id="seniorityOutput"></div>
+</div>
 
-<div id="totalOutput"></div>
-<div id="seniorityOutput"></div>
+<div class="card" id="ganttCard" style="display:none;">
+  <h3 style="margin-top:0;">Career Timeline (Gantt)</h3>
+  <div class="gantt-legend">
+    <div class="gantt-legend-item">
+      <div class="gantt-legend-swatch" style="background:#1976d2;"></div>Active
+    </div>
+    <div class="gantt-legend-item">
+      <div class="gantt-legend-swatch" style="background:#aaa;"></div>Soft Deleted
+    </div>
+    <div class="gantt-legend-item">
+      <div class="gantt-legend-swatch" style="background:#ffe082;border:1px dashed #f9a825;"></div>Career Gap
+    </div>
+    <div class="gantt-legend-item">
+      <div class="gantt-legend-swatch" style="background:#1976d2;outline:2px dashed #b71c1c;outline-offset:-2px;"></div>Overlap
+    </div>
+    <div class="gantt-legend-item">
+      <div style="width:2px;height:14px;background:#e53935;border-radius:1px;"></div>Today
+    </div>
+  </div>
+  <div class="gantt-wrapper">
+    <div id="ganttChart"></div>
+  </div>
 </div>
 
 </div>
-
 <script>
-let experiences=[];
-let historyStack=[];
-let redoStack=[];
-let editingIndex=null;
+let experiences = [];
+let historyStack = [];
+let redoStack = [];
+let editingId = null;
+let nextId = 1;
 
-/* STORAGE */
+const COLORS = ['#1976d2','#388e3c','#7b1fa2','#f57c00','#0288d1',
+                 '#c62828','#00796b','#5d4037','#455a64','#ad1457'];
+function colorFor(id){ return COLORS[(id - 1) % COLORS.length]; }
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+/* ── Storage ── */
 function saveToStorage(){
-    localStorage.setItem("careerData",JSON.stringify(experiences));
+  try{ localStorage.setItem("careerData2", JSON.stringify({experiences, nextId})); }
+  catch(e){ console.warn("save failed", e); }
 }
 function loadFromStorage(){
-    let data=localStorage.getItem("careerData");
-    if(data){
-        experiences=JSON.parse(data).map(e=>({
-            ...e,
-            start:new Date(e.start),
-            end:new Date(e.end)
-        }));
-    }
+  try{
+    let raw = localStorage.getItem("careerData2");
+    if(!raw) return;
+    let p = JSON.parse(raw);
+    nextId = p.nextId || 1;
+    experiences = (p.experiences || []).map(hydrate);
+  } catch(e){ console.warn("load failed", e); experiences = []; }
+}
+function hydrate(e){
+  return {...e, start: new Date(e.start),
+    end: e.stillWorking ? new Date() : new Date(e.end)};
 }
 
-/* STILL WORKING */
+/* ── Still Working ── */
 function handleStillWorking(){
-    let end=document.getElementById("endDate");
-    if(document.getElementById("stillWorking").checked){
-        end.value=new Date().toISOString().split('T')[0];
-        end.disabled=true;
-    }else{
-        end.disabled=false;
-    }
+  let end = document.getElementById("endDate");
+  if(document.getElementById("stillWorking").checked){
+    end.value = toDateStr(new Date()); end.disabled = true;
+  } else { end.disabled = false; }
 }
+function toDateStr(d){ return d.toISOString().split('T')[0]; }
 
-/* HISTORY */
-function pushHistory(){
-    historyStack.push(JSON.stringify(experiences));
-    redoStack=[];
+/* ── History ── */
+function snapshot(){ return JSON.stringify({experiences, nextId}); }
+function pushHistory(){ historyStack.push(snapshot()); redoStack = []; }
+function restoreSnapshot(s){
+  let p = JSON.parse(s);
+  nextId = p.nextId;
+  experiences = p.experiences.map(hydrate);
 }
 function undo(){
-    if(historyStack.length){
-        redoStack.push(JSON.stringify(experiences));
-        experiences=JSON.parse(historyStack.pop());
-        rehydrate();
-        saveToStorage();
-        render();
-    }
+  if(!historyStack.length) return;
+  redoStack.push(snapshot());
+  restoreSnapshot(historyStack.pop());
+  saveToStorage(); render();
 }
 function redo(){
-    if(redoStack.length){
-        historyStack.push(JSON.stringify(experiences));
-        experiences=JSON.parse(redoStack.pop());
-        rehydrate();
-        saveToStorage();
-        render();
-    }
-}
-function rehydrate(){
-    experiences=experiences.map(e=>({
-        ...e,
-        start:new Date(e.start),
-        end:new Date(e.end)
-    }));
+  if(!redoStack.length) return;
+  historyStack.push(snapshot());
+  restoreSnapshot(redoStack.pop());
+  saveToStorage(); render();
 }
 
-/* UTILITIES */
-function daysBetween(s,e){
-    return Math.floor((e-s)/(1000*60*60*24))+1;
-}
-function convertToYMD(d){
-    let y=Math.floor(d/365);
-    d%=365;
-    let m=Math.floor(d/30);
-    let day=d%30;
-    return `${y}Y ${m}M ${day}D`;
+/* ── Utils ── */
+function daysBetween(s, e){ return Math.floor((e - s) / 864e5) + 1; }
+function convertToYMD(days){
+  if(days <= 0) return "0D";
+  let y = Math.floor(days/365), r = days%365, m = Math.floor(r/30), d = r%30;
+  return [y?`${y}Y`:"", m?`${m}M`:"", d?`${d}D`:""].filter(Boolean).join(" ") || "0D";
 }
 function calculateSeniority(years){
-    if(years<2) return {level:"Junior",next:2};
-    if(years<5) return {level:"Mid-Level",next:5};
-    if(years<8) return {level:"Senior",next:8};
-    if(years<12) return {level:"Lead",next:12};
-    return {level:"Principal / Architect",next:null};
+  if(years < 2)  return {level:"Junior", next:2};
+  if(years < 5)  return {level:"Mid-Level", next:5};
+  if(years < 8)  return {level:"Senior", next:8};
+  if(years < 12) return {level:"Lead", next:12};
+  return {level:"Principal / Architect", next:null};
 }
 
-/* CRUD */
+/* ── CRUD ── */
 function addExperience(){
-    let c=document.getElementById("company").value.trim();
-    let s=document.getElementById("startDate").value;
-    let e=document.getElementById("endDate").value;
-
-    if(!c||!s||!e){alert("Fill all fields");return;}
-    if(new Date(e)<new Date(s)){alert("Invalid dates");return;}
-
-    pushHistory();
-
-    experiences.push({
-        company:c,
-        start:new Date(s),
-        end:new Date(e),
-        deleted:false
-    });
-
-    saveToStorage();
-    clearInputs();
-    render();
+  let c = document.getElementById("company").value.trim();
+  let s = document.getElementById("startDate").value;
+  let e = document.getElementById("endDate").value;
+  let still = document.getElementById("stillWorking").checked;
+  if(!c || !s || !e){ alert("Fill all fields"); return; }
+  if(new Date(e) < new Date(s)){ alert("Invalid dates"); return; }
+  pushHistory();
+  experiences.push({id: nextId++, company: c,
+    start: new Date(s), end: new Date(e), stillWorking: still, deleted: false});
+  saveToStorage(); clearInputs(); render();
 }
-
 function clearInputs(){
-    document.getElementById("company").value="";
-    document.getElementById("startDate").value="";
-    document.getElementById("endDate").value="";
-    document.getElementById("stillWorking").checked=false;
-    document.getElementById("endDate").disabled=false;
+  ["company","startDate","endDate"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("stillWorking").checked = false;
+  document.getElementById("endDate").disabled = false;
 }
 
-function toggleDelete(i){
-    pushHistory();
-    experiences[i].deleted=!experiences[i].deleted;
-    saveToStorage();
-    render();
+/* FIX: all mutations use stable ID, never array index */
+function toggleDelete(id){
+  pushHistory();
+  let exp = experiences.find(e => e.id === id);
+  if(exp) exp.deleted = !exp.deleted;
+  saveToStorage(); render();
+}
+function permanentlyDelete(id){
+  // confirm() is silently blocked in sandboxed iframes — use inline modal instead
+  let existing = document.getElementById("confirmBox");
+  if(existing) existing.remove();
+  let box = document.createElement("div");
+  box.id = "confirmBox";
+  box.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.45);display:flex;align-items:center;
+    justify-content:center;z-index:9999;`;
+  box.innerHTML = `
+    <div style="background:white;padding:28px 32px;border-radius:10px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.2);text-align:center;max-width:340px;">
+      <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Permanent Delete</div>
+      <div style="color:#555;margin-bottom:20px;">
+        This entry will be permanently removed. This cannot be undone after you leave the page.
+      </div>
+      <button onclick="confirmPermanentDelete(${id})"
+        style="background:#b71c1c;color:white;border:none;padding:8px 20px;
+        border-radius:4px;cursor:pointer;margin-right:10px;font-size:14px;">
+        Delete
+      </button>
+      <button onclick="document.getElementById('confirmBox').remove()"
+        style="background:#757575;color:white;border:none;padding:8px 20px;
+        border-radius:4px;cursor:pointer;font-size:14px;">
+        Cancel
+      </button>
+    </div>`;
+  document.body.appendChild(box);
+}
+function confirmPermanentDelete(id){
+  document.getElementById("confirmBox").remove();
+  pushHistory();
+  experiences = experiences.filter(e => e.id !== id);
+  saveToStorage(); render();
+}
+function startEdit(id){ editingId = id; render(); }
+function cancelEdit(){ editingId = null; render(); }
+function saveEdit(id){
+  let c = document.getElementById("editCompany"+id).value.trim();
+  let s = document.getElementById("editStart"+id).value;
+  let e = document.getElementById("editEnd"+id).value;
+  let still = document.getElementById("editStillWorking"+id).checked;
+  if(!c || !s || !e){ alert("Fill all fields"); return; }
+  if(new Date(e) < new Date(s)){ alert("Invalid dates"); return; }
+  pushHistory();
+  let exp = experiences.find(x => x.id === id);
+  exp.company = c; exp.start = new Date(s); exp.end = new Date(e); exp.stillWorking = still;
+  editingId = null; saveToStorage(); render();
+}
+function handleEditStillWorking(id){
+  let cb = document.getElementById("editStillWorking"+id);
+  let ei = document.getElementById("editEnd"+id);
+  if(cb.checked){ ei.value = toDateStr(new Date()); ei.disabled = true; }
+  else { ei.disabled = false; }
 }
 
-function permanentlyDelete(i){
-    if(!confirm("Permanent delete. Continue?")) return;
-    pushHistory();
-    experiences.splice(i,1);
-    saveToStorage();
-    render();
-}
-
-/* EDITING */
-function startEdit(i){
-    editingIndex=i;
-    render();
-}
-function cancelEdit(){
-    editingIndex=null;
-    render();
-}
-function saveEdit(i){
-    let c=document.getElementById("editCompany"+i).value.trim();
-    let s=document.getElementById("editStart"+i).value;
-    let e=document.getElementById("editEnd"+i).value;
-
-    if(!c||!s||!e){alert("Fill all fields");return;}
-    if(new Date(e)<new Date(s)){alert("Invalid dates");return;}
-
-    pushHistory();
-
-    experiences[i].company=c;
-    experiences[i].start=new Date(s);
-    experiences[i].end=new Date(e);
-
-    editingIndex=null;
-    saveToStorage();
-    render();
-}
-
-/* CALCULATE TOTAL */
+/* ── Total ── */
 function calculateTotal(){
-    let active=experiences.filter(e=>!e.deleted)
-        .sort((a,b)=>a.start-b.start);
-
-    let merged=[];
-    active.forEach(exp=>{
-        let placed=false;
-        for(let m of merged){
-            if(exp.start<=m.end){
-                m.end=new Date(Math.max(m.end,exp.end));
-                placed=true;break;
-            }
-        }
-        if(!placed){
-            merged.push({start:new Date(exp.start),end:new Date(exp.end)});
-        }
-    });
-
-    let total=0;
-    merged.forEach(m=>total+=daysBetween(m.start,m.end));
-    return total;
+  let active = experiences.filter(e => !e.deleted)
+    .map(e => ({start: new Date(e.start), end: new Date(e.end)}))
+    .sort((a,b) => a.start - b.start);
+  let merged = [];
+  for(let exp of active){
+    if(merged.length && exp.start <= merged[merged.length-1].end){
+      merged[merged.length-1].end = new Date(Math.max(merged[merged.length-1].end, exp.end));
+    } else { merged.push({start: new Date(exp.start), end: new Date(exp.end)}); }
+  }
+  return merged.reduce((s,m) => s + daysBetween(m.start, m.end), 0);
 }
 
-/* RENDER */
+/* ── RENDER TABLE ── */
 function render(){
-    let tbody=document.getElementById("expTable");
-    tbody.innerHTML="";
+  let tbody = document.getElementById("expTable");
+  tbody.innerHTML = "";
+  let sorted = [...experiences].sort((a,b) => a.start - b.start);
+  let lastEnd = null, rowNum = 0;
 
-    // Sort experiences by start
-    experiences.sort((a,b)=>a.start-b.start);
+  sorted.forEach(exp => {
+    // Gap row
+    if(!exp.deleted && lastEnd && exp.start > new Date(lastEnd.getTime() + 864e5)){
+      let gapStart = new Date(lastEnd.getTime() + 864e5);
+      let gapEnd   = new Date(exp.start.getTime() - 864e5);
+      let gapDays  = daysBetween(gapStart, gapEnd);
+      if(gapDays > 0){
+        let gr = document.createElement("tr");
+        gr.classList.add("gap-row");
+        gr.innerHTML = `<td>-</td><td colspan="3">Career Gap</td>
+          <td>${convertToYMD(gapDays)}</td><td>Gap</td><td>-</td><td>-</td>`;
+        tbody.appendChild(gr);
+      }
+    }
 
-    let lastEnd=null;
+    // Overlap
+    let overlap = false, overlapDuration = "";
+    if(!exp.deleted && lastEnd && exp.start <= lastEnd){
+      overlap = true;
+      let od = daysBetween(new Date(exp.start), new Date(Math.min(lastEnd, exp.end)));
+      overlapDuration = convertToYMD(od);
+    }
 
-    experiences.forEach((exp,i)=>{
-        // Skip deleted for gap/overlap logic
-        if(exp.deleted) {
-            lastEnd = lastEnd && exp.end > lastEnd ? exp.end : lastEnd;
-        }
+    rowNum++;
+    let row = document.createElement("tr");
+    if(exp.deleted) row.classList.add("strike");
+    if(overlap) row.classList.add("overlap-row");
 
-        // Insert career gap if exists
-        if(lastEnd && !exp.deleted && exp.start > lastEnd){
-            let gapDays=daysBetween(new Date(lastEnd.getTime()+1*24*60*60*1000),new Date(exp.start.getTime()-1*24*60*60*1000));
-            let row=document.createElement("tr");
-            row.classList.add("gap-row");
-            row.innerHTML=`
-                <td>-</td>
-                <td colspan="3">Career Gap</td>
-                <td>${convertToYMD(gapDays)}</td>
-                <td>Gap</td>
-                <td>-</td>
-            `;
-            tbody.appendChild(row);
-        }
+    if(editingId === exp.id){
+      row.innerHTML = `
+        <td>${rowNum}</td>
+        <td><input id="editCompany${exp.id}" value="${escapeHtml(exp.company)}"></td>
+        <td><input type="date" id="editStart${exp.id}" value="${toDateStr(exp.start)}"></td>
+        <td>
+          <input type="date" id="editEnd${exp.id}" value="${toDateStr(exp.end)}" ${exp.stillWorking?"disabled":""}>
+          <label style="font-size:12px;">
+            <input type="checkbox" id="editStillWorking${exp.id}"
+              onchange="handleEditStillWorking(${exp.id})" ${exp.stillWorking?"checked":""}>
+            Still Working
+          </label>
+        </td>
+        <td>-</td><td>Editing</td><td>-</td>
+        <td>
+          <button class="save-btn" onclick="saveEdit(${exp.id})">Save</button>
+          <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+        </td>`;
+    } else {
+      let dur = convertToYMD(daysBetween(exp.start, exp.end));
+      row.innerHTML = `
+        <td>${rowNum}</td>
+        <td>${escapeHtml(exp.company)}${exp.stillWorking?' <em style="font-size:11px;color:#1976d2;">(Current)</em>':''}</td>
+        <td>${toDateStr(exp.start)}</td>
+        <td>${toDateStr(exp.end)}</td>
+        <td>${dur}</td>
+        <td>${exp.deleted?"Deleted":"Active"}</td>
+        <td>${overlap ? overlapDuration : "-"}</td>
+        <td>
+          <button class="edit-btn" onclick="startEdit(${exp.id})">Edit</button>
+          <button class="soft-btn" onclick="toggleDelete(${exp.id})">${exp.deleted?"Undo":"Soft Delete"}</button>
+          ${exp.deleted?`<button class="perm-btn" onclick="permanentlyDelete(${exp.id})">Permanent</button>`:""}
+        </td>`;
+    }
 
-        // Check overlap and calculate overlap duration
-        let overlap=false;
-        let overlapDuration="";
-        if(lastEnd && !exp.deleted && exp.start <= lastEnd) {
-            overlap = true;
-            let overlapStart = new Date(Math.max(lastEnd, exp.start));
-            let overlapEnd = new Date(Math.min(lastEnd, exp.end));
-            let overlapDays = daysBetween(overlapStart, overlapEnd);
-            overlapDuration = convertToYMD(overlapDays); // Correct overlap duration
-        }
+    tbody.appendChild(row);
+    if(!exp.deleted){
+      lastEnd = lastEnd ? new Date(Math.max(lastEnd, exp.end)) : new Date(exp.end);
+    }
+  });
 
-        let row=document.createElement("tr");
-        if(exp.deleted) row.classList.add("strike");
-        if(overlap) row.classList.add("overlap-row");
-
-        if(editingIndex===i){
-            row.innerHTML=`
-            <td>${i+1}</td>
-            <td><input id="editCompany${i}" value="${exp.company}"></td>
-            <td><input type="date" id="editStart${i}" value="${exp.start.toISOString().split('T')[0]}"></td>
-            <td><input type="date" id="editEnd${i}" value="${exp.end.toISOString().split('T')[0]}"></td>
-            <td>-</td>
-            <td>Editing</td>
-            <td>-</td>
-            <td>
-                <button class="save-btn" onclick="saveEdit(${i})">Save</button>
-                <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
-            </td>`;
-        }else{
-            let dur=convertToYMD(daysBetween(exp.start,exp.end));
-            row.innerHTML=`
-            <td>${i+1}</td>
-            <td>${exp.company}</td>
-            <td>${exp.start.toISOString().split('T')[0]}</td>
-            <td>${exp.end.toISOString().split('T')[0]}</td>
-            <td>${dur}</td>
-            <td>${exp.deleted?"Deleted":"Active"}</td>
-            <td>${overlap ? overlapDuration : "-"}</td> <!-- Overlap Column -->
-            <td>
-                <button class="edit-btn" onclick="startEdit(${i})">Edit</button>
-                <button class="soft-btn" onclick="toggleDelete(${i})">
-                    ${exp.deleted?"Undo":"Soft Delete"}
-                </button>
-                ${exp.deleted?`
-                    <button class="perm-btn" onclick="permanentlyDelete(${i})">
-                        Permanent
-                    </button>`:""}
-            </td>`;
-        }
-
-        tbody.appendChild(row);
-        if(!exp.deleted) lastEnd = lastEnd ? new Date(Math.max(lastEnd, exp.end)) : new Date(exp.end);
-    });
-
-    updateTotals();
+  updateTotals();
+  renderGantt();
 }
 
 function updateTotals(){
-    let total=calculateTotal();
-    document.getElementById("totalOutput").innerHTML=
-        `<div class="total-big">Total Experience: ${convertToYMD(total)}</div>`;
-
-    let years=total/365;
-    let s=calculateSeniority(years);
-    let next=s.next?`Next Level in ${(s.next-years).toFixed(2)} Years`:"Top Tier Achieved";
-
-    document.getElementById("seniorityOutput").innerHTML=
-        `<div class="seniority-box"><strong>${s.level}</strong><br>${next}</div>`;
+  let total = calculateTotal();
+  document.getElementById("totalOutput").innerHTML =
+    `<div class="total-big">Total Experience: ${convertToYMD(total)}</div>`;
+  let years = total / 365, s = calculateSeniority(years);
+  let next = s.next ? `Next Level in ${(s.next - years).toFixed(2)} Years` : "Top Tier Achieved";
+  document.getElementById("seniorityOutput").innerHTML =
+    `<div class="seniority-box"><strong>${s.level}</strong><br>${next}</div>`;
 }
 
-/* INIT */
+/* ── GANTT ── */
+function renderGantt(){
+  let container = document.getElementById("ganttChart");
+  let card = document.getElementById("ganttCard");
+  container.innerHTML = "";
+  if(!experiences.length){ card.style.display = "none"; return; }
+  card.style.display = "block";
+
+  let sorted = [...experiences].sort((a,b) => a.start - b.start);
+  let today  = new Date();
+
+  // Time range
+  let minDate = new Date(Math.min(...experiences.map(e => e.start)));
+  let maxDate = new Date(Math.max(today.getTime(), ...experiences.map(e => e.end)));
+  minDate = new Date(minDate.getFullYear(), minDate.getMonth() - 1, 1);
+  maxDate = new Date(maxDate.getFullYear(), maxDate.getMonth() + 2, 1);
+  let totalMs = maxDate - minDate;
+
+  function pct(d){ return ((d - minDate) / totalMs * 100).toFixed(4) + "%"; }
+  function pctW(s, e){ return ((e - s) / totalMs * 100).toFixed(4) + "%"; }
+
+  let grid = document.createElement("div");
+  grid.className = "gantt-grid";
+  grid.style.gridTemplateColumns = "160px 1fr";
+
+  // Header row
+  let hLabel = document.createElement("div");
+  hLabel.className = "gantt-header-label";
+  hLabel.textContent = "Company";
+
+  let hBar = document.createElement("div");
+  hBar.className = "gantt-header-label";
+  hBar.style.cssText = "position:relative;height:28px;overflow:visible;";
+
+  // Year ticks on header
+  let yr = new Date(minDate.getFullYear(), 0, 1);
+  while(yr <= maxDate){
+    if(yr >= minDate){
+      let tick = document.createElement("div");
+      tick.className = "gantt-year-tick";
+      tick.style.left = pct(yr);
+      let lbl = document.createElement("div");
+      lbl.className = "gantt-year-label";
+      lbl.style.left = pct(yr);
+      lbl.textContent = yr.getFullYear();
+      hBar.appendChild(tick);
+      hBar.appendChild(lbl);
+    }
+    yr = new Date(yr.getFullYear() + 1, 0, 1);
+  }
+  // Today on header
+  if(today >= minDate && today <= maxDate){
+    let tl = document.createElement("div");
+    tl.className = "gantt-today"; tl.style.left = pct(today);
+    let tll = document.createElement("div");
+    tll.className = "gantt-today-label"; tll.style.left = pct(today);
+    tll.textContent = "Today";
+    hBar.appendChild(tl); hBar.appendChild(tll);
+  }
+  grid.appendChild(hLabel); grid.appendChild(hBar);
+
+  // Compute gap intervals (active only)
+  let activeOnly = sorted.filter(e => !e.deleted);
+  let gaps = [], prevEnd = null;
+  for(let exp of activeOnly){
+    if(prevEnd && exp.start > new Date(prevEnd.getTime() + 864e5)){
+      gaps.push({start: new Date(prevEnd.getTime() + 864e5),
+                 end:   new Date(exp.start.getTime() - 864e5)});
+    }
+    prevEnd = prevEnd ? new Date(Math.max(prevEnd, exp.end)) : new Date(exp.end);
+  }
+
+  // One row per experience
+  let lastEnd2 = null;
+  sorted.forEach(exp => {
+    let isOverlap = !exp.deleted && lastEnd2 && exp.start <= lastEnd2;
+
+    // Label
+    let lCell = document.createElement("div");
+    lCell.className = "gantt-company";
+    if(exp.deleted) lCell.style.opacity = "0.4";
+    let dot = document.createElement("span");
+    dot.style.cssText = `display:inline-block;width:10px;height:10px;border-radius:50%;
+      background:${exp.deleted?"#aaa":colorFor(exp.id)};flex-shrink:0;`;
+    let txt = document.createElement("span");
+    txt.style.cssText = "overflow:hidden;text-overflow:ellipsis;white-space:nowrap;";
+    txt.textContent = exp.company;
+    lCell.appendChild(dot); lCell.appendChild(txt);
+
+    // Bar cell
+    let bCell = document.createElement("div");
+    bCell.className = "gantt-bar-cell";
+
+    // Gap highlights
+    for(let gap of gaps){
+      if(gap.end < minDate || gap.start > maxDate) continue;
+      let gBar = document.createElement("div");
+      gBar.className = "gantt-gap-bar";
+      gBar.style.left  = pct(new Date(Math.max(gap.start, minDate)));
+      gBar.style.width = pctW(new Date(Math.max(gap.start, minDate)),
+                               new Date(Math.min(gap.end, maxDate)));
+      gBar.title = "Career Gap: " + convertToYMD(daysBetween(gap.start, gap.end));
+      bCell.appendChild(gBar);
+    }
+
+    // Year ticks
+    let yr2 = new Date(minDate.getFullYear(), 0, 1);
+    while(yr2 <= maxDate){
+      if(yr2 >= minDate){
+        let tick = document.createElement("div");
+        tick.className = "gantt-year-tick"; tick.style.left = pct(yr2);
+        bCell.appendChild(tick);
+      }
+      yr2 = new Date(yr2.getFullYear() + 1, 0, 1);
+    }
+
+    // Today line
+    if(today >= minDate && today <= maxDate){
+      let tl = document.createElement("div");
+      tl.className = "gantt-today"; tl.style.left = pct(today);
+      bCell.appendChild(tl);
+    }
+
+    // Experience bar
+    let bar = document.createElement("div");
+    bar.className = "gantt-bar" + (exp.deleted?" deleted":"") + (isOverlap?" overlap":"");
+    bar.style.left       = pct(exp.start);
+    bar.style.width      = pctW(exp.start, exp.end);
+    bar.style.background = exp.deleted ? "#aaa" : colorFor(exp.id);
+    bar.title = `${exp.company}\n${toDateStr(exp.start)} → ${toDateStr(exp.end)}\n${convertToYMD(daysBetween(exp.start,exp.end))}`;
+    bar.textContent = convertToYMD(daysBetween(exp.start, exp.end));
+    bCell.appendChild(bar);
+
+    grid.appendChild(lCell);
+    grid.appendChild(bCell);
+
+    if(!exp.deleted){
+      lastEnd2 = lastEnd2 ? new Date(Math.max(lastEnd2, exp.end)) : new Date(exp.end);
+    }
+  });
+
+  container.appendChild(grid);
+}
+
+/* ── INIT ── */
 loadFromStorage();
 render();
 </script>
-
 </body>
 </html>
