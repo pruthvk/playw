@@ -1,530 +1,1258 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Enterprise Career Engine Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Engine Pro</title>
 <style>
-body{font-family:'Segoe UI',sans-serif;background:#f4f6f9;padding:30px;}
-.container{max-width:1200px;margin:auto;}
-.card{background:white;padding:20px;border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);margin-bottom:25px;}
-input,button{padding:6px;margin-right:6px;}
-button{border:none;border-radius:4px;cursor:pointer;}
-.add-btn{background:#1976d2;color:white;}
-.soft-btn{background:#f57c00;color:white;}
-.perm-btn{background:#b71c1c;color:white;}
-.undo-btn{background:#2e7d32;color:white;}
-.edit-btn{background:#0288d1;color:white;}
-.save-btn{background:#388e3c;color:white;}
-.cancel-btn{background:#757575;color:white;}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
-th,td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
-.strike{text-decoration:line-through;color:gray;opacity:0.6;}
-.total-big{font-size:26px;font-weight:bold;color:#1976d2;margin-top:10px;}
-.seniority-box{margin-top:10px;padding:10px;background:#e3f2fd;border-radius:6px;}
-.gap-row{background:#fff3e0;}
-.overlap-row{background:#ffe0e0;}
+/* ── Reset & Base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;color:#222;
+  font-size:14px;line-height:1.5;}
+.container{max-width:1300px;margin:0 auto;padding:16px;}
 
-/* Gantt */
-.gantt-wrapper{overflow-x:auto;margin-top:10px;}
-.gantt-grid{display:grid;font-size:13px;min-width:700px;}
-.gantt-header-label{background:#1976d2;color:white;padding:6px 4px;
-  text-align:center;font-weight:600;font-size:11px;border-right:1px solid #1565c0;}
-.gantt-row:hover .gantt-company,
-.gantt-row:hover .gantt-bar-cell{background:#f0f7ff;}
-.gantt-company{padding:7px 10px;border-bottom:1px solid #eee;
-  white-space:nowrap;font-weight:500;display:flex;align-items:center;gap:6px;
-  overflow:hidden;}
-.gantt-bar-cell{position:relative;border-bottom:1px solid #eee;padding:4px 0;min-height:34px;}
+/* ── Card ── */
+.card{background:#fff;border-radius:12px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.07);margin-bottom:20px;overflow:hidden;}
+.card-header{padding:14px 20px;border-bottom:1px solid #f0f0f0;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.card-header h2,.card-header h3{font-size:16px;font-weight:700;color:#1a1a2e;margin:0;}
+.card-body{padding:16px 20px;}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:0;border-bottom:2px solid #e8eaf6;margin-bottom:16px;overflow-x:auto;}
+.tab-btn{background:none;border:none;padding:9px 18px;cursor:pointer;
+  font-size:13px;font-weight:600;color:#666;border-bottom:3px solid transparent;
+  margin-bottom:-2px;white-space:nowrap;transition:color .2s,border-color .2s;}
+.tab-btn.active{color:#1976d2;border-bottom-color:#1976d2;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* ── Form grid ── */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.form-field{display:flex;flex-direction:column;gap:4px;}
+.form-field label{font-size:11px;font-weight:600;color:#555;text-transform:uppercase;
+  letter-spacing:.4px;}
+.form-field input,.form-field select,.form-field textarea{
+  padding:7px 9px;border:1px solid #d0d5dd;border-radius:6px;
+  font-size:13px;width:100%;transition:border-color .2s;background:#fff;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{
+  outline:none;border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.1);}
+.form-field textarea{resize:vertical;min-height:60px;}
+.form-field.wide{grid-column:span 2;}
+.form-field.checkbox{flex-direction:row;align-items:center;gap:8px;padding-top:18px;}
+.form-field.checkbox input{width:auto;}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;
+  border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;
+  white-space:nowrap;transition:opacity .15s,transform .1s;}
+.btn:active{transform:scale(.97);}
+.btn:hover{opacity:.88;}
+.btn-primary{background:#1976d2;color:#fff;}
+.btn-success{background:#388e3c;color:#fff;}
+.btn-warning{background:#f57c00;color:#fff;}
+.btn-danger{background:#c62828;color:#fff;}
+.btn-info{background:#0288d1;color:#fff;}
+.btn-purple{background:#5e35b1;color:#fff;}
+.btn-teal{background:#00838f;color:#fff;}
+.btn-grey{background:#757575;color:#fff;}
+.btn-sm{padding:4px 9px;font-size:11px;}
+.btn-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
+
+/* ── Warn banner ── */
+.warn-banner{background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;
+  padding:9px 14px;margin-bottom:12px;font-size:12px;color:#7a5c00;display:none;}
+
+/* ── Table wrapper (responsive scroll) ── */
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+th{background:#f5f7ff;font-size:12px;font-weight:700;color:#444;
+  padding:9px 10px;border-bottom:2px solid #e8eaf6;text-align:center;white-space:nowrap;}
+td{padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;
+  font-size:13px;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+.row-gap{background:#fffde7;}
+.row-overlap{background:#fff0f0;}
+.row-deleted td{text-decoration:line-through;color:#aaa;opacity:.7;}
+.row-edu{background:#f3fdf3;}
+
+/* ── Badges ── */
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;}
+.badge-ft{background:#e3f2fd;color:#1565c0;}
+.badge-pt{background:#fff8e1;color:#e65100;}
+.badge-ct{background:#f3e5f5;color:#6a1b9a;}
+.badge-fl{background:#e8f5e9;color:#2e7d32;}
+.badge-edu{background:#e8f5e9;color:#1b5e20;}
+.badge-gap{background:#fff3e0;color:#bf360c;}
+
+/* ── Notes expand row ── */
+.notes-row td{background:#fafafa;text-align:left;font-size:12px;color:#555;
+  padding:5px 14px 8px;border-bottom:1px solid #f0f0f0;}
+
+/* ── Gap annotation ── */
+.gap-reason{font-style:italic;font-size:11px;color:#888;margin-left:6px;}
+.gap-annotate-btn{font-size:10px;padding:2px 7px;background:#ffe082;
+  border:1px solid #fbc02d;border-radius:4px;cursor:pointer;color:#5d4037;
+  margin-left:6px;white-space:nowrap;}
+/* Edu→Job gap row — distinct lavender tint */
+.row-edu-gap{background:#f3e5f5;}
+.row-edu-gap td{color:#4a148c;}
+/* Gantt edu→job gap shading — purple diagonal */
+.gantt-edu-gap-shading{position:absolute;top:0;bottom:0;
+  background:repeating-linear-gradient(45deg,#f3e5f5,#f3e5f5 4px,#ede7f6 4px,#ede7f6 8px);
+  pointer-events:none;opacity:.65;}
+
+/* ── Summary bar ── */
+.summary-bar{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;padding-top:14px;
+  border-top:1px solid #f0f0f0;align-items:center;}
+.summary-item{display:flex;flex-direction:column;align-items:center;}
+.summary-val{font-size:22px;font-weight:800;color:#1976d2;line-height:1;}
+.summary-lbl{font-size:11px;color:#888;margin-top:2px;}
+.seniority-pill{background:#e3f2fd;color:#1565c0;border-radius:20px;
+  padding:5px 16px;font-weight:700;font-size:13px;}
+.seniority-next{font-size:11px;color:#888;margin-top:3px;}
+
+/* ── Sort bar ── */
+.sort-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin-bottom:10px;font-size:13px;}
+.sort-bar select{padding:5px 8px;border:1px solid #d0d5dd;border-radius:6px;
+  font-size:12px;}
+
+/* ── Backup bar ── */
+.backup-bar{font-size:11px;color:#999;margin-top:8px;line-height:1.8;}
+.backup-bar span{cursor:pointer;color:#1976d2;text-decoration:underline;margin-right:10px;}
+
+/* ── Gantt ── */
+.gantt-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
+.gantt-grid{display:grid;font-size:12px;min-width:600px;}
+.gantt-hdr{background:#1976d2;color:#fff;padding:6px 8px;
+  font-weight:700;font-size:11px;}
+.gantt-hdr-bar{position:relative;height:28px;overflow:visible;}
+.gantt-label{padding:7px 10px;border-bottom:1px solid #f0f0f0;
+  display:flex;align-items:center;gap:7px;overflow:hidden;min-width:0;}
+.gantt-label-text{overflow:hidden;min-width:0;}
+.gantt-label-text .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-weight:600;font-size:12px;}
+.gantt-label-text .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-size:10px;color:#999;}
+.gantt-cell{position:relative;border-bottom:1px solid #f0f0f0;min-height:34px;}
 .gantt-bar{position:absolute;top:6px;bottom:6px;border-radius:4px;
-  display:flex;align-items:center;overflow:hidden;
-  font-size:11px;color:white;font-weight:600;padding:0 6px;
-  box-sizing:border-box;white-space:nowrap;cursor:default;transition:opacity .2s;}
+  display:flex;align-items:center;overflow:hidden;font-size:10px;
+  color:#fff;font-weight:700;padding:0 6px;white-space:nowrap;
+  cursor:default;transition:opacity .2s;}
 .gantt-bar:hover{opacity:.82;}
-.gantt-bar.deleted{opacity:.28;filter:grayscale(1);}
-.gantt-bar.overlap{outline:2px dashed #b71c1c;outline-offset:-2px;}
-.gantt-gap-bar{position:absolute;top:10px;bottom:10px;background:#ffe082;
-  border-radius:3px;border:1px dashed #f9a825;}
-.gantt-year-tick{position:absolute;top:0;bottom:0;border-left:1px dashed #ccc;pointer-events:none;}
-.gantt-year-label{position:absolute;top:2px;font-size:10px;color:#999;
+.gantt-bar.deleted{opacity:.25;filter:grayscale(1);}
+.gantt-bar.overlap{outline:none;}/* outline moved to overlay div */
+.gantt-overlap-overlay{position:absolute;top:4px;bottom:4px;border:2px dashed #c62828;
+  border-radius:4px;pointer-events:none;box-sizing:border-box;}
+.gantt-bar.edu{background:#43a047!important;}
+.gantt-gap-shading{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(
+  45deg,#fffde7,#fffde7 4px,#fff8e1 4px,#fff8e1 8px);pointer-events:none;opacity:.6;}
+.gantt-tick{position:absolute;top:0;bottom:0;border-left:1px dashed #ddd;pointer-events:none;}
+.gantt-year-lbl{position:absolute;top:3px;font-size:10px;color:#bbb;
   transform:translateX(-50%);white-space:nowrap;}
 .gantt-today{position:absolute;top:0;bottom:0;border-left:2px solid #e53935;pointer-events:none;}
-.gantt-today-label{position:absolute;top:2px;font-size:10px;color:#e53935;
-  font-weight:bold;transform:translateX(-50%);white-space:nowrap;}
-.gantt-legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;font-size:12px;}
+.gantt-today-lbl{position:absolute;top:3px;font-size:10px;color:#e53935;
+  font-weight:700;transform:translateX(-50%);white-space:nowrap;}
+.gantt-edu-marker{position:absolute;top:4px;bottom:4px;width:3px;
+  background:#43a047;border-radius:2px;}
+.gantt-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:12px;}
 .gantt-legend-item{display:flex;align-items:center;gap:5px;}
-.gantt-legend-swatch{width:16px;height:12px;border-radius:3px;}
+.gantt-swatch{width:14px;height:10px;border-radius:3px;}
+
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;}
+.modal-box{background:#fff;padding:28px 28px 22px;border-radius:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,.2);width:100%;max-width:380px;text-align:center;}
+.modal-box h4{font-size:17px;margin-bottom:10px;}
+.modal-box p{font-size:13px;color:#555;margin-bottom:20px;line-height:1.6;}
+.modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* ── Responsive breakpoints ── */
+/* Tables always scroll horizontally — no columns are ever hidden */
+@media(max-width:768px){
+  .container{padding:10px;}
+  .card-body{padding:12px 14px;}
+  .form-grid{grid-template-columns:1fr 1fr;}
+  .form-field.wide{grid-column:span 2;}
+  .summary-val{font-size:18px;}
+  .btn{padding:6px 10px;font-size:12px;}
+}
+@media(max-width:480px){
+  .form-grid{grid-template-columns:1fr;}
+  .form-field.wide{grid-column:span 1;}
+  .card-header{flex-direction:column;align-items:flex-start;}
+  .tabs{gap:0;}
+  .tab-btn{padding:8px 12px;font-size:12px;}
+}
 </style>
 </head>
 <body>
 <div class="container">
 
+<!-- ══════ HEADER ══════ -->
 <div class="card">
-  <h2>Career Experience Dashboard</h2>
-  Company: <input type="text" id="company">
-  Start: <input type="date" id="startDate">
-  End: <input type="date" id="endDate">
-  <label>
-    <input type="checkbox" id="stillWorking" onchange="handleStillWorking()">
-    Still Working
-  </label>
-  <button class="add-btn" onclick="addExperience()">Add</button>
-  <button class="undo-btn" onclick="undo()">Undo</button>
-  <button class="undo-btn" onclick="redo()">Redo</button>
+  <div class="card-header">
+    <h2>🎯 Career Engine Pro</h2>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn btn-purple" onclick="exportJSON()">⬇ Export</button>
+      <button class="btn btn-teal"   onclick="document.getElementById('importFile').click()">⬆ Import</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+      <button class="btn btn-success" onclick="undo()">↩ Undo</button>
+      <button class="btn btn-success" onclick="redo()">↪ Redo</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div id="warnBanner" class="warn-banner"></div>
+
+    <!-- Tabs: Experience | Education -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('exp')">💼 Add Experience</button>
+      <button class="tab-btn"        onclick="switchTab('edu')">🎓 Add Education</button>
+    </div>
+
+    <!-- Experience form -->
+    <div id="tab-exp" class="tab-pane active">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Company *</label>
+          <input id="company" type="text" placeholder="e.g. Google">
+        </div>
+        <div class="form-field">
+          <label>Role / Title</label>
+          <input id="role" type="text" placeholder="e.g. Senior Engineer">
+        </div>
+        <div class="form-field">
+          <label>Type</label>
+          <select id="empType">
+            <option>Full-time</option><option>Part-time</option>
+            <option>Contract</option><option>Freelance</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Start *</label>
+          <input id="startDate" type="date">
+        </div>
+        <div class="form-field">
+          <label>End *</label>
+          <input id="endDate" type="date">
+        </div>
+        <div class="form-field wide">
+          <label>Notes</label>
+          <input id="notes" type="text" placeholder="Tech stack, highlights…">
+        </div>
+        <div class="form-field checkbox">
+          <input id="stillWorking" type="checkbox" onchange="handleStillWorking()">
+          <label style="text-transform:none;letter-spacing:0;font-size:13px;">Still Working Here</label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="addExperience()">＋ Add Experience</button>
+      </div>
+    </div>
+
+    <!-- Education form -->
+    <div id="tab-edu" class="tab-pane">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Institution *</label>
+          <input id="eduInstitution" type="text" placeholder="e.g. MIT">
+        </div>
+        <div class="form-field">
+          <label>Degree / Program</label>
+          <input id="eduDegree" type="text" placeholder="e.g. B.Sc. Computer Science">
+        </div>
+        <div class="form-field">
+          <label>Start *</label>
+          <input id="eduStart" type="date">
+        </div>
+        <div class="form-field">
+          <label>Graduation *</label>
+          <input id="eduEnd" type="date">
+        </div>
+        <div class="form-field wide">
+          <label>Notes</label>
+          <input id="eduNotes" type="text" placeholder="GPA, honors, relevant coursework…">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-success" onclick="addEducation()">＋ Add Education</button>
+      </div>
+    </div>
+
+    <div class="backup-bar" id="backupBar"></div>
+  </div>
 </div>
 
+<!-- ══════ EXPERIENCE TABLE ══════ -->
 <div class="card">
-  <table>
-    <thead>
-      <tr>
-        <th>#</th><th>Company</th><th>Start</th><th>End</th>
-        <th>Duration</th><th>Status</th><th>Overlap Duration</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="expTable"></tbody>
-  </table>
-  <div id="totalOutput"></div>
-  <div id="seniorityOutput"></div>
+  <div class="card-header">
+    <h3>💼 Work Experience</h3>
+    <div class="sort-bar">
+      Sort:
+      <select id="sortKey" onchange="render()">
+        <option value="start">Start Date</option>
+        <option value="duration">Duration</option>
+        <option value="company">Company</option>
+      </select>
+      <select id="sortDir" onchange="render()">
+        <option value="asc">↑ Asc</option>
+        <option value="desc">↓ Desc</option>
+      </select>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="text-align:left">Company / Role</th>
+            <th>Type</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Overlap</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="expTable"></tbody>
+      </table>
+    </div>
+    <div class="summary-bar" id="summaryBar"></div>
+  </div>
 </div>
 
+<!-- ══════ EDUCATION TABLE ══════ -->
+<div class="card" id="eduCard" style="display:none;">
+  <div class="card-header"><h3>🎓 Education</h3></div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="text-align:left">Institution / Degree</th>
+            <th>Start</th>
+            <th>Graduation</th>
+            <th>Duration</th>
+            <th>Gap to 1st Job</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="eduTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ GANTT ══════ -->
 <div class="card" id="ganttCard" style="display:none;">
-  <h3 style="margin-top:0;">Career Timeline (Gantt)</h3>
-  <div class="gantt-legend">
-    <div class="gantt-legend-item">
-      <div class="gantt-legend-swatch" style="background:#1976d2;"></div>Active
+  <div class="card-header"><h3>📊 Career Timeline</h3></div>
+  <div class="card-body">
+    <div class="gantt-legend">
+      <div class="gantt-legend-item"><div class="gantt-swatch" style="background:#1976d2;"></div>Experience</div>
+      <div class="gantt-legend-item"><div class="gantt-swatch" style="background:#43a047;"></div>Education</div>
+      <div class="gantt-legend-item"><div class="gantt-swatch" style="background:#aaa;"></div>Soft Deleted</div>
+      <div class="gantt-legend-item"><div class="gantt-swatch" style="background:repeating-linear-gradient(45deg,#fffde7,#fffde7 4px,#fff8e1 4px,#fff8e1 8px);border:1px solid #fbc02d;"></div>Career Gap</div>
+      <div class="gantt-legend-item"><div class="gantt-swatch" style="background:repeating-linear-gradient(45deg,#f3e5f5,#f3e5f5 4px,#ede7f6 4px,#ede7f6 8px);border:1px solid #ce93d8;"></div>Edu→Job Gap</div>
+      <div class="gantt-legend-item"><div class="gantt-swatch" style="background:#1976d2;outline:2px dashed #c62828;outline-offset:-2px;"></div>Overlap</div>
+      <div class="gantt-legend-item"><div style="width:2px;height:12px;background:#e53935;"></div>Today</div>
     </div>
-    <div class="gantt-legend-item">
-      <div class="gantt-legend-swatch" style="background:#aaa;"></div>Soft Deleted
-    </div>
-    <div class="gantt-legend-item">
-      <div class="gantt-legend-swatch" style="background:#ffe082;border:1px dashed #f9a825;"></div>Career Gap
-    </div>
-    <div class="gantt-legend-item">
-      <div class="gantt-legend-swatch" style="background:#1976d2;outline:2px dashed #b71c1c;outline-offset:-2px;"></div>Overlap
-    </div>
-    <div class="gantt-legend-item">
-      <div style="width:2px;height:14px;background:#e53935;border-radius:1px;"></div>Today
-    </div>
-  </div>
-  <div class="gantt-wrapper">
-    <div id="ganttChart"></div>
+    <div class="gantt-wrapper"><div id="ganttChart"></div></div>
   </div>
 </div>
 
-</div>
+</div><!-- /container -->
+
 <script>
-let experiences = [];
+/* ══════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════ */
+let experiences  = [];
+let education    = [];
+let gapReasons   = {};   // keyed by "YYYY-MM-DD_YYYY-MM-DD" → reason string
 let historyStack = [];
-let redoStack = [];
-let editingId = null;
-let nextId = 1;
+let redoStack    = [];
+let editingId    = null;
+let editingEduId = null;
+let nextId       = 1;
+let nextEduId    = 1;
 
-const COLORS = ['#1976d2','#388e3c','#7b1fa2','#f57c00','#0288d1',
-                 '#c62828','#00796b','#5d4037','#455a64','#ad1457'];
-function colorFor(id){ return COLORS[(id - 1) % COLORS.length]; }
+const COLORS=['#1976d2','#7b1fa2','#f57c00','#0288d1','#c62828',
+              '#00796b','#5d4037','#455a64','#ad1457','#558b2f'];
+function colorFor(id){ return COLORS[(id-1)%COLORS.length]; }
 
-function escapeHtml(str){
-  return String(str)
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+const EMP_BADGES={'Full-time':'badge-ft','Part-time':'badge-pt',
+                  'Contract':'badge-ct','Freelance':'badge-fl'};
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+function toDateStr(d){ return d.toISOString().split('T')[0]; }
+function friendlyDate(d){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  // Use local date parts to avoid UTC-shift issues
+  let dt = d instanceof Date ? d : new Date(d);
+  let day=days[dt.getDay()], dd=dt.getDate();
+  let mon=months[dt.getMonth()], yr=dt.getFullYear();
+  return `${day}, ${dd} ${mon} ${yr}`;
 }
 
-/* ── Storage ── */
+/* ══════════════════════════════════════════════════
+   STORAGE
+══════════════════════════════════════════════════ */
+const SK='careerPro4';
+const BK=['careerProB1','careerProB2','careerProB3'];
+
 function saveToStorage(){
-  try{ localStorage.setItem("careerData2", JSON.stringify({experiences, nextId})); }
-  catch(e){ console.warn("save failed", e); }
+  try{
+    let cur=localStorage.getItem(SK);
+    if(cur){
+      let b2=localStorage.getItem(BK[1]); if(b2) localStorage.setItem(BK[2],b2);
+      let b1=localStorage.getItem(BK[0]); if(b1) localStorage.setItem(BK[1],b1);
+      localStorage.setItem(BK[0],cur);
+    }
+    localStorage.setItem(SK,JSON.stringify({
+      experiences,education,gapReasons,nextId,nextEduId,
+      savedAt:new Date().toISOString()
+    }));
+    renderBackupBar();
+  }catch(e){console.warn('save failed',e);}
 }
 function loadFromStorage(){
   try{
-    let raw = localStorage.getItem("careerData2");
-    if(!raw) return;
-    let p = JSON.parse(raw);
-    nextId = p.nextId || 1;
-    experiences = (p.experiences || []).map(hydrate);
-  } catch(e){ console.warn("load failed", e); experiences = []; }
+    let raw=localStorage.getItem(SK); if(!raw) return;
+    let p=JSON.parse(raw);
+    nextId    = p.nextId    || 1;
+    nextEduId = p.nextEduId || 1;
+    gapReasons= p.gapReasons|| {};
+    experiences=(p.experiences||[]).map(hydrateExp);
+    education  =(p.education  ||[]).map(hydrateEdu);
+  }catch(e){console.warn('load failed',e);experiences=[];education=[];}
 }
-function hydrate(e){
-  return {...e, start: new Date(e.start),
-    end: e.stillWorking ? new Date() : new Date(e.end)};
+function restoreBackup(key){
+  try{
+    let raw=localStorage.getItem(key); if(!raw){showModal('No backup at this slot.');return;}
+    let p=JSON.parse(raw);
+    pushHistory();
+    nextId=p.nextId||1; nextEduId=p.nextEduId||1;
+    gapReasons=p.gapReasons||{};
+    experiences=(p.experiences||[]).map(hydrateExp);
+    education  =(p.education  ||[]).map(hydrateEdu);
+    saveToStorage(); render();
+    showModal('✅ Backup restored.');
+  }catch(e){showModal('Failed to restore backup.');}
+}
+function renderBackupBar(){
+  let bar=document.getElementById('backupBar'); if(!bar) return;
+  let slots=BK.map((k,i)=>{
+    let raw=localStorage.getItem(k); if(!raw) return '';
+    try{
+      let p=JSON.parse(raw);
+      let d=p.savedAt?new Date(p.savedAt).toLocaleString():`Backup ${i+1}`;
+      return `<span onclick="restoreBackup('${k}')">⟳ Backup ${i+1}: ${d}</span>`;
+    }catch(e){return '';}
+  }).filter(Boolean);
+  bar.innerHTML=slots.length?`<strong>Auto-backups:</strong> ${slots.join('')}`:'';
 }
 
-/* ── Still Working ── */
-function handleStillWorking(){
-  let end = document.getElementById("endDate");
-  if(document.getElementById("stillWorking").checked){
-    end.value = toDateStr(new Date()); end.disabled = true;
-  } else { end.disabled = false; }
+function hydrateExp(e){
+  return{...e,start:new Date(e.start),
+    end:e.stillWorking?new Date():new Date(e.end),
+    role:e.role||'',empType:e.empType||'Full-time',notes:e.notes||''};
 }
-function toDateStr(d){ return d.toISOString().split('T')[0]; }
+function hydrateEdu(e){
+  return{...e,start:new Date(e.start),end:new Date(e.end),
+    degree:e.degree||'',notes:e.notes||''};
+}
 
-/* ── History ── */
-function snapshot(){ return JSON.stringify({experiences, nextId}); }
-function pushHistory(){ historyStack.push(snapshot()); redoStack = []; }
-function restoreSnapshot(s){
-  let p = JSON.parse(s);
-  nextId = p.nextId;
-  experiences = p.experiences.map(hydrate);
+/* ══════════════════════════════════════════════════
+   HISTORY
+══════════════════════════════════════════════════ */
+function snapshot(){
+  return JSON.stringify({experiences,education,gapReasons,nextId,nextEduId});
+}
+function pushHistory(){ historyStack.push(snapshot()); redoStack=[]; }
+function restoreSnap(s){
+  let p=JSON.parse(s);
+  nextId=p.nextId; nextEduId=p.nextEduId;
+  gapReasons=p.gapReasons||{};
+  experiences=p.experiences.map(hydrateExp);
+  education  =p.education.map(hydrateEdu);
 }
 function undo(){
   if(!historyStack.length) return;
   redoStack.push(snapshot());
-  restoreSnapshot(historyStack.pop());
+  restoreSnap(historyStack.pop());
   saveToStorage(); render();
 }
 function redo(){
   if(!redoStack.length) return;
   historyStack.push(snapshot());
-  restoreSnapshot(redoStack.pop());
+  restoreSnap(redoStack.pop());
   saveToStorage(); render();
 }
 
-/* ── Utils ── */
-function daysBetween(s, e){ return Math.floor((e - s) / 864e5) + 1; }
+window.addEventListener('beforeunload',e=>{
+  if(editingId!==null||editingEduId!==null){
+    e.preventDefault(); e.returnValue='Unsaved edit — leave?';
+  }
+});
+
+/* ══════════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════════ */
+function daysBetween(s,e){ return Math.floor((e-s)/864e5)+1; }
 function convertToYMD(days){
-  if(days <= 0) return "0D";
-  let y = Math.floor(days/365), r = days%365, m = Math.floor(r/30), d = r%30;
-  return [y?`${y}Y`:"", m?`${m}M`:"", d?`${d}D`:""].filter(Boolean).join(" ") || "0D";
+  if(days<=0) return '0D';
+  let y=Math.floor(days/365),r=days%365,m=Math.floor(r/30),d=r%30;
+  return [y?`${y}Y`:'',m?`${m}M`:'',d?`${d}D`:''].filter(Boolean).join(' ')||'0D';
 }
 function calculateSeniority(years){
-  if(years < 2)  return {level:"Junior", next:2};
-  if(years < 5)  return {level:"Mid-Level", next:5};
-  if(years < 8)  return {level:"Senior", next:8};
-  if(years < 12) return {level:"Lead", next:12};
-  return {level:"Principal / Architect", next:null};
+  if(years<2)  return{level:'Junior',next:2};
+  if(years<5)  return{level:'Mid-Level',next:5};
+  if(years<8)  return{level:'Senior',next:8};
+  if(years<12) return{level:'Lead',next:12};
+  return{level:'Principal / Architect',next:null};
+}
+function gapKey(start,end){ return `${toDateStr(start)}_${toDateStr(end)}`; }
+
+/* ══════════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════════ */
+function switchTab(t){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>
+    b.classList.toggle('active',i===(t==='exp'?0:1)));
+  document.getElementById('tab-exp').classList.toggle('active',t==='exp');
+  document.getElementById('tab-edu').classList.toggle('active',t==='edu');
 }
 
-/* ── CRUD ── */
+/* ══════════════════════════════════════════════════
+   STILL WORKING
+══════════════════════════════════════════════════ */
+function handleStillWorking(){
+  let el=document.getElementById('endDate');
+  el.disabled=document.getElementById('stillWorking').checked;
+  if(el.disabled) el.value=toDateStr(new Date());
+}
+
+/* ══════════════════════════════════════════════════
+   DUPLICATE / OVERLAP WARNING
+══════════════════════════════════════════════════ */
+function checkWarning(){
+  let banner=document.getElementById('warnBanner');
+  let c=(document.getElementById('company')?.value||'').trim().toLowerCase();
+  let s=document.getElementById('startDate')?.value;
+  let e=document.getElementById('endDate')?.value;
+  let warns=[];
+  experiences.filter(x=>!x.deleted).forEach(x=>{
+    if(c && x.company.toLowerCase()===c)
+      warns.push(`⚠ Already have an entry for <strong>${esc(x.company)}</strong>.`);
+    if(s&&e&&new Date(s)<=x.end&&new Date(e)>=x.start)
+      warns.push(`⚠ Dates overlap with <strong>${esc(x.company)}</strong> (${toDateStr(x.start)} – ${toDateStr(x.end)}).`);
+  });
+  warns=[...new Set(warns)];
+  banner.innerHTML=warns.join('<br>');
+  banner.style.display=warns.length?'block':'none';
+}
+['company','startDate','endDate'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('input',checkWarning);
+});
+
+/* ══════════════════════════════════════════════════
+   EXPERIENCE CRUD
+══════════════════════════════════════════════════ */
 function addExperience(){
-  let c = document.getElementById("company").value.trim();
-  let s = document.getElementById("startDate").value;
-  let e = document.getElementById("endDate").value;
-  let still = document.getElementById("stillWorking").checked;
-  if(!c || !s || !e){ alert("Fill all fields"); return; }
-  if(new Date(e) < new Date(s)){ alert("Invalid dates"); return; }
+  let c=document.getElementById('company').value.trim();
+  let role=document.getElementById('role').value.trim();
+  let emp=document.getElementById('empType').value;
+  let s=document.getElementById('startDate').value;
+  let e=document.getElementById('endDate').value;
+  let still=document.getElementById('stillWorking').checked;
+  let notes=document.getElementById('notes').value.trim();
+  if(!c||!s||!e){showModal('Please fill Company, Start and End.'); return;}
+  if(new Date(e)<new Date(s)){showModal('End must be after start.'); return;}
   pushHistory();
-  experiences.push({id: nextId++, company: c,
-    start: new Date(s), end: new Date(e), stillWorking: still, deleted: false});
-  saveToStorage(); clearInputs(); render();
+  experiences.push({id:nextId++,company:c,role,empType:emp,
+    start:new Date(s),end:new Date(e),stillWorking:still,deleted:false,notes});
+  saveToStorage();
+  ['company','role','startDate','endDate','notes'].forEach(id=>
+    {let el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('stillWorking').checked=false;
+  document.getElementById('endDate').disabled=false;
+  document.getElementById('empType').value='Full-time';
+  document.getElementById('warnBanner').style.display='none';
+  render();
 }
-function clearInputs(){
-  ["company","startDate","endDate"].forEach(id => document.getElementById(id).value = "");
-  document.getElementById("stillWorking").checked = false;
-  document.getElementById("endDate").disabled = false;
-}
-
-/* FIX: all mutations use stable ID, never array index */
 function toggleDelete(id){
   pushHistory();
-  let exp = experiences.find(e => e.id === id);
-  if(exp) exp.deleted = !exp.deleted;
+  let x=experiences.find(e=>e.id===id); if(x) x.deleted=!x.deleted;
   saveToStorage(); render();
 }
-function permanentlyDelete(id){
-  // confirm() is silently blocked in sandboxed iframes — use inline modal instead
-  let existing = document.getElementById("confirmBox");
-  if(existing) existing.remove();
-  let box = document.createElement("div");
-  box.id = "confirmBox";
-  box.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;
-    background:rgba(0,0,0,0.45);display:flex;align-items:center;
-    justify-content:center;z-index:9999;`;
-  box.innerHTML = `
-    <div style="background:white;padding:28px 32px;border-radius:10px;
-      box-shadow:0 8px 30px rgba(0,0,0,0.2);text-align:center;max-width:340px;">
-      <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Permanent Delete</div>
-      <div style="color:#555;margin-bottom:20px;">
-        This entry will be permanently removed. This cannot be undone after you leave the page.
-      </div>
-      <button onclick="confirmPermanentDelete(${id})"
-        style="background:#b71c1c;color:white;border:none;padding:8px 20px;
-        border-radius:4px;cursor:pointer;margin-right:10px;font-size:14px;">
-        Delete
-      </button>
-      <button onclick="document.getElementById('confirmBox').remove()"
-        style="background:#757575;color:white;border:none;padding:8px 20px;
-        border-radius:4px;cursor:pointer;font-size:14px;">
-        Cancel
-      </button>
-    </div>`;
-  document.body.appendChild(box);
-}
-function confirmPermanentDelete(id){
-  document.getElementById("confirmBox").remove();
-  pushHistory();
-  experiences = experiences.filter(e => e.id !== id);
-  saveToStorage(); render();
-}
-function startEdit(id){ editingId = id; render(); }
-function cancelEdit(){ editingId = null; render(); }
+function permanentlyDelete(id){ showConfirm('Delete this entry permanently?',()=>{ pushHistory(); experiences=experiences.filter(e=>e.id!==id); saveToStorage(); render(); }); }
+function startEdit(id){ editingId=id; render(); }
+function cancelEdit(){ editingId=null; render(); }
 function saveEdit(id){
-  let c = document.getElementById("editCompany"+id).value.trim();
-  let s = document.getElementById("editStart"+id).value;
-  let e = document.getElementById("editEnd"+id).value;
-  let still = document.getElementById("editStillWorking"+id).checked;
-  if(!c || !s || !e){ alert("Fill all fields"); return; }
-  if(new Date(e) < new Date(s)){ alert("Invalid dates"); return; }
+  let c=document.getElementById('ec'+id)?.value.trim();
+  let role=document.getElementById('er'+id)?.value.trim();
+  let emp=document.getElementById('et'+id)?.value;
+  let s=document.getElementById('es'+id)?.value;
+  let e=document.getElementById('ee'+id)?.value;
+  let still=document.getElementById('esw'+id)?.checked;
+  let notes=document.getElementById('en'+id)?.value.trim();
+  if(!c||!s||!e){showModal('Fill required fields.'); return;}
+  if(new Date(e)<new Date(s)){showModal('End must be after start.'); return;}
   pushHistory();
-  let exp = experiences.find(x => x.id === id);
-  exp.company = c; exp.start = new Date(s); exp.end = new Date(e); exp.stillWorking = still;
-  editingId = null; saveToStorage(); render();
+  let x=experiences.find(v=>v.id===id);
+  Object.assign(x,{company:c,role,empType:emp,start:new Date(s),end:new Date(e),stillWorking:still,notes});
+  editingId=null; saveToStorage(); render();
 }
-function handleEditStillWorking(id){
-  let cb = document.getElementById("editStillWorking"+id);
-  let ei = document.getElementById("editEnd"+id);
-  if(cb.checked){ ei.value = toDateStr(new Date()); ei.disabled = true; }
-  else { ei.disabled = false; }
+function handleEditSW(id){
+  let cb=document.getElementById('esw'+id),ei=document.getElementById('ee'+id);
+  ei.disabled=cb.checked; if(cb.checked) ei.value=toDateStr(new Date());
+}
+function toggleNotes(id){
+  let r=document.getElementById('nr'+id);
+  if(r) r.style.display=r.style.display==='none'?'':'none';
 }
 
-/* ── Total ── */
+/* ══════════════════════════════════════════════════
+   EDUCATION CRUD
+══════════════════════════════════════════════════ */
+function addEducation(){
+  let inst=document.getElementById('eduInstitution').value.trim();
+  let deg =document.getElementById('eduDegree').value.trim();
+  let s   =document.getElementById('eduStart').value;
+  let e   =document.getElementById('eduEnd').value;
+  let notes=document.getElementById('eduNotes').value.trim();
+  if(!inst||!s||!e){showModal('Please fill Institution, Start and Graduation.'); return;}
+  if(new Date(e)<new Date(s)){showModal('Graduation must be after start.'); return;}
+  pushHistory();
+  education.push({id:nextEduId++,institution:inst,degree:deg,
+    start:new Date(s),end:new Date(e),notes});
+  saveToStorage();
+  ['eduInstitution','eduDegree','eduStart','eduEnd','eduNotes'].forEach(id=>
+    {let el=document.getElementById(id);if(el)el.value='';});
+  render();
+}
+function deleteEducation(id){
+  showConfirm('Delete this education entry?',()=>{ pushHistory(); education=education.filter(e=>e.id!==id); saveToStorage(); render(); });
+}
+function startEditEdu(id){ editingEduId=id; render(); }
+function cancelEditEdu(){ editingEduId=null; render(); }
+function saveEditEdu(id){
+  let inst=document.getElementById('eei'+id)?.value.trim();
+  let deg =document.getElementById('eed'+id)?.value.trim();
+  let s   =document.getElementById('ees'+id)?.value;
+  let e   =document.getElementById('eee'+id)?.value;
+  let notes=document.getElementById('een'+id)?.value.trim();
+  if(!inst||!s||!e){showModal('Fill required fields.'); return;}
+  if(new Date(e)<new Date(s)){showModal('End must be after start.'); return;}
+  pushHistory();
+  let x=education.find(v=>v.id===id);
+  Object.assign(x,{institution:inst,degree:deg,start:new Date(s),end:new Date(e),notes});
+  editingEduId=null; saveToStorage(); render();
+}
+
+/* ══════════════════════════════════════════════════
+   GAP ANNOTATION
+══════════════════════════════════════════════════ */
+function annotateGap(startStr, endStr){
+  let key=`${startStr}_${endStr}`;
+  let existing=gapReasons[key]||'';
+  showPrompt('Reason for this gap (e.g. Travel, Health, Study, Job Search):',existing,reason=>{
+    pushHistory();
+    if(reason!==null){
+      gapReasons[key]=reason.trim();
+      saveToStorage(); render();
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   TOTAL
+══════════════════════════════════════════════════ */
 function calculateTotal(){
-  let active = experiences.filter(e => !e.deleted)
-    .map(e => ({start: new Date(e.start), end: new Date(e.end)}))
-    .sort((a,b) => a.start - b.start);
-  let merged = [];
-  for(let exp of active){
-    if(merged.length && exp.start <= merged[merged.length-1].end){
-      merged[merged.length-1].end = new Date(Math.max(merged[merged.length-1].end, exp.end));
-    } else { merged.push({start: new Date(exp.start), end: new Date(exp.end)}); }
+  let active=experiences.filter(e=>!e.deleted)
+    .map(e=>({start:new Date(e.start),end:new Date(e.end)}))
+    .sort((a,b)=>a.start-b.start);
+  let merged=[];
+  for(let x of active){
+    if(merged.length&&x.start<=merged[merged.length-1].end)
+      merged[merged.length-1].end=new Date(Math.max(merged[merged.length-1].end,x.end));
+    else merged.push({start:new Date(x.start),end:new Date(x.end)});
   }
-  return merged.reduce((s,m) => s + daysBetween(m.start, m.end), 0);
+  return merged.reduce((s,m)=>s+daysBetween(m.start,m.end),0);
 }
 
-/* ── RENDER TABLE ── */
-function render(){
-  let tbody = document.getElementById("expTable");
-  tbody.innerHTML = "";
-  let sorted = [...experiences].sort((a,b) => a.start - b.start);
-  let lastEnd = null, rowNum = 0;
+/* ══════════════════════════════════════════════════
+   SORT
+══════════════════════════════════════════════════ */
+function getSorted(){
+  let key=document.getElementById('sortKey')?.value||'start';
+  let dir=document.getElementById('sortDir')?.value||'asc';
+  return [...experiences].sort((a,b)=>{
+    let va=key==='start'?a.start:key==='duration'?daysBetween(a.start,a.end):a.company.toLowerCase();
+    let vb=key==='start'?b.start:key==='duration'?daysBetween(b.start,b.end):b.company.toLowerCase();
+    return va<vb?(dir==='asc'?-1:1):va>vb?(dir==='asc'?1:-1):0;
+  });
+}
 
-  sorted.forEach(exp => {
-    // Gap row
-    if(!exp.deleted && lastEnd && exp.start > new Date(lastEnd.getTime() + 864e5)){
-      let gapStart = new Date(lastEnd.getTime() + 864e5);
-      let gapEnd   = new Date(exp.start.getTime() - 864e5);
-      let gapDays  = daysBetween(gapStart, gapEnd);
-      if(gapDays > 0){
-        let gr = document.createElement("tr");
-        gr.classList.add("gap-row");
-        gr.innerHTML = `<td>-</td><td colspan="3">Career Gap</td>
-          <td>${convertToYMD(gapDays)}</td><td>Gap</td><td>-</td><td>-</td>`;
-        tbody.appendChild(gr);
+/* ══════════════════════════════════════════════════
+   RENDER — EXPERIENCE TABLE
+══════════════════════════════════════════════════ */
+function render(){
+  renderExpTable();
+  renderEduTable();
+  renderSummary();
+  renderGantt();
+}
+
+function renderExpTable(){
+  let tbody=document.getElementById('expTable');
+  tbody.innerHTML='';
+
+  // Build overlap map and gap inserts (always by start date)
+  let byStart=[...experiences].filter(e=>!e.deleted).sort((a,b)=>a.start-b.start);
+  let lastEndMap={}, le=null;
+  byStart.forEach(x=>{ lastEndMap[x.id]=le?new Date(le):null; le=le?new Date(Math.max(le,x.end)):new Date(x.end); });
+
+  let sortKey=document.getElementById('sortKey')?.value||'start';
+  let gapInserts={}, gLast=null;
+  [...experiences].sort((a,b)=>a.start-b.start).forEach(x=>{
+    if(!x.deleted){
+      if(gLast&&x.start>new Date(gLast.getTime()+864e5)){
+        let gs=new Date(gLast.getTime()+864e5), ge=new Date(x.start.getTime()-864e5);
+        let gd=daysBetween(gs,ge);
+        if(gd>0) gapInserts[x.id]={days:gd,gs,ge};
       }
+      gLast=gLast?new Date(Math.max(gLast,x.end)):new Date(x.end);
+    }
+  });
+
+  // ── Edu→Job gap: latest graduation vs earliest active job start ──────────
+  let eduJobGapRow = null;
+  if(sortKey==='start' && education.length && experiences.filter(e=>!e.deleted).length){
+    let latestGrad = education.reduce((m,e)=>(!m||e.end>m)?e.end:m, null);
+    let activeExps = experiences.filter(e=>!e.deleted).sort((a,b)=>a.start-b.start);
+    let firstJobEntry = activeExps.length ? activeExps[0] : null;
+    let firstJobStart = firstJobEntry ? firstJobEntry.start : null;
+    let firstJobId = firstJobEntry ? firstJobEntry.id : null;
+    if(latestGrad && firstJobStart && toDateStr(firstJobStart) > toDateStr(latestGrad)){
+      // gs = day after graduation, ge = day before first job
+      let gs = new Date(latestGrad.getFullYear(), latestGrad.getMonth(), latestGrad.getDate()+1);
+      let ge = new Date(firstJobStart.getFullYear(), firstJobStart.getMonth(), firstJobStart.getDate()-1);
+      let gd = daysBetween(gs, ge);
+      if(gd>0) eduJobGapRow = {days:gd, gs, ge, beforeId:firstJobId};
+    }
+  }
+
+  let rowNum=0;
+  getSorted().forEach(exp=>{
+    // Edu→Job gap row — inserted just before the first job
+    if(eduJobGapRow && eduJobGapRow.beforeId===exp.id && !exp.deleted){
+      let {days,gs,ge}=eduJobGapRow;
+      let key='edu_'+gapKey(gs,ge), reason=gapReasons[key]||'';
+      let gr=document.createElement('tr'); gr.className='row-edu-gap';
+      gr.innerHTML=`<td>-</td>
+        <td colspan="2" style="text-align:left;">
+          🎓 → 💼 Education to First Job Gap
+          ${reason?`<span class="gap-reason">— ${esc(reason)}</span>`:''}
+          <button class="gap-annotate-btn" onclick="annotateGap('edu_${toDateStr(gs)}','${toDateStr(ge)}')">
+            ${reason?'✏ Edit reason':'＋ Add reason'}
+          </button>
+        </td>
+        <td>${friendlyDate(gs)}</td>
+        <td>${friendlyDate(ge)}</td>
+        <td>${convertToYMD(days)}</td>
+        <td>Edu Gap</td>
+        <td>-</td><td>-</td>`;
+      tbody.appendChild(gr);
+    }
+
+    // Career gap row (only in start-date sort)
+    if(sortKey==='start'&&gapInserts[exp.id]&&!exp.deleted){
+      let {days,gs,ge}=gapInserts[exp.id];
+      let key=gapKey(gs,ge), reason=gapReasons[key]||'';
+      let gr=document.createElement('tr'); gr.className='row-gap';
+      gr.innerHTML=`<td>-</td>
+        <td colspan="2" style="text-align:left;">
+          Career Gap
+          ${reason?`<span class="gap-reason">— ${esc(reason)}</span>`:''}
+          <button class="gap-annotate-btn" onclick="annotateGap('${toDateStr(gs)}','${toDateStr(ge)}')">
+            ${reason?'✏ Edit reason':'＋ Add reason'}
+          </button>
+        </td>
+        <td>${friendlyDate(gs)}</td>
+        <td>${friendlyDate(ge)}</td>
+        <td>${convertToYMD(days)}</td>
+        <td>Gap</td>
+        <td>-</td><td>-</td>`;
+      tbody.appendChild(gr);
     }
 
     // Overlap
-    let overlap = false, overlapDuration = "";
-    if(!exp.deleted && lastEnd && exp.start <= lastEnd){
-      overlap = true;
-      let od = daysBetween(new Date(exp.start), new Date(Math.min(lastEnd, exp.end)));
-      overlapDuration = convertToYMD(od);
+    let overlap=false,overlapDur='';
+    let prevEnd=lastEndMap[exp.id];
+    if(!exp.deleted&&prevEnd&&exp.start<=prevEnd){
+      overlap=true;
+      overlapDur=convertToYMD(daysBetween(new Date(exp.start),new Date(Math.min(prevEnd,exp.end))));
     }
 
     rowNum++;
-    let row = document.createElement("tr");
-    if(exp.deleted) row.classList.add("strike");
-    if(overlap) row.classList.add("overlap-row");
+    let row=document.createElement('tr');
+    if(exp.deleted) row.className='row-deleted';
+    else if(overlap) row.className='row-overlap';
 
-    if(editingId === exp.id){
-      row.innerHTML = `
+    if(editingId===exp.id){
+      row.innerHTML=`
         <td>${rowNum}</td>
-        <td><input id="editCompany${exp.id}" value="${escapeHtml(exp.company)}"></td>
-        <td><input type="date" id="editStart${exp.id}" value="${toDateStr(exp.start)}"></td>
+        <td style="text-align:left;">
+          <input id="ec${exp.id}" value="${esc(exp.company)}" placeholder="Company*" style="width:100%;margin-bottom:4px;">
+          <input id="er${exp.id}" value="${esc(exp.role)}" placeholder="Role" style="width:100%;">
+        </td>
+        <td><select id="et${exp.id}">${['Full-time','Part-time','Contract','Freelance'].map(t=>`<option${exp.empType===t?' selected':''}>${t}</option>`).join('')}</select></td>
+        <td><input type="date" id="es${exp.id}" value="${toDateStr(exp.start)}" style="width:100%;"></td>
         <td>
-          <input type="date" id="editEnd${exp.id}" value="${toDateStr(exp.end)}" ${exp.stillWorking?"disabled":""}>
-          <label style="font-size:12px;">
-            <input type="checkbox" id="editStillWorking${exp.id}"
-              onchange="handleEditStillWorking(${exp.id})" ${exp.stillWorking?"checked":""}>
-            Still Working
+          <input type="date" id="ee${exp.id}" value="${toDateStr(exp.end)}" ${exp.stillWorking?'disabled':''} style="width:100%;">
+          <label style="font-size:11px;display:flex;align-items:center;gap:4px;margin-top:3px;">
+            <input type="checkbox" id="esw${exp.id}" onchange="handleEditSW(${exp.id})" ${exp.stillWorking?'checked':''}>Still Working
           </label>
         </td>
         <td>-</td><td>Editing</td><td>-</td>
         <td>
-          <button class="save-btn" onclick="saveEdit(${exp.id})">Save</button>
-          <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+          <input id="en${exp.id}" value="${esc(exp.notes)}" placeholder="Notes" style="width:100%;margin-bottom:5px;">
+          <button class="btn btn-success btn-sm" onclick="saveEdit(${exp.id})">Save</button>
+          <button class="btn btn-grey btn-sm" onclick="cancelEdit()">Cancel</button>
         </td>`;
     } else {
-      let dur = convertToYMD(daysBetween(exp.start, exp.end));
-      row.innerHTML = `
+      let dur=convertToYMD(daysBetween(exp.start,exp.end));
+      let bc=EMP_BADGES[exp.empType]||'badge-ft';
+      row.innerHTML=`
         <td>${rowNum}</td>
-        <td>${escapeHtml(exp.company)}${exp.stillWorking?' <em style="font-size:11px;color:#1976d2;">(Current)</em>':''}</td>
-        <td>${toDateStr(exp.start)}</td>
-        <td>${toDateStr(exp.end)}</td>
+        <td style="text-align:left;">
+          <strong>${esc(exp.company)}</strong>${exp.stillWorking?' <em style="font-size:10px;color:#1976d2;">(Current)</em>':''}
+          ${exp.role?`<br><span style="font-size:11px;color:#777;">${esc(exp.role)}</span>`:''}
+        </td>
+        <td><span class="badge ${bc}">${esc(exp.empType)}</span></td>
+        <td>${friendlyDate(exp.start)}</td>
+        <td>${friendlyDate(exp.end)}</td>
         <td>${dur}</td>
-        <td>${exp.deleted?"Deleted":"Active"}</td>
-        <td>${overlap ? overlapDuration : "-"}</td>
+        <td>${exp.deleted?'Deleted':'Active'}</td>
+        <td>${overlap?overlapDur:'-'}</td>
         <td>
-          <button class="edit-btn" onclick="startEdit(${exp.id})">Edit</button>
-          <button class="soft-btn" onclick="toggleDelete(${exp.id})">${exp.deleted?"Undo":"Soft Delete"}</button>
-          ${exp.deleted?`<button class="perm-btn" onclick="permanentlyDelete(${exp.id})">Permanent</button>`:""}
+          <button class="btn btn-info btn-sm" onclick="startEdit(${exp.id})">Edit</button>
+          <button class="btn btn-warning btn-sm" onclick="toggleDelete(${exp.id})">${exp.deleted?'Undo':'Del'}</button>
+          ${exp.notes?`<button class="btn btn-grey btn-sm" onclick="toggleNotes(${exp.id})">Notes</button>`:''}
+          ${exp.deleted?`<button class="btn btn-danger btn-sm" onclick="permanentlyDelete(${exp.id})">Perm</button>`:''}
         </td>`;
     }
-
     tbody.appendChild(row);
-    if(!exp.deleted){
-      lastEnd = lastEnd ? new Date(Math.max(lastEnd, exp.end)) : new Date(exp.end);
+
+    if(exp.notes&&!exp.deleted&&editingId!==exp.id){
+      let nr=document.createElement('tr'); nr.id='nr'+exp.id; nr.className='notes-row'; nr.style.display='none';
+      nr.innerHTML=`<td></td><td colspan="8">📝 ${esc(exp.notes)}</td>`;
+      tbody.appendChild(nr);
     }
   });
-
-  updateTotals();
-  renderGantt();
 }
 
-function updateTotals(){
-  let total = calculateTotal();
-  document.getElementById("totalOutput").innerHTML =
-    `<div class="total-big">Total Experience: ${convertToYMD(total)}</div>`;
-  let years = total / 365, s = calculateSeniority(years);
-  let next = s.next ? `Next Level in ${(s.next - years).toFixed(2)} Years` : "Top Tier Achieved";
-  document.getElementById("seniorityOutput").innerHTML =
-    `<div class="seniority-box"><strong>${s.level}</strong><br>${next}</div>`;
-}
+/* ══════════════════════════════════════════════════
+   RENDER — EDUCATION TABLE
+══════════════════════════════════════════════════ */
+function renderEduTable(){
+  let card=document.getElementById('eduCard');
+  let tbody=document.getElementById('eduTable');
+  tbody.innerHTML='';
+  if(!education.length){ card.style.display='none'; return; }
+  card.style.display='block';
 
-/* ── GANTT ── */
-function renderGantt(){
-  let container = document.getElementById("ganttChart");
-  let card = document.getElementById("ganttCard");
-  container.innerHTML = "";
-  if(!experiences.length){ card.style.display = "none"; return; }
-  card.style.display = "block";
+  // First job start (for gap-to-first-job calculation)
+  let firstJobStart=experiences.filter(e=>!e.deleted).reduce((m,e)=>(!m||e.start<m)?e.start:m,null);
 
-  let sorted = [...experiences].sort((a,b) => a.start - b.start);
-  let today  = new Date();
-
-  // Time range
-  let minDate = new Date(Math.min(...experiences.map(e => e.start)));
-  let maxDate = new Date(Math.max(today.getTime(), ...experiences.map(e => e.end)));
-  minDate = new Date(minDate.getFullYear(), minDate.getMonth() - 1, 1);
-  maxDate = new Date(maxDate.getFullYear(), maxDate.getMonth() + 2, 1);
-  let totalMs = maxDate - minDate;
-
-  function pct(d){ return ((d - minDate) / totalMs * 100).toFixed(4) + "%"; }
-  function pctW(s, e){ return ((e - s) / totalMs * 100).toFixed(4) + "%"; }
-
-  let grid = document.createElement("div");
-  grid.className = "gantt-grid";
-  grid.style.gridTemplateColumns = "160px 1fr";
-
-  // Header row
-  let hLabel = document.createElement("div");
-  hLabel.className = "gantt-header-label";
-  hLabel.textContent = "Company";
-
-  let hBar = document.createElement("div");
-  hBar.className = "gantt-header-label";
-  hBar.style.cssText = "position:relative;height:28px;overflow:visible;";
-
-  // Year ticks on header
-  let yr = new Date(minDate.getFullYear(), 0, 1);
-  while(yr <= maxDate){
-    if(yr >= minDate){
-      let tick = document.createElement("div");
-      tick.className = "gantt-year-tick";
-      tick.style.left = pct(yr);
-      let lbl = document.createElement("div");
-      lbl.className = "gantt-year-label";
-      lbl.style.left = pct(yr);
-      lbl.textContent = yr.getFullYear();
-      hBar.appendChild(tick);
-      hBar.appendChild(lbl);
+  [...education].sort((a,b)=>a.end-b.end).forEach((edu,i)=>{
+    // Gap from graduation to first job
+    let gapToJob='—';
+    if(firstJobStart){
+      let diff=Math.floor((firstJobStart-edu.end)/864e5);
+      if(diff>0) gapToJob=`${convertToYMD(diff)} gap`;
+      else if(diff<0) gapToJob=`${convertToYMD(-diff)} overlap`;
+      else gapToJob='Same day';
     }
-    yr = new Date(yr.getFullYear() + 1, 0, 1);
+
+    let row=document.createElement('tr'); row.className='row-edu';
+
+    if(editingEduId===edu.id){
+      row.innerHTML=`
+        <td>${i+1}</td>
+        <td style="text-align:left;">
+          <input id="eei${edu.id}" value="${esc(edu.institution)}" placeholder="Institution*" style="width:100%;margin-bottom:4px;">
+          <input id="eed${edu.id}" value="${esc(edu.degree)}" placeholder="Degree" style="width:100%;">
+        </td>
+        <td><input type="date" id="ees${edu.id}" value="${toDateStr(edu.start)}" style="width:100%;"></td>
+        <td><input type="date" id="eee${edu.id}" value="${toDateStr(edu.end)}" style="width:100%;"></td>
+        <td>-</td><td>-</td>
+        <td>
+          <input id="een${edu.id}" value="${esc(edu.notes)}" placeholder="Notes" style="width:100%;margin-bottom:5px;">
+          <button class="btn btn-success btn-sm" onclick="saveEditEdu(${edu.id})">Save</button>
+          <button class="btn btn-grey btn-sm" onclick="cancelEditEdu()">Cancel</button>
+        </td>`;
+    } else {
+      let dur=convertToYMD(daysBetween(edu.start,edu.end));
+      row.innerHTML=`
+        <td>${i+1}</td>
+        <td style="text-align:left;">
+          <strong>${esc(edu.institution)}</strong>
+          ${edu.degree?`<br><span style="font-size:11px;color:#555;">${esc(edu.degree)}</span>`:''}
+          ${edu.notes?`<br><span style="font-size:10px;color:#999;">${esc(edu.notes)}</span>`:''}
+        </td>
+        <td>${friendlyDate(edu.start)}</td>
+        <td>${friendlyDate(edu.end)}</td>
+        <td>${dur}</td>
+        <td>${gapToJob}</td>
+        <td>
+          <button class="btn btn-info btn-sm" onclick="startEditEdu(${edu.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEducation(${edu.id})">Del</button>
+        </td>`;
+    }
+    tbody.appendChild(row);
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   RENDER — SUMMARY BAR
+══════════════════════════════════════════════════ */
+function renderSummary(){
+  let total=calculateTotal();
+  let years=total/365;
+  let s=calculateSeniority(years);
+  let next=s.next?`Next level in ${(s.next-years).toFixed(1)} yrs`:'Top tier 🏆';
+
+  // Count career gaps (between jobs)
+  let byStart=[...experiences].filter(e=>!e.deleted).sort((a,b)=>a.start-b.start);
+  let gapCount=0, le=null;
+  byStart.forEach(x=>{
+    if(le&&x.start>new Date(le.getTime()+864e5)) gapCount++;
+    le=le?new Date(Math.max(le,x.end)):new Date(x.end);
+  });
+
+  // Edu→Job gap (shown separately)
+  let eduGapDays=0;
+  if(education.length && experiences.filter(e=>!e.deleted).length){
+    let latestGrad=education.reduce((m,e)=>(!m||e.end>m)?e.end:m,null);
+    let firstJob=experiences.filter(e=>!e.deleted).reduce((m,e)=>(!m||e.start<m)?e.start:m,null);
+    if(latestGrad&&firstJob&&firstJob>new Date(latestGrad.getTime()+864e5)){
+      eduGapDays=daysBetween(new Date(latestGrad.getTime()+864e5),new Date(firstJob.getTime()-864e5));
+    }
   }
-  // Today on header
-  if(today >= minDate && today <= maxDate){
-    let tl = document.createElement("div");
-    tl.className = "gantt-today"; tl.style.left = pct(today);
-    let tll = document.createElement("div");
-    tll.className = "gantt-today-label"; tll.style.left = pct(today);
-    tll.textContent = "Today";
+
+  document.getElementById('summaryBar').innerHTML=`
+    <div class="summary-item">
+      <div class="summary-val">${convertToYMD(total)}</div>
+      <div class="summary-lbl">Total Experience</div>
+    </div>
+    <div class="summary-item">
+      <div class="seniority-pill">${s.level}</div>
+      <div class="seniority-next">${next}</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-val" style="color:${gapCount>0?'#e65100':'#388e3c'}">${gapCount}</div>
+      <div class="summary-lbl">Career Gap${gapCount!==1?'s':''}</div>
+    </div>
+    ${eduGapDays>0?`
+    <div class="summary-item">
+      <div class="summary-val" style="color:#7b1fa2">${convertToYMD(eduGapDays)}</div>
+      <div class="summary-lbl">Edu → 1st Job Gap</div>
+    </div>`:''}
+    <div class="summary-item">
+      <div class="summary-val" style="color:#7b1fa2">${education.length}</div>
+      <div class="summary-lbl">Education Entr${education.length!==1?'ies':'y'}</div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   EXPORT / IMPORT
+══════════════════════════════════════════════════ */
+function exportJSON(){
+  let data=JSON.stringify({experiences,education,gapReasons,nextId,nextEduId},null,2);
+  showExportModal(data, `career-${toDateStr(new Date())}.json`);
+}
+function importJSON(evt){
+  let file=evt.target.files[0]; if(!file) return;
+  let r=new FileReader();
+  r.onload=e=>{
+    try{
+      let p=JSON.parse(e.target.result);
+      if(!Array.isArray(p.experiences)) throw 0;
+      pushHistory();
+      nextId=p.nextId||1; nextEduId=p.nextEduId||1;
+      gapReasons=p.gapReasons||{};
+      experiences=p.experiences.map(hydrateExp);
+      education  =(p.education||[]).map(hydrateEdu);
+      saveToStorage(); render();
+      showModal(`✅ Imported ${experiences.length} experience + ${education.length} education entries.`);
+    }catch{showModal('❌ Import failed: invalid file.');}
+    evt.target.value='';
+  };
+  r.readAsText(file);
+}
+
+/* ══════════════════════════════════════════════════
+   GANTT
+══════════════════════════════════════════════════ */
+function renderGantt(){
+  let container=document.getElementById('ganttChart');
+  let card=document.getElementById('ganttCard');
+  container.innerHTML='';
+  let hasExp=experiences.length>0, hasEdu=education.length>0;
+  if(!hasExp&&!hasEdu){ card.style.display='none'; return; }
+  card.style.display='block';
+
+  let today=new Date();
+  let allDates=[...experiences.map(e=>e.start),...experiences.map(e=>e.end),
+                ...education.map(e=>e.start),...education.map(e=>e.end),today];
+  let minDate=new Date(Math.min(...allDates));
+  let maxDate=new Date(Math.max(...allDates));
+  minDate=new Date(minDate.getFullYear(),minDate.getMonth()-1,1);
+  maxDate=new Date(maxDate.getFullYear(),maxDate.getMonth()+2,1);
+  let totalMs=maxDate-minDate;
+
+  const pct=d=>((d-minDate)/totalMs*100).toFixed(4)+'%';
+  const pctW=(s,e)=>((e-s)/totalMs*100).toFixed(4)+'%';
+
+  let grid=document.createElement('div');
+  grid.className='gantt-grid';
+  grid.style.gridTemplateColumns='160px 1fr';
+
+  // Header
+  let hLbl=document.createElement('div'); hLbl.className='gantt-hdr'; hLbl.textContent='Entry';
+  let hBar=document.createElement('div'); hBar.className='gantt-hdr gantt-hdr-bar';
+  let yr=new Date(minDate.getFullYear(),0,1);
+  while(yr<=maxDate){
+    if(yr>=minDate){
+      let t=document.createElement('div'); t.className='gantt-tick'; t.style.left=pct(yr);
+      let l=document.createElement('div'); l.className='gantt-year-lbl'; l.style.left=pct(yr); l.textContent=yr.getFullYear();
+      hBar.appendChild(t); hBar.appendChild(l);
+    }
+    yr=new Date(yr.getFullYear()+1,0,1);
+  }
+  if(today>=minDate&&today<=maxDate){
+    let tl=document.createElement('div'); tl.className='gantt-today'; tl.style.left=pct(today);
+    let tll=document.createElement('div'); tll.className='gantt-today-lbl'; tll.style.left=pct(today); tll.textContent='Today';
     hBar.appendChild(tl); hBar.appendChild(tll);
   }
-  grid.appendChild(hLabel); grid.appendChild(hBar);
+  grid.appendChild(hLbl); grid.appendChild(hBar);
 
-  // Compute gap intervals (active only)
-  let activeOnly = sorted.filter(e => !e.deleted);
-  let gaps = [], prevEnd = null;
-  for(let exp of activeOnly){
-    if(prevEnd && exp.start > new Date(prevEnd.getTime() + 864e5)){
-      gaps.push({start: new Date(prevEnd.getTime() + 864e5),
-                 end:   new Date(exp.start.getTime() - 864e5)});
+  // Gap shading for experience
+  let activeExp=[...experiences].filter(e=>!e.deleted).sort((a,b)=>a.start-b.start);
+  let gaps=[],pe=null;
+  activeExp.forEach(x=>{
+    if(pe&&x.start>new Date(pe.getTime()+864e5))
+      gaps.push({s:new Date(pe.getTime()+864e5),e:new Date(x.start.getTime()-864e5)});
+    pe=pe?new Date(Math.max(pe,x.end)):new Date(x.end);
+  });
+
+  // Compute edu→job gap for Gantt shading
+  let eduJobGanttGap=null;
+  if(education.length && activeExp.length){
+    let latestGrad=education.reduce((m,e)=>(!m||e.end>m)?e.end:m,null);
+    let firstJob=activeExp[0].start; // already sorted ascending
+    if(latestGrad && toDateStr(firstJob) > toDateStr(latestGrad)){
+      let gs=new Date(latestGrad.getFullYear(),latestGrad.getMonth(),latestGrad.getDate()+1);
+      let ge=new Date(firstJob.getFullYear(),firstJob.getMonth(),firstJob.getDate()-1);
+      if(daysBetween(gs,ge)>0) eduJobGanttGap={gs,ge};
     }
-    prevEnd = prevEnd ? new Date(Math.max(prevEnd, exp.end)) : new Date(exp.end);
   }
 
-  // One row per experience
-  let lastEnd2 = null;
-  sorted.forEach(exp => {
-    let isOverlap = !exp.deleted && lastEnd2 && exp.start <= lastEnd2;
-
-    // Label
-    let lCell = document.createElement("div");
-    lCell.className = "gantt-company";
-    if(exp.deleted) lCell.style.opacity = "0.4";
-    let dot = document.createElement("span");
-    dot.style.cssText = `display:inline-block;width:10px;height:10px;border-radius:50%;
-      background:${exp.deleted?"#aaa":colorFor(exp.id)};flex-shrink:0;`;
-    let txt = document.createElement("span");
-    txt.style.cssText = "overflow:hidden;text-overflow:ellipsis;white-space:nowrap;";
-    txt.textContent = exp.company;
-    lCell.appendChild(dot); lCell.appendChild(txt);
-
-    // Bar cell
-    let bCell = document.createElement("div");
-    bCell.className = "gantt-bar-cell";
-
-    // Gap highlights
-    for(let gap of gaps){
-      if(gap.end < minDate || gap.start > maxDate) continue;
-      let gBar = document.createElement("div");
-      gBar.className = "gantt-gap-bar";
-      gBar.style.left  = pct(new Date(Math.max(gap.start, minDate)));
-      gBar.style.width = pctW(new Date(Math.max(gap.start, minDate)),
-                               new Date(Math.min(gap.end, maxDate)));
-      gBar.title = "Career Gap: " + convertToYMD(daysBetween(gap.start, gap.end));
-      bCell.appendChild(gBar);
-    }
-
-    // Year ticks
-    let yr2 = new Date(minDate.getFullYear(), 0, 1);
-    while(yr2 <= maxDate){
-      if(yr2 >= minDate){
-        let tick = document.createElement("div");
-        tick.className = "gantt-year-tick"; tick.style.left = pct(yr2);
-        bCell.appendChild(tick);
+  function addTicksAndGaps(cell){
+    // Career gaps (yellow diagonal)
+    gaps.forEach(g=>{
+      if(g.e<minDate||g.s>maxDate) return;
+      let sh=document.createElement('div'); sh.className='gantt-gap-shading';
+      sh.style.left=pct(new Date(Math.max(g.s,minDate)));
+      sh.style.width=pctW(new Date(Math.max(g.s,minDate)),new Date(Math.min(g.e,maxDate)));
+      sh.title='Career gap: '+convertToYMD(daysBetween(g.s,g.e));
+      cell.appendChild(sh);
+    });
+    // Edu→Job gap (purple diagonal)
+    if(eduJobGanttGap){
+      let {gs,ge}=eduJobGanttGap;
+      if(!(ge<minDate||gs>maxDate)){
+        let sh=document.createElement('div'); sh.className='gantt-edu-gap-shading';
+        sh.style.left=pct(new Date(Math.max(gs,minDate)));
+        sh.style.width=pctW(new Date(Math.max(gs,minDate)),new Date(Math.min(ge,maxDate)));
+        sh.title='Edu → 1st Job gap: '+convertToYMD(daysBetween(gs,ge));
+        cell.appendChild(sh);
       }
-      yr2 = new Date(yr2.getFullYear() + 1, 0, 1);
     }
-
-    // Today line
-    if(today >= minDate && today <= maxDate){
-      let tl = document.createElement("div");
-      tl.className = "gantt-today"; tl.style.left = pct(today);
-      bCell.appendChild(tl);
+    let yr2=new Date(minDate.getFullYear(),0,1);
+    while(yr2<=maxDate){
+      if(yr2>=minDate){
+        let t=document.createElement('div'); t.className='gantt-tick'; t.style.left=pct(yr2); cell.appendChild(t);
+      }
+      yr2=new Date(yr2.getFullYear()+1,0,1);
     }
-
-    // Experience bar
-    let bar = document.createElement("div");
-    bar.className = "gantt-bar" + (exp.deleted?" deleted":"") + (isOverlap?" overlap":"");
-    bar.style.left       = pct(exp.start);
-    bar.style.width      = pctW(exp.start, exp.end);
-    bar.style.background = exp.deleted ? "#aaa" : colorFor(exp.id);
-    bar.title = `${exp.company}\n${toDateStr(exp.start)} → ${toDateStr(exp.end)}\n${convertToYMD(daysBetween(exp.start,exp.end))}`;
-    bar.textContent = convertToYMD(daysBetween(exp.start, exp.end));
-    bCell.appendChild(bar);
-
-    grid.appendChild(lCell);
-    grid.appendChild(bCell);
-
-    if(!exp.deleted){
-      lastEnd2 = lastEnd2 ? new Date(Math.max(lastEnd2, exp.end)) : new Date(exp.end);
+    if(today>=minDate&&today<=maxDate){
+      let tl=document.createElement('div'); tl.className='gantt-today'; tl.style.left=pct(today); cell.appendChild(tl);
     }
+  }
+
+  // Education rows (shown first, in green)
+  [...education].sort((a,b)=>a.start-b.start).forEach(edu=>{
+    let lc=document.createElement('div'); lc.className='gantt-label';
+    let dot=document.createElement('span');
+    dot.style.cssText='display:inline-block;width:10px;height:10px;border-radius:50%;background:#43a047;flex-shrink:0;';
+    let txt=document.createElement('div'); txt.className='gantt-label-text';
+    txt.innerHTML=`<div class="name">${esc(edu.institution)}</div>`
+      +(edu.degree?`<div class="sub">${esc(edu.degree)}</div>`:'');
+    lc.appendChild(dot); lc.appendChild(txt);
+
+    let bc=document.createElement('div'); bc.className='gantt-cell';
+    addTicksAndGaps(bc);
+    let bar=document.createElement('div'); bar.className='gantt-bar edu';
+    bar.style.left=pct(edu.start); bar.style.width=pctW(edu.start,edu.end);
+    bar.title=`${edu.institution}\n${toDateStr(edu.start)} → ${toDateStr(edu.end)}\n${convertToYMD(daysBetween(edu.start,edu.end))}`;
+    bar.textContent=convertToYMD(daysBetween(edu.start,edu.end));
+    bc.appendChild(bar);
+    grid.appendChild(lc); grid.appendChild(bc);
+  });
+
+  // Experience rows
+  let le2=null;
+  [...experiences].sort((a,b)=>a.start-b.start).forEach(exp=>{
+    let isOv=!exp.deleted&&le2&&exp.start<=le2;
+    let lc=document.createElement('div'); lc.className='gantt-label';
+    if(exp.deleted) lc.style.opacity='0.35';
+    let dot=document.createElement('span');
+    dot.style.cssText=`display:inline-block;width:10px;height:10px;border-radius:50%;background:${exp.deleted?'#aaa':colorFor(exp.id)};flex-shrink:0;`;
+    let txt=document.createElement('div'); txt.className='gantt-label-text';
+    txt.innerHTML=`<div class="name">${esc(exp.company)}</div>`
+      +(exp.role?`<div class="sub">${esc(exp.role)}</div>`:'');
+    lc.appendChild(dot); lc.appendChild(txt);
+
+    let bc=document.createElement('div'); bc.className='gantt-cell';
+    addTicksAndGaps(bc);
+    let bar=document.createElement('div');
+    bar.className='gantt-bar'+(exp.deleted?' deleted':'');
+    bar.style.left=pct(exp.start); bar.style.width=pctW(exp.start,exp.end);
+    bar.style.background=exp.deleted?'#aaa':colorFor(exp.id);
+    bar.title=`${exp.company}${exp.role?' — '+exp.role:''}\n${toDateStr(exp.start)} → ${toDateStr(exp.end)}\n${convertToYMD(daysBetween(exp.start,exp.end))}\n${exp.empType}`;
+    bar.textContent=convertToYMD(daysBetween(exp.start,exp.end));
+    bc.appendChild(bar);
+    // Draw overlap overlay only over the overlapping portion
+    if(isOv && le2){
+      let ovStart=new Date(exp.start);
+      let ovEnd=new Date(Math.min(le2.getTime(),exp.end.getTime()));
+      if(daysBetween(ovStart,ovEnd)>0){
+        let ov=document.createElement('div'); ov.className='gantt-overlap-overlay';
+        ov.style.left=pct(ovStart); ov.style.width=pctW(ovStart,ovEnd);
+        ov.title=`Overlap: ${convertToYMD(daysBetween(ovStart,ovEnd))}`;
+        bc.appendChild(ov);
+      }
+    }
+    grid.appendChild(lc); grid.appendChild(bc);
+    if(!exp.deleted) le2=le2?new Date(Math.max(le2,exp.end)):new Date(exp.end);
   });
 
   container.appendChild(grid);
 }
 
-/* ── INIT ── */
+/* ══════════════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════════════ */
+function showModal(msg){
+  let b=document.createElement('div'); b.id='infoModal'; b.className='modal-overlay';
+  b.innerHTML=`<div class="modal-box"><p>${msg}</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="document.getElementById('infoModal').remove()">OK</button>
+    </div></div>`;
+  document.body.appendChild(b);
+}
+function showConfirm(msg,onYes){
+  let b=document.createElement('div'); b.id='confirmModal'; b.className='modal-overlay';
+  b.innerHTML=`<div class="modal-box"><h4>Confirm</h4><p>${msg}</p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="confirmYes">Yes, Delete</button>
+      <button class="btn btn-grey" onclick="document.getElementById('confirmModal').remove()">Cancel</button>
+    </div></div>`;
+  document.body.appendChild(b);
+  document.getElementById('confirmYes').onclick=()=>{ b.remove(); onYes(); };
+}
+function showPrompt(msg, defaultVal, cb){
+  let b=document.createElement('div'); b.id='promptModal'; b.className='modal-overlay';
+  b.innerHTML=`<div class="modal-box"><h4>Annotate Gap</h4><p>${msg}</p>
+    <input id="promptInput" value="${esc(defaultVal)}" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:13px;margin-bottom:14px;">
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="promptOk">Save</button>
+      <button class="btn btn-grey" onclick="document.getElementById('promptModal').remove();"> Cancel</button>
+    </div></div>`;
+  document.body.appendChild(b);
+  document.getElementById('promptInput').focus();
+  document.getElementById('promptOk').onclick=()=>{
+    let v=document.getElementById('promptInput').value; b.remove(); cb(v);
+  };
+}
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+
+/* ══ EXPORT MODAL ══ */
+function showExportModal(data, filename){
+  let existing=document.getElementById('exportModal');
+  if(existing) existing.remove();
+  let b=document.createElement('div'); b.id='exportModal'; b.className='modal-overlay';
+  b.innerHTML=`
+    <div class="modal-box" style="max-width:560px;text-align:left;">
+      <h4 style="margin-bottom:8px;">⬇ Export Data</h4>
+      <p style="margin-bottom:10px;font-size:12px;color:#666;">
+        Your data is shown below. Click <strong>Copy to Clipboard</strong> to copy it,
+        then paste into a <code>.json</code> file on your computer.
+        The download button will also attempt a direct file download.
+      </p>
+      <textarea id="exportTextarea" readonly style="width:100%;height:180px;font-size:11px;
+        font-family:monospace;border:1px solid #ddd;border-radius:6px;padding:8px;
+        resize:vertical;background:#f9f9f9;">${data.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="btn btn-primary" onclick="copyExport()">📋 Copy to Clipboard</button>
+        <button class="btn btn-purple" onclick="downloadExport('${filename}')">⬇ Try Download</button>
+        <button class="btn btn-grey" onclick="document.getElementById('exportModal').remove()">Close</button>
+      </div>
+      <div id="exportCopyMsg" style="font-size:12px;color:#388e3c;margin-top:8px;min-height:18px;"></div>
+    </div>`;
+  document.body.appendChild(b);
+  // Select all text for easy manual copy
+  setTimeout(()=>{ let ta=document.getElementById('exportTextarea'); if(ta){ ta.focus(); ta.select(); } },100);
+}
+function copyExport(){
+  let ta=document.getElementById('exportTextarea');
+  if(!ta) return;
+  ta.select();
+  try{
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      document.getElementById('exportCopyMsg').textContent='✅ Copied to clipboard!';
+    }).catch(()=>{ fallbackCopy(ta); });
+  }catch(e){ fallbackCopy(ta); }
+}
+function fallbackCopy(ta){
+  try{ document.execCommand('copy'); document.getElementById('exportCopyMsg').textContent='✅ Copied to clipboard!'; }
+  catch(e){ document.getElementById('exportCopyMsg').textContent='⚠ Select the text above and press Ctrl+C / Cmd+C to copy.'; }
+}
+function downloadExport(filename){
+  let ta=document.getElementById('exportTextarea'); if(!ta) return;
+  let data=ta.value;
+  try{
+    let uri='data:application/json;base64,'+btoa(unescape(encodeURIComponent(data)));
+    let a=document.createElement('a'); a.href=uri; a.download=filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }catch(e){ document.getElementById('exportCopyMsg').textContent='⚠ Download failed — please use Copy instead.'; }
+}
 loadFromStorage();
+renderBackupBar();
 render();
 </script>
 </body>
