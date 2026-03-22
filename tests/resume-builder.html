@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résumé Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1410;
+    --ink-light: #5c5046;
+    --ink-faint: #9e9488;
+    --cream: #f9f6f0;
+    --cream-dark: #ede8df;
+    --accent: #c0392b;
+    --border: #d4cdc3;
+    --panel: #ffffff;
+    --shadow-lg: 0 8px 48px rgba(26,20,16,0.14);
+    --header-h: 56px;
+    --tabs-h: 48px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    height: var(--header-h);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+    white-space: nowrap;
+  }
+  .logo span { font-style: italic; color: #c9a96e; }
+  .logo-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .btn {
+    padding: 7px 14px; border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; border: none; white-space: nowrap;
+  }
+  .btn-ghost { background: transparent; color: var(--cream); border: 1px solid rgba(255,255,255,0.25); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #a93226; }
+  .btn-label { display: inline; }
+
+  /* ── MOBILE TABS ── */
+  .mobile-tabs {
+    display: none;
+    position: sticky;
+    top: var(--header-h);
+    z-index: 150;
+    background: var(--ink);
+    height: var(--tabs-h);
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-tabs button {
+    flex: 1; background: none; border: none;
+    color: rgba(255,255,255,0.5);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+    cursor: pointer; height: 100%; transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .mobile-tabs button.active { color: white; border-bottom-color: var(--accent); }
+
+  /* ── DESKTOP LAYOUT ── */
+  .app {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    min-height: calc(100vh - var(--header-h));
+  }
+
+  /* ── EDITOR PANEL ── */
+  .editor {
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    max-height: calc(100vh - var(--header-h));
+    position: sticky;
+    top: var(--header-h);
+  }
+  .editor-section { border-bottom: 1px solid var(--cream-dark); }
+  .section-header {
+    padding: 15px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+    background: var(--cream); transition: background 0.15s;
+  }
+  .section-header:hover { background: var(--cream-dark); }
+  .section-title {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-light); display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before {
+    content: ''; display: block; width: 3px; height: 14px;
+    background: var(--accent); border-radius: 2px;
+  }
+  .section-chevron { font-size: 12px; color: var(--ink-faint); transition: transform 0.2s; }
+  .section-chevron.open { transform: rotate(180deg); }
+  .section-body {
+    padding: 18px 20px; display: flex; flex-direction: column;
+    gap: 13px; animation: slideDown 0.2s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Template bar */
+  .template-bar {
+    padding: 12px 20px; background: #faf8f5;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .template-bar > label {
+    font-size: 11px; color: var(--ink-faint); white-space: nowrap;
+    font-family: 'DM Mono', monospace; letter-spacing: 1px;
+  }
+  .template-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill {
+    padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
+    font-size: 12px; cursor: pointer; background: white;
+    color: var(--ink-light); font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+  }
+  .pill.active { background: var(--ink); color: white; border-color: var(--ink); }
+  .pill:hover:not(.active) { border-color: var(--ink-light); }
+
+  /* Fields */
+  .field-row { display: flex; gap: 10px; }
+  .field { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
+  label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+    color: var(--ink-faint); text-transform: uppercase;
+  }
+  input, textarea, select {
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+    color: var(--ink); background: var(--cream);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 9px 11px; transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%; resize: none; -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.1); background: white;
+  }
+  textarea { min-height: 70px; line-height: 1.5; }
+
+  /* Entry cards */
+  .entry-card {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 6px; padding: 13px 14px; transition: border-color 0.15s;
+  }
+  .entry-card:hover { border-color: #bbb; }
+  .entry-card-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px;
+  }
+  .entry-card-title {
+    font-size: 11px; font-weight: 500; color: var(--ink-light);
+    font-family: 'DM Mono', monospace; letter-spacing: 0.5px;
+  }
+  .btn-remove {
+    background: none; border: none; color: var(--ink-faint);
+    cursor: pointer; font-size: 15px; padding: 2px 5px; line-height: 1;
+    transition: color 0.15s; border-radius: 3px;
+  }
+  .btn-remove:hover { color: var(--accent); background: rgba(192,57,43,0.07); }
+  .btn-add {
+    background: none; border: 1.5px dashed var(--border);
+    color: var(--ink-light); padding: 10px; border-radius: 5px;
+    cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif;
+    width: 100%; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-add:hover { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.04); }
+
+  /* ── PREVIEW ── */
+  .preview {
+    background: #e8e4de; padding: 32px 24px;
+    overflow-y: auto; display: flex; flex-direction: column;
+    align-items: center; gap: 16px;
+  }
+  .preview-label {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #a09890; align-self: flex-start;
+  }
+  .resume-scaler { width: 100%; display: flex; justify-content: center; }
+
+  /* ── RESUME PAPER ── */
+  .resume {
+    background: white; width: 700px; min-height: 900px;
+    box-shadow: var(--shadow-lg); padding: 60px 56px;
+    font-family: 'DM Sans', sans-serif; color: #1a1410;
+    font-size: 13px; line-height: 1.6;
+    transform-origin: top center;
+    animation: fadeIn 0.3s ease; flex-shrink: 0;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ══ CLASSIC ══ */
+  .tpl-classic .resume-name {
+    font-family: 'Playfair Display', serif; font-size: 36px;
+    font-weight: 700; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 4px;
+  }
+  .tpl-classic .resume-title {
+    font-size: 13px; font-weight: 300; color: #6b5f55;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .tpl-classic .resume-contact {
+    display: flex; flex-wrap: wrap; gap: 5px 16px;
+    font-size: 12px; color: #6b5f55;
+    padding-bottom: 18px; border-bottom: 2px solid #1a1410; margin-bottom: 22px;
+  }
+  .tpl-classic .resume-contact span { display: flex; align-items: center; gap: 4px; }
+  .tpl-classic .section-label {
+    font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600;
+    border-bottom: 1px solid #d4cdc3; padding-bottom: 5px; margin: 18px 0 12px;
+  }
+  .tpl-classic .entry { margin-bottom: 13px; }
+  .tpl-classic .entry-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .tpl-classic .entry-role { font-weight: 600; font-size: 13.5px; }
+  .tpl-classic .entry-date { font-size: 12px; color: #888; white-space: nowrap; flex-shrink: 0; }
+  .tpl-classic .entry-org { font-size: 13px; color: #c0392b; font-style: italic; margin-bottom: 4px; }
+  .tpl-classic .entry-desc { font-size: 12.5px; color: #444; }
+  .tpl-classic .skills-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tpl-classic .skill-tag {
+    background: #f4f0ea; border: 1px solid #d4cdc3;
+    border-radius: 3px; padding: 3px 9px; font-size: 12px; color: #4a3f36;
+  }
+  .tpl-classic .summary-text { font-size: 13px; color: #4a3f36; font-style: italic; }
+
+  /* ══ MODERN ══ */
+  .tpl-modern { display: grid; grid-template-columns: 190px 1fr; padding: 0; }
+  .tpl-modern .resume-sidebar {
+    background: #1a1410; color: #f9f6f0; padding: 40px 24px; min-height: 100%;
+  }
+  .tpl-modern .resume-main { padding: 40px 36px; }
+  .tpl-modern .resume-name {
+    font-family: 'Playfair Display', serif; font-size: 24px;
+    font-weight: 700; line-height: 1.15; margin-bottom: 4px;
+  }
+  .tpl-modern .resume-title {
+    font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+    color: #c9a96e; margin-bottom: 24px;
+  }
+  .tpl-modern .sidebar-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.8px;
+    text-transform: uppercase; color: #c9a96e;
+    margin: 18px 0 8px; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .tpl-modern .contact-item { font-size: 11.5px; color: #ccc; margin-bottom: 5px; word-break: break-all; }
+  .tpl-modern .skill-item { font-size: 11.5px; color: #ddd; margin-bottom: 4px; padding-left: 10px; position: relative; }
+  .tpl-modern .skill-item::before { content: '·'; position: absolute; left: 0; color: #c9a96e; }
+  .tpl-modern .section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: #c0392b; margin: 18px 0 10px;
+  }
+  .tpl-modern .entry { margin-bottom: 13px; }
+  .tpl-modern .entry-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .tpl-modern .entry-role { font-weight: 600; font-size: 13px; }
+  .tpl-modern .entry-date { font-size: 11px; color: #aaa; white-space: nowrap; flex-shrink: 0; }
+  .tpl-modern .entry-org { font-size: 12px; color: #888; margin-bottom: 4px; }
+  .tpl-modern .entry-desc { font-size: 12px; color: #555; }
+  .tpl-modern .summary-text { font-size: 12.5px; color: #555; border-left: 3px solid #c0392b; padding-left: 11px; }
+
+  /* ══ MINIMAL ══ */
+  .tpl-minimal .resume-name {
+    font-family: 'DM Sans', sans-serif; font-size: 30px;
+    font-weight: 300; letter-spacing: -1px; margin-bottom: 2px;
+  }
+  .tpl-minimal .resume-title { font-size: 13px; color: #999; margin-bottom: 12px; }
+  .tpl-minimal .resume-contact {
+    display: flex; flex-wrap: wrap; gap: 4px 14px;
+    font-size: 12px; color: #888; margin-bottom: 28px;
+  }
+  .tpl-minimal .section-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 2.5px;
+    text-transform: uppercase; color: #999; margin: 22px 0 10px;
+  }
+  .tpl-minimal .divider { height: 1px; background: #eee; margin-bottom: 10px; }
+  .tpl-minimal .entry { display: grid; grid-template-columns: 90px 1fr; gap: 0 16px; margin-bottom: 12px; }
+  .tpl-minimal .entry-date { font-size: 11px; color: #aaa; padding-top: 2px; }
+  .tpl-minimal .entry-role { font-weight: 500; font-size: 13px; }
+  .tpl-minimal .entry-org { font-size: 12px; color: #888; margin-bottom: 3px; }
+  .tpl-minimal .entry-desc { font-size: 12px; color: #666; }
+  .tpl-minimal .skills-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tpl-minimal .skill-tag { border: 1px solid #ddd; border-radius: 2px; padding: 2px 9px; font-size: 12px; color: #666; }
+  .tpl-minimal .summary-text { font-size: 13px; color: #666; }
+
+  /* ── PRINT ── */
+  @media print {
+    header, .editor, .mobile-tabs, .preview-label { display: none !important; }
+    .app { display: block; }
+    .preview { padding: 0; background: white; }
+    .resume-scaler { display: block; }
+    .resume { box-shadow: none; width: 100%; padding: 40px; transform: none !important; }
+  }
+
+  /* ── SCROLLBAR ── */
+  .editor::-webkit-scrollbar { width: 4px; }
+  .editor::-webkit-scrollbar-track { background: var(--cream); }
+  .editor::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ═══════════════════════════
+     RESPONSIVE
+  ═══════════════════════════ */
+
+  /* Tablet — narrow editor */
+  @media (max-width: 1024px) {
+    .app { grid-template-columns: 340px 1fr; }
+  }
+
+  /* ≤ 768px — stacked tab layout */
+  @media (max-width: 768px) {
+    :root { --header-h: 52px; --tabs-h: 44px; }
+
+    header { padding: 0 14px; }
+    .logo { font-size: 18px; }
+
+    .mobile-tabs { display: flex; }
+
+    .app { display: block; min-height: auto; }
+
+    .editor {
+      position: static; max-height: none;
+      border-right: none; border-bottom: 1px solid var(--border);
+    }
+    .editor.tab-hidden { display: none; }
+
+    .preview {
+      padding: 20px 12px 40px;
+      min-height: calc(100vh - var(--header-h) - var(--tabs-h));
+    }
+    .preview.tab-hidden { display: none; }
+
+    /* Two-column field rows stack to single on mobile */
+    .field-row { flex-direction: column; gap: 10px; }
+  }
+
+  /* ≤ 480px — phones */
+  @media (max-width: 480px) {
+    .btn-label { display: none; }
+    .btn { padding: 7px 10px; }
+    .section-body { padding: 14px; }
+    .section-header { padding: 13px 14px; }
+    .template-bar { padding: 10px 14px; }
+    .preview { padding: 14px 8px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span>Résumé</span> Studio
+    <div class="logo-dot"></div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-ghost" onclick="window.print()">⎙ <span class="btn-label">Print / Save PDF</span></button>
+    <button class="btn btn-primary" onclick="clearAll()">✦ <span class="btn-label">New Resume</span></button>
+  </div>
+</header>
+
+<!-- Mobile-only tabs -->
+<div class="mobile-tabs" id="mobileTabs">
+  <button id="tabEdit" class="active" onclick="switchTab('edit')">✏ Edit</button>
+  <button id="tabPreview" onclick="switchTab('preview')">👁 Preview</button>
+</div>
+
+<div class="app">
+
+  <!-- EDITOR -->
+  <div class="editor" id="editorPanel">
+
+    <div class="template-bar">
+      <label>Template</label>
+      <div class="template-pills">
+        <div class="pill active" onclick="setTemplate('classic',this)">Classic</div>
+        <div class="pill" onclick="setTemplate('modern',this)">Modern</div>
+        <div class="pill" onclick="setTemplate('minimal',this)">Minimal</div>
+      </div>
+    </div>
+
+    <!-- Personal Info -->
+    <div class="editor-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title">Personal Info</div>
+        <div class="section-chevron open">▾</div>
+      </div>
+      <div class="section-body">
+        <div class="field-row">
+          <div class="field"><label>First Name</label>
+            <input type="text" id="firstName" placeholder="Jane" oninput="render()" value="Jane"></div>
+          <div class="field"><label>Last Name</label>
+            <input type="text" id="lastName" placeholder="Smith" oninput="render()" value="Smith"></div>
+        </div>
+        <div class="field"><label>Professional Title</label>
+          <input type="text" id="jobTitle" placeholder="Senior Product Designer" oninput="render()" value="Senior Product Designer"></div>
+        <div class="field-row">
+          <div class="field"><label>Email</label>
+            <input type="email" id="email" placeholder="jane@example.com" oninput="render()" value="jane@example.com"></div>
+          <div class="field"><label>Phone</label>
+            <input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="render()" value="+1 (555) 234-5678"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Location</label>
+            <input type="text" id="location" placeholder="New York, NY" oninput="render()" value="New York, NY"></div>
+          <div class="field"><label>Website / LinkedIn</label>
+            <input type="text" id="website" placeholder="linkedin.com/in/jane" oninput="render()" value="linkedin.com/in/janesmith"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="editor-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title">Summary</div>
+        <div class="section-chevron open">▾</div>
+      </div>
+      <div class="section-body">
+        <div class="field"><label>Professional Summary</label>
+          <textarea id="summary" placeholder="A brief statement about your career goals and expertise..." oninput="render()">Accomplished product designer with 8+ years crafting intuitive digital experiences at scale. Known for translating complex user needs into elegant, data-informed design solutions that drive business outcomes.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="editor-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title">Experience</div>
+        <div class="section-chevron open">▾</div>
+      </div>
+      <div class="section-body" id="experienceList"></div>
+    </div>
+
+    <!-- Education -->
+    <div class="editor-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title">Education</div>
+        <div class="section-chevron open">▾</div>
+      </div>
+      <div class="section-body" id="educationList"></div>
+    </div>
+
+    <!-- Skills -->
+    <div class="editor-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title">Skills</div>
+        <div class="section-chevron open">▾</div>
+      </div>
+      <div class="section-body">
+        <div class="field"><label>Skills (comma-separated)</label>
+          <textarea id="skills" placeholder="Figma, Prototyping, User Research..." oninput="render()">Figma, Prototyping, User Research, Design Systems, Interaction Design, Accessibility, Agile, HTML/CSS</textarea>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /editor -->
+
+  <!-- PREVIEW -->
+  <div class="preview" id="previewPanel">
+    <div class="preview-label">Live Preview</div>
+    <div class="resume-scaler" id="resumeScaler">
+      <div id="resumePreview" class="resume tpl-classic"></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+/* ── State ── */
+let currentTemplate = 'classic';
+let experiences = [
+  { id:1, role:'Lead Product Designer', org:'Horizon Technologies', start:'2020', end:'Present',
+    desc:'Led end-to-end design for a SaaS platform serving 200K+ users. Built and maintained a company-wide design system, reducing design-to-dev handoff 
