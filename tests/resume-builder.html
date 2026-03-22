@@ -499,4 +499,271 @@
 let currentTemplate = 'classic';
 let experiences = [
   { id:1, role:'Lead Product Designer', org:'Horizon Technologies', start:'2020', end:'Present',
-    desc:'Led end-to-end design for a SaaS platform serving 200K+ users. Built and maintained a company-wide design system, reducing design-to-dev handoff 
+    desc:'Led end-to-end design for a SaaS platform serving 200K+ users. Built and maintained a company-wide design system, reducing design-to-dev handoff time by 40%.' },
+  { id:2, role:'UX Designer', org:'Beacon Digital Agency', start:'2017', end:'2020',
+    desc:'Delivered UX strategy and visual design for 30+ client projects across fintech, healthcare, and e-commerce sectors.' }
+];
+let educations = [
+  { id:1, degree:'B.S. Interaction Design', school:'Parsons School of Design', start:'2013', end:'2017' }
+];
+let nextExpId = 3, nextEduId = 2;
+
+/* ── Mobile tabs ── */
+function switchTab(tab) {
+  const editor  = document.getElementById('editorPanel');
+  const preview = document.getElementById('previewPanel');
+  const te = document.getElementById('tabEdit');
+  const tp = document.getElementById('tabPreview');
+  if (tab === 'edit') {
+    editor.classList.remove('tab-hidden');
+    preview.classList.add('tab-hidden');
+    te.classList.add('active'); tp.classList.remove('active');
+  } else {
+    editor.classList.add('tab-hidden');
+    preview.classList.remove('tab-hidden');
+    te.classList.remove('active'); tp.classList.add('active');
+    requestAnimationFrame(scaleResume);
+  }
+}
+
+/* ── Scale resume to fit preview column ── */
+function scaleResume() {
+  const scaler = document.getElementById('resumeScaler');
+  const resume = document.getElementById('resumePreview');
+  if (!scaler || !resume) return;
+  const RESUME_W = 700;
+  const available = scaler.clientWidth;
+  if (available > 0 && available < RESUME_W) {
+    const scale = available / RESUME_W;
+    resume.style.transform = `scale(${scale})`;
+    resume.style.transformOrigin = 'top center';
+    // Collapse the extra space the un-scaled element would occupy
+    const scaledH = resume.scrollHeight * scale;
+    scaler.style.height = scaledH + 'px';
+    resume.style.marginBottom = '0';
+  } else {
+    resume.style.transform = '';
+    scaler.style.height = '';
+  }
+}
+window.addEventListener('resize', scaleResume);
+
+/* ── Template ── */
+function setTemplate(tpl, el) {
+  currentTemplate = tpl;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+/* ── Collapsible sections ── */
+function toggleSection(header) {
+  const chevron = header.querySelector('.section-chevron');
+  const body = header.nextElementSibling;
+  const hidden = body.style.display === 'none';
+  body.style.display = hidden ? '' : 'none';
+  chevron.classList.toggle('open', hidden);
+}
+
+/* ── Helpers ── */
+function get(id) { return (document.getElementById(id)||{}).value||''; }
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function skillTags(skills, cls) {
+  return skills.split(',').map(s=>s.trim()).filter(Boolean)
+    .map(s=>`<span class="${cls}">${esc(s)}</span>`).join('');
+}
+
+/* ── Experience ── */
+function addExperience() {
+  experiences.push({id:nextExpId++,role:'',org:'',start:'',end:'',desc:''});
+  renderEditorExperiences(); render();
+}
+function removeExperience(id) {
+  experiences = experiences.filter(e=>e.id!==id);
+  renderEditorExperiences(); render();
+}
+function updateExp(id,field,value) {
+  const e = experiences.find(e=>e.id===id); if(e){e[field]=value;render();}
+}
+function renderEditorExperiences() {
+  document.getElementById('experienceList').innerHTML =
+    experiences.map((exp,i)=>`
+      <div class="entry-card">
+        <div class="entry-card-header">
+          <span class="entry-card-title">Position ${i+1}</span>
+          <button class="btn-remove" onclick="removeExperience(${exp.id})">✕</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="field-row">
+            <div class="field"><label>Job Title</label>
+              <input value="${esc(exp.role)}" placeholder="Software Engineer" oninput="updateExp(${exp.id},'role',this.value)"></div>
+            <div class="field"><label>Company</label>
+              <input value="${esc(exp.org)}" placeholder="Acme Corp" oninput="updateExp(${exp.id},'org',this.value)"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Start</label>
+              <input value="${esc(exp.start)}" placeholder="2020" oninput="updateExp(${exp.id},'start',this.value)"></div>
+            <div class="field"><label>End</label>
+              <input value="${esc(exp.end)}" placeholder="Present" oninput="updateExp(${exp.id},'end',this.value)"></div>
+          </div>
+          <div class="field"><label>Description</label>
+            <textarea placeholder="Describe your role and key achievements..." oninput="updateExp(${exp.id},'desc',this.value)">${esc(exp.desc)}</textarea>
+          </div>
+        </div>
+      </div>`).join('') +
+    `<button class="btn-add" onclick="addExperience()">＋ Add Position</button>`;
+}
+
+/* ── Education ── */
+function addEducation() {
+  educations.push({id:nextEduId++,degree:'',school:'',start:'',end:''});
+  renderEditorEducations(); render();
+}
+function removeEducation(id) {
+  educations = educations.filter(e=>e.id!==id);
+  renderEditorEducations(); render();
+}
+function updateEdu(id,field,value) {
+  const e = educations.find(e=>e.id===id); if(e){e[field]=value;render();}
+}
+function renderEditorEducations() {
+  document.getElementById('educationList').innerHTML =
+    educations.map((edu,i)=>`
+      <div class="entry-card">
+        <div class="entry-card-header">
+          <span class="entry-card-title">Degree ${i+1}</span>
+          <button class="btn-remove" onclick="removeEducation(${edu.id})">✕</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="field-row">
+            <div class="field"><label>Degree / Field</label>
+              <input value="${esc(edu.degree)}" placeholder="B.S. Computer Science" oninput="updateEdu(${edu.id},'degree',this.value)"></div>
+            <div class="field"><label>School</label>
+              <input value="${esc(edu.school)}" placeholder="State University" oninput="updateEdu(${edu.id},'school',this.value)"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Start</label>
+              <input value="${esc(edu.start)}" placeholder="2019" oninput="updateEdu(${edu.id},'start',this.value)"></div>
+            <div class="field"><label>End</label>
+              <input value="${esc(edu.end)}" placeholder="2023" oninput="updateEdu(${edu.id},'end',this.value)"></div>
+          </div>
+        </div>
+      </div>`).join('') +
+    `<button class="btn-add" onclick="addEducation()">＋ Add Degree</button>`;
+}
+
+/* ── Render resume ── */
+function render() {
+  const preview = document.getElementById('resumePreview');
+  preview.className = `resume tpl-${currentTemplate}`;
+
+  const name    = `${get('firstName')} ${get('lastName')}`.trim() || 'Your Name';
+  const title   = get('jobTitle');
+  const email   = get('email');
+  const phone   = get('phone');
+  const loc     = get('location');
+  const website = get('website');
+  const summary = get('summary');
+  const skills  = get('skills');
+
+  const expHtml = (map) => experiences.map(map).join('');
+  const eduHtml = (map) => educations.map(map).join('');
+
+  if (currentTemplate === 'classic') {
+    preview.innerHTML = `
+      <div class="resume-name">${esc(name)}</div>
+      ${title?`<div class="resume-title">${esc(title)}</div>`:''}
+      <div class="resume-contact">
+        ${email?`<span>✉ ${esc(email)}</span>`:''}
+        ${phone?`<span>☎ ${esc(phone)}</span>`:''}
+        ${loc?`<span>◎ ${esc(loc)}</span>`:''}
+        ${website?`<span>⬡ ${esc(website)}</span>`:''}
+      </div>
+      ${summary?`<div class="section-label">Profile</div><div class="summary-text">${esc(summary)}</div>`:''}
+      ${experiences.length?`<div class="section-label">Experience</div>${expHtml(e=>`
+        <div class="entry">
+          <div class="entry-header"><span class="entry-role">${esc(e.role||'Role')}</span>
+          <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+          <div class="entry-org">${esc(e.org)}</div>
+          ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
+        </div>`)}` : ''}
+      ${educations.length?`<div class="section-label">Education</div>${eduHtml(e=>`
+        <div class="entry">
+          <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
+          <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+          <div class="entry-org">${esc(e.school)}</div>
+        </div>`)}` : ''}
+      ${skills?`<div class="section-label">Skills</div><div class="skills-list">${skillTags(skills,'skill-tag')}</div>`:''}`;
+
+  } else if (currentTemplate === 'modern') {
+    preview.innerHTML = `
+      <div class="resume-sidebar">
+        <div class="resume-name">${esc(name)}</div>
+        ${title?`<div class="resume-title">${esc(title)}</div>`:''}
+        <div class="sidebar-label">Contact</div>
+        ${email?`<div class="contact-item">✉ ${esc(email)}</div>`:''}
+        ${phone?`<div class="contact-item">☎ ${esc(phone)}</div>`:''}
+        ${loc?`<div class="contact-item">◎ ${esc(loc)}</div>`:''}
+        ${website?`<div class="contact-item">⬡ ${esc(website)}</div>`:''}
+        ${skills?`<div class="sidebar-label">Skills</div>${skills.split(',').map(s=>s.trim()).filter(Boolean).map(s=>`<div class="skill-item">${esc(s)}</div>`).join('')}`:''}
+      </div>
+      <div class="resume-main">
+        ${summary?`<div class="section-label">About</div><div class="summary-text">${esc(summary)}</div>`:''}
+        ${experiences.length?`<div class="section-label">Experience</div>${expHtml(e=>`
+          <div class="entry">
+            <div class="entry-header"><span class="entry-role">${esc(e.role||'Role')}</span>
+            <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+            <div class="entry-org">${esc(e.org)}</div>
+            ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
+          </div>`)}` : ''}
+        ${educations.length?`<div class="section-label">Education</div>${eduHtml(e=>`
+          <div class="entry">
+            <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
+            <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+            <div class="entry-org">${esc(e.school)}</div>
+          </div>`)}` : ''}
+      </div>`;
+
+  } else if (currentTemplate === 'minimal') {
+    preview.innerHTML = `
+      <div class="resume-name">${esc(name)}</div>
+      ${title?`<div class="resume-title">${esc(title)}</div>`:''}
+      <div class="resume-contact">${[email,phone,loc,website].filter(Boolean).map(v=>esc(v)).join(' · ')}</div>
+      ${summary?`<div class="section-label">Summary</div><div class="divider"></div><div class="summary-text">${esc(summary)}</div>`:''}
+      ${experiences.length?`<div class="section-label">Experience</div><div class="divider"></div>${expHtml(e=>`
+        <div class="entry">
+          <div class="entry-date">${esc(e.start)}${e.end?'–'+esc(e.end):''}</div>
+          <div><div class="entry-role">${esc(e.role||'Role')}</div>
+          <div class="entry-org">${esc(e.org)}</div>
+          ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
+          </div></div>`)}` : ''}
+      ${educations.length?`<div class="section-label">Education</div><div class="divider"></div>${eduHtml(e=>`
+        <div class="entry">
+          <div class="entry-date">${esc(e.start)}${e.end?'–'+esc(e.end):''}</div>
+          <div><div class="entry-role">${esc(e.degree||'Degree')}</div>
+          <div class="entry-org">${esc(e.school)}</div></div>
+        </div>`)}` : ''}
+      ${skills?`<div class="section-label">Skills</div><div class="divider"></div><div class="skills-list">${skillTags(skills,'skill-tag')}</div>`:''}`;
+  }
+
+  requestAnimationFrame(scaleResume);
+}
+
+/* ── Clear ── */
+function clearAll() {
+  if (!confirm('Start a new resume? All current data will be cleared.')) return;
+  ['firstName','lastName','jobTitle','email','phone','location','website','summary','skills']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  experiences=[]; educations=[]; nextExpId=1; nextEduId=1;
+  renderEditorExperiences(); renderEditorEducations(); render();
+}
+
+/* ── Init ── */
+renderEditorExperiences();
+renderEditorEducations();
+render();
+</script>
+</body>
+</html>
