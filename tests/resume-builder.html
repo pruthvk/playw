@@ -115,6 +115,16 @@
   /* ── RESUME PAPER ── */
   .resume { background:white; width:700px; min-height:900px; box-shadow:var(--shadow-lg); padding:60px 56px; font-family:'DM Sans',sans-serif; color:#1a1410; font-size:13px; line-height:1.6; transform-origin:top center; animation:fadeIn 0.3s ease; flex-shrink:0; }
   .resume.page2 { min-height:600px; }
+  /* ── Universal layout fixes across all templates ── */
+  .resume .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .resume .entry-role   { flex:1; min-width:0; font-weight:600; font-size:13px; color:#1a1410; }
+  .resume .entry-date   { flex-shrink:0; white-space:nowrap; font-size:12px; color:#888; }
+  .resume .entry-org    { font-size:12.5px; color:#888; margin-bottom:4px; }
+  .resume .entry-desc,
+  .resume .summary-text,
+  .resume .project-desc { word-break:break-word; overflow-wrap:anywhere; }
+  .resume .skill-group-name::after { content:': '; }
+  .resume .skill-group-items { word-break:break-word; overflow-wrap:anywhere; }
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   .page2-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#7a8aaa; align-self:flex-start; width:700px; padding-left:4px; transform-origin:top left; }
 
@@ -129,15 +139,16 @@
   .tpl-classic .entry-role { font-weight:600; font-size:13.5px; }
   .tpl-classic .entry-date { font-size:12px; color:#888; white-space:nowrap; flex-shrink:0; }
   .tpl-classic .entry-org { font-size:13px; color:#c0392b; font-style:italic; margin-bottom:4px; }
-  .tpl-classic .entry-desc { font-size:12.5px; color:#444; }
+  .tpl-classic .entry-desc { font-size:12.5px; color:#444; word-break:break-word; overflow-wrap:anywhere; }
   .tpl-classic .skills-list { display:flex; flex-direction:column; gap:5px; }
-  .tpl-classic .skill-group { display:flex; align-items:baseline; gap:0; font-size:12.5px; line-height:1.5; }
-  .tpl-classic .skill-group-name { font-weight:600; color:#1a1410; white-space:nowrap; margin-right:6px; flex-shrink:0; }
-  .tpl-classic .skill-group-name::after { content:':'; }
-  .tpl-classic .skill-group-items { color:#444; }
-  .tpl-classic .summary-text { font-size:13px; color:#4a3f36; font-style:italic; }
+  .tpl-classic .skills-list { display:flex; flex-direction:column; gap:5px; margin-top:6px; }
+  .tpl-classic .skill-group { display:grid; grid-template-columns:140px 1fr; gap:0 12px; align-items:baseline; font-size:12px; line-height:1.65; }
+  .tpl-classic .skill-group-name { font-weight:700; color:#1a1410; padding-top:0; }
+  .tpl-classic .skill-group-name::after { content:''; }
+  .tpl-classic .skill-group-items { color:#444; min-width:0; overflow-wrap:break-word; line-height:1.65; }
+  .tpl-classic .summary-text { font-size:13px; color:#4a3f36; font-style:italic; word-break:break-word; overflow-wrap:anywhere; }
   .tpl-classic .project-title { font-weight:600; font-size:13.5px; margin-bottom:2px; }
-  .tpl-classic .project-desc { font-size:12.5px; color:#444; margin-bottom:4px; }
+  .tpl-classic .project-desc { font-size:12.5px; color:#444; margin-bottom:4px; word-break:break-word; overflow-wrap:anywhere; }
   .tpl-classic .project-tags { display:flex; flex-wrap:wrap; gap:4px; }
   .tpl-classic .project-tag { background:#f4f0ea; border:1px solid #d4cdc3; border-radius:3px; padding:2px 7px; font-size:11px; color:#4a3f36; }
   .tpl-classic .project-link { font-size:12px; color:#c0392b; }
@@ -164,8 +175,8 @@
   .tpl-modern .entry-role { font-weight:600; font-size:13px; }
   .tpl-modern .entry-date { font-size:11px; color:#aaa; white-space:nowrap; flex-shrink:0; }
   .tpl-modern .entry-org { font-size:12px; color:#888; margin-bottom:4px; }
-  .tpl-modern .entry-desc { font-size:12px; color:#555; }
-  .tpl-modern .summary-text { font-size:12.5px; color:#555; border-left:3px solid #c0392b; padding-left:11px; }
+  .tpl-modern .entry-desc { font-size:12px; color:#555; word-break:break-word; overflow-wrap:anywhere; }
+  .tpl-modern .summary-text { font-size:12.5px; color:#555; border-left:3px solid #c0392b; padding-left:11px; word-break:break-word; overflow-wrap:anywhere; }
   .tpl-modern .project-title { font-weight:600; font-size:13px; margin-bottom:2px; }
   .tpl-modern .project-desc { font-size:12px; color:#555; margin-bottom:4px; }
   .tpl-modern .project-tags { display:flex; flex-wrap:wrap; gap:4px; }
@@ -176,30 +187,38 @@
   .tpl-modern .bullet-list li::before { content:'▸'; position:absolute; left:0; color:#c0392b; font-size:10px; top:3px; }
 
   /* ══ MINIMAL ══ */
-  .tpl-minimal .resume-name { font-family:'DM Sans',sans-serif; font-size:30px; font-weight:300; letter-spacing:-1px; margin-bottom:2px; }
-  .tpl-minimal .resume-title { font-size:13px; color:#999; margin-bottom:12px; }
-  .tpl-minimal .resume-contact { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color:#888; margin-bottom:28px; }
-  .tpl-minimal .section-label { font-size:10px; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:#999; margin:22px 0 10px; }
-  .tpl-minimal .divider { height:1px; background:#eee; margin-bottom:10px; }
-  .tpl-minimal .entry { display:grid; grid-template-columns:90px 1fr; gap:0 16px; margin-bottom:12px; }
-  .tpl-minimal .entry-date { font-size:11px; color:#aaa; padding-top:2px; }
-  .tpl-minimal .entry-role { font-weight:500; font-size:13px; }
-  .tpl-minimal .entry-org { font-size:12px; color:#888; margin-bottom:3px; }
-  .tpl-minimal .entry-desc { font-size:12px; color:#666; }
-  .tpl-minimal .skills-list { display:flex; flex-direction:column; gap:4px; }
-  .tpl-minimal .skill-group { font-size:12px; color:#555; line-height:1.5; }
-  .tpl-minimal .skill-group-name { font-weight:500; color:#333; }
-  .tpl-minimal .skill-group-name::after { content:' — '; color:#bbb; font-weight:400; }
-  .tpl-minimal .summary-text { font-size:13px; color:#666; }
-  .tpl-minimal .project-entry { display:grid; grid-template-columns:90px 1fr; gap:0 16px; margin-bottom:14px; }
-  .tpl-minimal .project-title { font-weight:500; font-size:13px; margin-bottom:2px; }
-  .tpl-minimal .project-desc { font-size:12px; color:#666; margin-bottom:3px; }
-  .tpl-minimal .project-tags { display:flex; flex-wrap:wrap; gap:4px; }
-  .tpl-minimal .project-tag { border:1px solid #ddd; border-radius:2px; padding:2px 7px; font-size:11px; color:#888; }
-  .tpl-minimal .project-link { font-size:11px; color:#666; }
-  .tpl-minimal .bullet-list { list-style:none; margin:0; padding:0; }
-  .tpl-minimal .bullet-list li { font-size:12px; color:#555; padding:2px 0 2px 14px; position:relative; }
-  .tpl-minimal .bullet-list li::before { content:'–'; position:absolute; left:0; color:#aaa; }
+  /* ══ MINIMAL — clean Swiss-style ══ */
+  .tpl-minimal { padding:52px 56px; }
+  .tpl-minimal .resume-name { font-family:'DM Sans',sans-serif; font-size:34px; font-weight:700; letter-spacing:-1.5px; color:#111; margin-bottom:3px; line-height:1.1; }
+  .tpl-minimal .resume-title { font-size:13px; font-weight:400; color:#666; letter-spacing:0.3px; margin-bottom:16px; }
+  .tpl-minimal .resume-contact { display:flex; flex-wrap:wrap; gap:0; font-size:12px; color:#555; margin-bottom:0; padding-bottom:18px; border-bottom:2px solid #111; }
+  .tpl-minimal .resume-contact span { display:flex; align-items:center; }
+  .tpl-minimal .resume-contact span:not(:last-child)::after { content:''; display:inline-block; width:1px; height:11px; background:#ccc; margin:0 12px; }
+  .tpl-minimal .section-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#111; margin:24px 0 0; padding-bottom:6px; border-bottom:1px solid #ddd; }
+  .tpl-minimal .divider { display:none; }
+  .tpl-minimal .entry { margin:14px 0 4px; }
+  .tpl-minimal .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:1px; }
+  .tpl-minimal .entry-role { font-weight:600; font-size:13px; color:#111; }
+  .tpl-minimal .entry-date { font-size:11px; color:#999; white-space:nowrap; flex-shrink:0; font-family:'DM Mono',monospace; letter-spacing:0.2px; }
+  .tpl-minimal .entry-org { font-size:12px; color:#777; margin-bottom:5px; }
+  .tpl-minimal .entry-desc { font-size:12px; color:#555; line-height:1.6; }
+  .tpl-minimal .skills-list { display:flex; flex-direction:column; gap:5px; margin-top:10px; }
+  .tpl-minimal .skills-list { display:flex; flex-direction:column; gap:5px; margin-top:8px; }
+  .tpl-minimal .skill-group { display:grid; grid-template-columns:130px 1fr; gap:0 12px; align-items:baseline; font-size:12px; line-height:1.65; }
+  .tpl-minimal .skill-group-name { font-weight:700; color:#111; }
+  .tpl-minimal .skill-group-name::after { content:''; }
+  .tpl-minimal .skill-group-items { color:#444; min-width:0; overflow-wrap:break-word; line-height:1.65; }
+  .tpl-minimal .summary-text { font-size:12.5px; color:#444; line-height:1.7; margin-top:10px; word-break:break-word; overflow-wrap:anywhere; }
+  .tpl-minimal .project-entry { margin:14px 0 4px; }
+  .tpl-minimal .project-title { font-weight:600; font-size:13px; color:#111; margin-bottom:2px; }
+  .tpl-minimal .project-meta { font-size:11px; color:#999; margin-bottom:4px; font-family:'DM Mono',monospace; }
+  .tpl-minimal .project-desc { font-size:12px; color:#555; margin-bottom:5px; line-height:1.6; }
+  .tpl-minimal .project-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+  .tpl-minimal .project-tag { background:#f4f4f4; border:1px solid #e0e0e0; border-radius:2px; padding:2px 8px; font-size:11px; color:#555; }
+  .tpl-minimal .project-link { font-size:11px; color:#555; margin-top:3px; }
+  .tpl-minimal .bullet-list { list-style:none; margin:8px 0 4px; padding:0; }
+  .tpl-minimal .bullet-list li { font-size:12px; color:#444; padding:2px 0 2px 14px; position:relative; line-height:1.55; }
+  .tpl-minimal .bullet-list li::before { content:'–'; position:absolute; left:0; color:#999; }
 
   .btn-autofill { background:linear-gradient(135deg,#6c3fc5,#4a90d9); color:white; }
   .btn-autofill:hover { opacity:0.88; transform:translateY(-1px); }
@@ -238,8 +257,77 @@
   .tpl-classic .exp-bullet-list li::before { content:'▸'; position:absolute; left:0; color:var(--accent); font-size:10px; top:4px; }
   .tpl-modern .exp-bullet-list li { font-size:12px; color:#555; padding:2px 0 2px 13px; position:relative; line-height:1.5; }
   .tpl-modern .exp-bullet-list li::before { content:'▸'; position:absolute; left:0; color:#c0392b; font-size:10px; top:3px; }
-  .tpl-minimal .exp-bullet-list li { font-size:12px; color:#555; padding:2px 0 2px 13px; position:relative; line-height:1.5; }
-  .tpl-minimal .exp-bullet-list li::before { content:'–'; position:absolute; left:0; color:#aaa; }
+  .tpl-minimal .exp-bullet-list li { font-size:12px; color:#444; padding:2px 0 2px 14px; position:relative; line-height:1.55; }
+  .tpl-minimal .exp-bullet-list li::before { content:'–'; position:absolute; left:0; color:#999; }
+
+  /* ══ EXECUTIVE — bold left-bar, navy/charcoal, corporate ══ */
+  .tpl-executive { padding:52px 56px; }
+  .tpl-executive .resume-name { font-family:'Playfair Display',serif; font-size:34px; font-weight:700; color:#1a2540; letter-spacing:-0.5px; line-height:1.1; margin-bottom:5px; }
+  .tpl-executive .resume-title { font-size:12px; font-weight:500; color:#4a6fa5; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; }
+  .tpl-executive .resume-contact { display:flex; flex-wrap:wrap; gap:5px 20px; font-size:12px; color:#555; padding-bottom:16px; border-bottom:3px solid #1a2540; margin-bottom:20px; }
+  .tpl-executive .resume-contact span { display:flex; align-items:center; gap:5px; }
+  .tpl-executive .section-label { font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#1a2540; margin:20px 0 0; padding:8px 0 8px 14px; border-left:4px solid #4a6fa5; line-height:1; }
+  .tpl-executive .entry { margin:12px 0 6px 0; padding-left:18px; border-left:2px solid #e8edf5; }
+  .tpl-executive .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:1px; }
+  .tpl-executive .entry-role { font-weight:700; font-size:13px; color:#1a2540; }
+  .tpl-executive .entry-date { font-size:11px; color:#4a6fa5; white-space:nowrap; flex-shrink:0; font-weight:500; }
+  .tpl-executive .entry-org { font-size:12px; color:#666; margin-bottom:5px; font-weight:500; }
+  .tpl-executive .entry-desc { font-size:12px; color:#444; line-height:1.6; }
+  .tpl-executive .skills-list { display:flex; flex-direction:column; gap:5px; margin-top:8px; }
+  .tpl-executive .skill-group { display:grid; grid-template-columns:140px 1fr; gap:0 12px; align-items:baseline; font-size:12px; line-height:1.65; }
+  .tpl-executive .skill-group-name { font-weight:700; color:#1a2540; }
+  .tpl-executive .skill-group-name::after { content:''; }
+  .tpl-executive .skill-group-items { color:#555; min-width:0; overflow-wrap:break-word; line-height:1.65; }
+  .tpl-executive .summary-text { font-size:12.5px; color:#444; line-height:1.7; margin-top:10px; padding:10px 14px; background:#f0f4fa; border-left:3px solid #4a6fa5; border-radius:0 4px 4px 0; }
+  .tpl-executive .exp-bullet-list { list-style:none; margin:5px 0 2px; padding:0; }
+  .tpl-executive .exp-bullet-list li { font-size:12px; color:#444; padding:2px 0 2px 14px; position:relative; line-height:1.55; }
+  .tpl-executive .exp-bullet-list li::before { content:'▶'; position:absolute; left:0; color:#4a6fa5; font-size:7px; top:5px; }
+  .tpl-executive .bullet-list { list-style:none; margin:8px 0 4px; padding:0; }
+  .tpl-executive .bullet-list li { font-size:12px; color:#444; padding:2px 0 2px 14px; position:relative; line-height:1.55; }
+  .tpl-executive .bullet-list li::before { content:'▶'; position:absolute; left:0; color:#4a6fa5; font-size:7px; top:5px; }
+  .tpl-executive .project-title { font-weight:700; font-size:13px; color:#1a2540; margin-bottom:2px; }
+  .tpl-executive .project-desc { font-size:12px; color:#444; margin-bottom:4px; line-height:1.6; }
+  .tpl-executive .project-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+  .tpl-executive .project-tag { background:#e8edf5; border:1px solid #c5d0e8; border-radius:3px; padding:2px 8px; font-size:11px; color:#1a2540; }
+  .tpl-executive .project-link { font-size:12px; color:#4a6fa5; margin-top:3px; }
+
+  /* ══ CREATIVE — teal header, bold accent, design-forward ══ */
+  .tpl-creative { padding:0; }
+  .tpl-creative .cr-header { background:#0d7377; padding:36px 48px 28px; color:white; }
+  .tpl-creative .resume-name { font-family:'DM Sans',sans-serif; font-size:36px; font-weight:800; letter-spacing:-1px; color:white; line-height:1.05; margin-bottom:5px; }
+  .tpl-creative .resume-title { font-size:12px; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.75); margin-bottom:16px; }
+  .tpl-creative .resume-contact { display:flex; flex-wrap:wrap; gap:5px 20px; font-size:11.5px; color:rgba(255,255,255,0.85); }
+  .tpl-creative .resume-contact span { display:flex; align-items:center; gap:5px; }
+  .tpl-creative .cr-body { padding:32px 48px; display:grid; grid-template-columns:1fr 200px; gap:0 36px; align-items:start; }
+  .tpl-creative .cr-main { min-width:0; }
+  .tpl-creative .cr-aside { border-left:2px solid #e8f8f8; padding-left:24px; }
+  .tpl-creative .section-label { font-size:10px; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:#0d7377; margin:20px 0 10px; display:flex; align-items:center; gap:8px; }
+  .tpl-creative .section-label::after { content:''; flex:1; height:2px; background:#e0f4f4; }
+  .tpl-creative .aside-label { font-size:9px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:#0d7377; margin:18px 0 8px; padding-bottom:5px; border-bottom:2px solid #e0f4f4; }
+  .tpl-creative .aside-label:first-child { margin-top:0; }
+  .tpl-creative .entry { margin-bottom:14px; }
+  .tpl-creative .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:1px; }
+  .tpl-creative .entry-role { font-weight:700; font-size:13px; color:#111; }
+  .tpl-creative .entry-date { font-size:10.5px; color:#0d7377; white-space:nowrap; flex-shrink:0; font-weight:600; background:#e8f8f8; padding:1px 7px; border-radius:10px; }
+  .tpl-creative .entry-org { font-size:12px; color:#666; margin-bottom:5px; }
+  .tpl-creative .entry-desc { font-size:12px; color:#444; line-height:1.6; }
+  .tpl-creative .summary-text { font-size:12.5px; color:#444; line-height:1.7; }
+  .tpl-creative .exp-bullet-list { list-style:none; margin:5px 0 2px; padding:0; }
+  .tpl-creative .exp-bullet-list li { font-size:12px; color:#333; padding:2px 0 2px 14px; position:relative; line-height:1.55; }
+  .tpl-creative .exp-bullet-list li::before { content:'◆'; position:absolute; left:0; color:#0d7377; font-size:7px; top:5px; }
+  .tpl-creative .bullet-list { list-style:none; margin:5px 0 2px; padding:0; }
+  .tpl-creative .bullet-list li { font-size:12px; color:#333; padding:2px 0 2px 14px; position:relative; line-height:1.55; }
+  .tpl-creative .bullet-list li::before { content:'◆'; position:absolute; left:0; color:#0d7377; font-size:7px; top:5px; }
+  /* Aside skills — stacked groups */
+  .tpl-creative .aside-skill-group { margin-bottom:8px; }
+  .tpl-creative .aside-skill-name { font-size:10px; font-weight:700; color:#333; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+  .tpl-creative .aside-skill-items { font-size:11.5px; color:#555; line-height:1.6; }
+  .tpl-creative .aside-contact { font-size:11.5px; color:#444; margin-bottom:5px; display:flex; align-items:center; gap:6px; line-height:1.4; }
+  .tpl-creative .project-title { font-weight:700; font-size:13px; color:#111; margin-bottom:2px; }
+  .tpl-creative .project-desc { font-size:12px; color:#444; margin-bottom:4px; line-height:1.6; }
+  .tpl-creative .project-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+  .tpl-creative .project-tag { background:#e8f8f8; border:1px solid #9ed9da; border-radius:10px; padding:2px 9px; font-size:11px; color:#0d7377; font-weight:500; }
+  .tpl-creative .project-link { font-size:11.5px; color:#0d7377; margin-top:3px; }
 
   /* ── DATE PICKER ── */
   .date-picker { display:flex; gap:5px; align-items:center; flex-wrap:nowrap; }
@@ -326,12 +414,77 @@
   /* ── PRINT ── */
   @page { margin:0; size:A4; }
   @media print {
+    @page { margin:0; size:A4; }
+
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+
     header,.editor,.mobile-tabs,.preview-label,.page2-label { display:none !important; }
     .app { display:block; }
-    .preview { padding:0; background:white; gap:0; }
-    .resume-scaler { gap:0; }
-    .resume { box-shadow:none; width:100%; padding:40px; transform:none !important; page-break-after:always; }
-    .resume.page2 { page-break-after:auto; }
+    .preview { padding:0; background:white; gap:0; display:block; }
+    .resume-scaler { display:block; width:100%; }
+
+    /* Force each resume to A4 size and break after */
+    .resume {
+      box-shadow:none !important;
+      width:210mm !important;
+      min-height:0 !important;
+      max-width:210mm !important;
+      padding:16mm 18mm !important;
+      transform:none !important;
+      margin:0 auto !important;
+      page-break-after:always;
+      break-after:page;
+      display:block !important;
+    }
+    .resume.page2 {
+      page-break-after:auto;
+      break-after:auto;
+    }
+
+    /* Modern template — restore grid for print */
+    .tpl-modern {
+      display:grid !important;
+      grid-template-columns:190px 1fr !important;
+      padding:0 !important;
+    }
+    /* Creative template */
+    .tpl-creative .cr-body {
+      display:grid !important;
+      grid-template-columns:1fr 200px !important;
+    }
+
+    /* Keep section headings with content below */
+    .section-label {
+      break-after:avoid;
+      page-break-after:avoid;
+    }
+
+    /* Keep entries together */
+    .entry {
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .entry-header {
+      break-after:avoid;
+      page-break-after:avoid;
+    }
+    .entry-org {
+      break-before:avoid;
+      page-break-before:avoid;
+    }
+
+    /* Keep bullets with entry */
+    .exp-bullet-list,
+    .bullet-list {
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+
+    /* Keep skill rows together */
+    .skill-group {
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
   }
 
   /* ── SCROLLBAR ── */
@@ -392,6 +545,8 @@
         <div class="pill active" onclick="setTemplate('classic',this)">Classic</div>
         <div class="pill" onclick="setTemplate('modern',this)">Modern</div>
         <div class="pill" onclick="setTemplate('minimal',this)">Minimal</div>
+        <div class="pill" onclick="setTemplate('executive',this)">Executive</div>
+        <div class="pill" onclick="setTemplate('creative',this)">Creative</div>
       </div>
     </div>
 
@@ -986,22 +1141,27 @@ function buildSkillsHtml(tpl){
   if(tpl==='classic'){
     return `<div class="section-label">${skillsLabel}</div>
       <div class="skills-list">${active.map(g=>`
-        <div class="skill-group">
-          ${g.category?`<span class="skill-group-name">${esc(g.category)}</span>`:''}
-          <span class="skill-group-items">${esc(g.items)}</span>
-        </div>`).join('')}</div>`;
+        <div class="skill-group">${g.category?`<span class="skill-group-name">${esc(g.category)}</span>`:''}<span class="skill-group-items">${esc(g.items)}</span></div>`).join('')}</div>`;
   } else if(tpl==='modern'){
     // In modern: sidebar shows groups stacked
     return `<div class="sidebar-label">${skillsLabel}</div>${active.map(g=>`
       ${g.category?`<span class="skill-group-name">${esc(g.category)}</span>`:''}
       <div class="skill-group-items-sidebar">${esc(g.items)}</div>`).join('')}`;
+  } else if(tpl==='executive'){
+    return `<div class="section-label">${skillsLabel}</div>
+      <div class="skills-list">${active.map(g=>`
+        <div class="skill-group">${g.category?`<span class="skill-group-name">${esc(g.category)}</span>`:''}<span class="skill-group-items">${esc(g.items)}</span></div>`).join('')}</div>`;
+  } else if(tpl==='creative'){
+    // Creative: aside layout — return stacked groups for sidebar
+    return active.map(g=>`
+      <div class="aside-skill-group">
+        ${g.category?`<div class="aside-skill-name">${esc(g.category)}</div>`:''}
+        <div class="aside-skill-items">${esc(g.items)}</div>
+      </div>`).join('');
   } else {
     return `<div class="section-label">${skillsLabel}</div><div class="divider"></div>
       <div class="skills-list">${active.map(g=>`
-        <div class="skill-group">
-          ${g.category?`<span class="skill-group-name">${esc(g.category)}</span>`:''}
-          <span>${esc(g.items)}</span>
-        </div>`).join('')}</div>`;
+        <div class="skill-group">${g.category?`<span class="skill-group-name">${esc(g.category)}</span>`:''}<span class="skill-group-items">${esc(g.items)}</span></div>`).join('')}</div>`;
   }
 }
 
@@ -1093,7 +1253,7 @@ function buildHighlightHtml(pg, tpl) {
     const validBullets = hl.bullets.filter(b=>b.text);
     if(!validBullets.length) return '';
     const bullets = validBullets.map(b=>`<li>${esc(b.text)}</li>`).join('');
-    if(tpl==='classic'||tpl==='modern') {
+    if(tpl==='classic'||tpl==='modern'||tpl==='executive'||tpl==='creative') {
       return `<div class="section-label">${esc(hl.title||'Highlights')}</div>
         <ul class="bullet-list">${bullets}</ul>`;
     } else {
@@ -1108,7 +1268,7 @@ function buildHighlightHtml(pg, tpl) {
 function buildProjectsHtml(tpl, projLabel) {
   if(!projects.length) return '';
   projLabel = esc(projLabel || get('label_projects') || 'Projects');
-  if(tpl==='classic'||tpl==='modern'){
+  if(tpl==='classic'||tpl==='modern'||tpl==='executive'||tpl==='creative'){
     return `<div class="section-label">${projLabel}</div>`+
       projects.map(p=>`
         <div class="entry" style="margin-bottom:16px">
@@ -1244,11 +1404,51 @@ function render(){
         ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
         ${hl1}${extraSections}
       </div>`;
+  } else if(tpl==='executive'){
+    p1.innerHTML=`
+      <div class="resume-name">${esc(name)}</div>
+      ${title?`<div class="resume-title">${esc(title)}</div>`:''}
+      <div class="resume-contact">
+        ${email?`<span>✉ ${esc(email)}</span>`:''}${phone?`<span>☎ ${esc(phone)}</span>`:''}
+        ${loc?`<span>◎ ${esc(loc)}</span>`:''}${website?`<span>⬡ ${esc(website)}</span>`:''}
+      </div>
+      ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="summary-text">${esc(summary)}</div>`:''}
+      ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div>${expH}`:''}
+      ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
+      ${skillsHtml}${hl1}${extraSections}`;
+  } else if(tpl==='creative'){
+    // Creative: teal header band + two-column body (main | aside)
+    const asideContact = [
+      email?`<div class="aside-contact">✉ ${esc(email)}</div>`:'',
+      phone?`<div class="aside-contact">☎ ${esc(phone)}</div>`:'',
+      loc?`<div class="aside-contact">◎ ${esc(loc)}</div>`:'',
+      website?`<div class="aside-contact">⬡ ${esc(website)}</div>`:''
+    ].filter(Boolean).join('');
+    p1.innerHTML=`
+      <div class="cr-header">
+        <div class="resume-name">${esc(name)}</div>
+        ${title?`<div class="resume-title">${esc(title)}</div>`:''}
+        <div class="resume-contact">
+          ${email?`<span>✉ ${esc(email)}</span>`:''}${phone?`<span>☎ ${esc(phone)}</span>`:''}
+          ${loc?`<span>◎ ${esc(loc)}</span>`:''}${website?`<span>⬡ ${esc(website)}</span>`:''}
+        </div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-main">
+          ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="summary-text">${esc(summary)}</div>`:''}
+          ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div>${expH}`:''}
+          ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
+          ${hl1}${extraSections}
+        </div>
+        <div class="cr-aside">
+          ${skillsHtml?`<div class="aside-label">${esc(LBL.skills)}</div>${skillsHtml}`:''}
+        </div>
+      </div>`;
   } else {
     p1.innerHTML=`
       <div class="resume-name">${esc(name)}</div>
       ${title?`<div class="resume-title">${esc(title)}</div>`:''}
-      <div class="resume-contact">${[email,phone,loc,website].filter(Boolean).map(v=>esc(v)).join(' · ')}</div>
+      <div class="resume-contact">${[email?`<span>✉ ${esc(email)}</span>`:'',phone?`<span>☎ ${esc(phone)}</span>`:'',loc?`<span>◎ ${esc(loc)}</span>`:'',website?`<span>⬡ ${esc(website)}</span>`:''].filter(Boolean).join('')}</div>
       ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="divider"></div><div class="summary-text">${esc(summary)}</div>`:''}
       ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div><div class="divider"></div>${expH}`:''}
       ${educations.length?`<div class="section-label">${esc(LBL.education)}</div><div class="divider"></div>${eduH}`:''}
@@ -1267,6 +1467,16 @@ function render(){
           <div class="resume-title">Page 2</div>
         </div>
         <div class="resume-main">${hl2}${projHtml}</div>`;
+    } else if(tpl==='creative'){
+      p2.innerHTML=`
+        <div class="cr-header" style="padding:24px 48px">
+          <div class="resume-name" style="font-size:24px">${esc(name)}</div>
+          <div class="resume-title">Projects &amp; More</div>
+        </div>
+        <div class="cr-body">
+          <div class="cr-main">${hl2}${projHtml}</div>
+          <div class="cr-aside"></div>
+        </div>`;
     } else {
       p2.innerHTML=hl2+projHtml;
     }
@@ -1299,276 +1509,331 @@ async function exportDocx(){
 }
 
 async function generateDocxInBrowser(d){
-  // Load JSZip (much smaller, more reliable than docx library)
+  // Load JSZip
   if(!window.JSZip){
     await new Promise((res,rej)=>{
       const s=document.createElement('script');
       s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
       s.onload=()=>window.JSZip?res():rej(new Error('JSZip failed to load'));
-      s.onerror=()=>rej(new Error('Cannot load JSZip from CDN — check your connection'));
+      s.onerror=()=>rej(new Error('Cannot load JSZip — check your connection'));
       document.head.appendChild(s);
     });
   }
 
   const SL = {
-    profile:    get('label_profile')    || 'Profile',
-    experience: get('label_experience') || 'Experience',
-    education:  get('label_education')  || 'Education',
-    skills:     get('label_skills')     || 'Skills',
-    projects:   get('label_projects')   || 'Projects',
-    certs:      get('label_certs')      || 'Certifications',
-    langs:      get('label_langs')      || 'Languages',
-    volunteer:  get('label_volunteer')  || 'Volunteer',
-    custom:     get('label_custom')     || 'Additional Info',
+    profile:   get('label_profile')   || 'Profile',
+    exp:       get('label_experience')|| 'Experience',
+    edu:       get('label_education') || 'Education',
+    skills:    get('label_skills')    || 'Skills',
+    projects:  get('label_projects')  || 'Projects',
+    certs:     get('label_certs')     || 'Certifications',
+    langs:     get('label_langs')     || 'Languages',
+    volunteer: get('label_volunteer') || 'Volunteer',
+    custom:    get('label_custom')    || 'Additional Info',
   };
 
-  // ── XML helpers ──
-  const x = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+  // ── OOXML helpers ──
+  // w:sz / w:szCs are in HALF-points. 10pt = sz 20, 11pt = sz 22, 12pt = sz 24
+  const hp = pt => pt * 2;           // points → half-points
+  const x  = s  => (s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
 
-  // Half-points (1pt = 20 half-pts in OOXML)
-  const PT = n => n * 20;
-
-  function para(runs, opts={}) {
-    const {spBefore=0,spAfter=120,bold=false,sz=21,color='1A1410',italic=false,
-           indent='',border='',rightTab=false} = opts;
-    const pPr = `<w:pPr>
-      <w:spacing w:before="${spBefore}" w:after="${spAfter}"/>
-      ${indent}
-      ${border}
-      ${rightTab?`<w:tabs><w:tab w:val="right" w:pos="9000"/></w:tabs>`:''}
-    </w:pPr>`;
-    const rPr = `<w:rPr>
-      ${bold?'<w:b/>':''}${italic?'<w:i/>':''}
-      <w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>
-      ${color?`<w:color w:val="${color}"/>`:''}
-      <w:rFonts w:ascii="Arial" w:hAnsi="Arial"/>
-    </w:rPr>`;
-    const runXml = Array.isArray(runs)
-      ? runs.map(r=>typeof r==='string'
-          ? `<w:r>${rPr}<w:t xml:space="preserve">${x(r)}</w:t></w:r>`
-          : `<w:r><w:rPr>${r.bold?'<w:b/>':''}${r.italic?'<w:i/>':''}<w:sz w:val="${r.sz||sz}"/><w:szCs w:val="${r.sz||sz}"/><w:color w:val="${r.color||color}"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(r.t||'')}</w:t></w:r>`
-        ).join('')
-      : `<w:r>${rPr}<w:t xml:space="preserve">${x(runs)}</w:t></w:r>`;
-    return `<w:p>${pPr}${runXml}</w:p>`;
+  // Run properties shorthand
+  function rpr(opts={}){
+    const {bold=false,italic=false,pt=10,color='1A1410',font='Calibri'} = opts;
+    return `<w:rPr>${bold?'<w:b/>':''}${italic?'<w:i/>'  :''}` +
+      `<w:sz w:val="${hp(pt)}"/><w:szCs w:val="${hp(pt)}"/>` +
+      `<w:color w:val="${color}"/>` +
+      `<w:rFonts w:ascii="${font}" w:hAnsi="${font}"/>` +
+      `</w:rPr>`;
   }
 
-  function secHeading(text) {
-    return para(text, {
-      spBefore:280,spAfter:80,bold:true,sz:PT(11),color:'1A1410',
-      border:`<w:pBdr><w:bottom w:val="single" w:sz="4" w:space="1" w:color="CCCCCC"/></w:pBdr>`
-    });
+  // Single-run paragraph
+  function p(text, opts={}, pOpts={}){
+    const {spBefore=0, spAfter=80, indent=0, hanging=0,
+           borderBottom='', tabs='', keepNext=false} = pOpts;
+    const ppr = `<w:pPr>` +
+      `<w:spacing w:before="${spBefore}" w:after="${spAfter}"/>` +
+      (indent||hanging ? `<w:ind w:left="${indent}" w:hanging="${hanging}"/>` : '') +
+      (tabs   ? `<w:tabs>${tabs}</w:tabs>` : '') +
+      (borderBottom ? `<w:pBdr><w:bottom w:val="single" w:sz="${borderBottom.sz||4}" w:space="1" w:color="${borderBottom.color||'CCCCCC'}"/></w:pBdr>` : '') +
+      (keepNext ? '<w:keepNext/>' : '') +
+      `</w:pPr>`;
+    const run = `<w:r>${rpr(opts)}<w:t xml:space="preserve">${x(text)}</w:t></w:r>`;
+    return `<w:p>${ppr}${run}</w:p>`;
   }
-  function hrLine() {
-    return `<w:p><w:pPr><w:spacing w:after="120"/><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="1A1410"/></w:pBdr></w:pPr></w:p>`;
+
+  // Two-run paragraph: left text + right-aligned date via tab
+  function entryHeader(leftText, dateText, leftOpts={}, dateOpts={}){
+    const ppr = `<w:pPr>` +
+      `<w:spacing w:before="120" w:after="20"/>` +
+      `<w:tabs><w:tab w:val="right" w:pos="9360"/></w:tabs>` +
+      `<w:keepNext/>` +
+      `</w:pPr>`;
+    return `<w:p>${ppr}` +
+      `<w:r>${rpr(leftOpts)}<w:t xml:space="preserve">${x(leftText)}</w:t></w:r>` +
+      `<w:r>${rpr(dateOpts)}<w:tab/><w:t xml:space="preserve">${x(dateText)}</w:t></w:r>` +
+      `</w:p>`;
   }
-  function bulletPara(text, indent=360) {
-    return `<w:p>
-      <w:pPr><w:spacing w:after="60"/><w:ind w:left="${indent}" w:hanging="240"/></w:pPr>
-      <w:r><w:rPr><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="444444"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr>
-        <w:t xml:space="preserve">\u25B8  ${x(text)}</w:t></w:r></w:p>`;
+
+  // Section heading: bold uppercase label + bottom border
+  function sectionHead(label){
+    return p(label.toUpperCase(), {bold:true, pt:9, color:'444444'},
+      {spBefore:240, spAfter:60,
+       borderBottom:{sz:4, color:'CCCCCC'}});
   }
-  function pageBreak() {
+
+  // Bullet point
+  function bullet(text){
+    return `<w:p>` +
+      `<w:pPr><w:spacing w:before="0" w:after="40"/>` +
+      `<w:ind w:left="280" w:hanging="200"/></w:pPr>` +
+      `<w:r>${rpr({pt:10,color:'333333'})}<w:t xml:space="preserve">\u2013  ${x(text)}</w:t></w:r>` +
+      `</w:p>`;
+  }
+
+  // Thin full-width rule
+  function rule(color='1A1410', sz=6){
+    return `<w:p><w:pPr><w:spacing w:before="0" w:after="100"/>` +
+      `<w:pBdr><w:bottom w:val="single" w:sz="${sz}" w:space="1" w:color="${color}"/></w:pBdr>` +
+      `</w:pPr></w:p>`;
+  }
+
+  function pageBreak(){
     return `<w:p><w:r><w:br w:type="page"/></w:r></w:p>`;
   }
 
-  // ── Build document body ──
+  // ── Build body ──
   let body = '';
 
-  // Name
-  body += para(d.name||'Your Name', {spBefore:0,spAfter:80,bold:true,sz:PT(22),color:'1A1410'});
-  if(d.title) body += para(d.title, {spAfter:100,sz:PT(10),color:'6B5F55'});
-  const contact = [d.email,d.phone,d.location,d.website].filter(Boolean).join('  ·  ');
-  if(contact) body += para(contact, {spAfter:0,sz:PT(9),color:'888888'});
-  body += hrLine();
+  // Header: Name
+  body += p(d.name||'Your Name',
+    {bold:true, pt:24, color:'1A1410', font:'Calibri'},
+    {spBefore:0, spAfter:40});
 
-  // Profile
+  // Title
+  if(d.title)
+    body += p(d.title,
+      {pt:11, color:'666666', font:'Calibri'},
+      {spBefore:0, spAfter:60});
+
+  // Contact line
+  const contactParts = [
+    d.email    ? '\u2709 '+d.email    : '',
+    d.phone    ? '\u260e '+d.phone    : '',
+    d.location ? '\u25ce '+d.location : '',
+    d.website  ? d.website            : '',
+  ].filter(Boolean);
+  if(contactParts.length){
+    body += p(contactParts.join('   \u00b7   '),
+      {pt:9.5, color:'555555'},
+      {spBefore:0, spAfter:0});
+  }
+
+  body += rule('1A1410', 8);
+
+  // Profile / Summary
   if(d.summary){
-    body += secHeading(SL.profile);
-    body += para(d.summary, {spAfter:160,sz:PT(10),color:'4A3F36',italic:true});
+    body += sectionHead(SL.profile);
+    body += p(d.summary, {pt:10, color:'333333', italic:false}, {spBefore:0, spAfter:100});
   }
 
   // Experience
-  if(d.experiences&&d.experiences.length){
-    body += secHeading(SL.experience);
-    d.experiences.forEach(e=>{
-      body += `<w:p>
-        <w:pPr><w:spacing w:before="120" w:after="20"/><w:tabs><w:tab w:val="right" w:pos="9000"/></w:tabs></w:pPr>
-        <w:r><w:rPr><w:b/><w:sz w:val="${PT(11)}"/><w:szCs w:val="${PT(11)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(e.role||'Role')}</w:t></w:r>
-        <w:r><w:rPr><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="888888"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:tab/><w:t xml:space="preserve">${x(e.start||'')}${e.end?' \u2013 '+x(e.end):''}</w:t></w:r>
-      </w:p>`;
-      if(e.org) body += para(e.org, {spAfter:40,sz:PT(10),color:'C0392B',italic:true});
-      (e.bullets||[]).filter(b=>b.text).forEach(b=>{ body += bulletPara(b.text); });
-      body += `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr></w:p>`;
+  if(d.experiences && d.experiences.length){
+    body += sectionHead(SL.exp);
+    d.experiences.forEach(e => {
+      const dateStr = [e.start, e.end].filter(Boolean).join(' \u2013 ');
+      body += entryHeader(e.role||'', dateStr,
+        {bold:true, pt:10.5, color:'1A1410'},
+        {pt:9.5, color:'888888'});
+      if(e.org)
+        body += p(e.org, {italic:true, pt:10, color:'C0392B'}, {spBefore:0, spAfter:30, keepNext:true});
+      (e.bullets||[]).filter(b=>b.text).forEach(b => { body += bullet(b.text); });
+      body += `<w:p><w:pPr><w:spacing w:after="80"/></w:pPr></w:p>`;
     });
   }
 
   // Education
-  if(d.educations&&d.educations.length){
-    body += secHeading(SL.education);
-    d.educations.forEach(e=>{
-      body += `<w:p>
-        <w:pPr><w:spacing w:before="100" w:after="20"/><w:tabs><w:tab w:val="right" w:pos="9000"/></w:tabs></w:pPr>
-        <w:r><w:rPr><w:b/><w:sz w:val="${PT(11)}"/><w:szCs w:val="${PT(11)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(e.degree||'Degree')}</w:t></w:r>
-        <w:r><w:rPr><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="888888"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:tab/><w:t xml:space="preserve">${x(e.start||'')}${e.end?' \u2013 '+x(e.end):''}</w:t></w:r>
-      </w:p>`;
-      if(e.school) body += para(e.school, {spAfter:60,sz:PT(10),color:'C0392B',italic:true});
+  if(d.educations && d.educations.length){
+    body += sectionHead(SL.edu);
+    d.educations.forEach(e => {
+      const dateStr = [e.start, e.end].filter(Boolean).join(' \u2013 ');
+      body += entryHeader(e.degree||'', dateStr,
+        {bold:true, pt:10.5, color:'1A1410'},
+        {pt:9.5, color:'888888'});
+      if(e.school)
+        body += p(e.school, {italic:true, pt:10, color:'C0392B'}, {spBefore:0, spAfter:80});
     });
   }
 
   // Skills
-  if(d.skillGroups&&d.skillGroups.some(g=>g.items.trim())){
-    body += secHeading(SL.skills);
-    d.skillGroups.filter(g=>g.items.trim()).forEach(g=>{
-      body += `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr>
-        ${g.category?`<w:r><w:rPr><w:b/><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(g.category)}: </w:t></w:r>`:''}
-        <w:r><w:rPr><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="444444"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(g.items)}</w:t></w:r>
-      </w:p>`;
+  if(d.skillGroups && d.skillGroups.some(g=>g.items.trim())){
+    body += sectionHead(SL.skills);
+    d.skillGroups.filter(g=>g.items.trim()).forEach(g => {
+      const ppr = `<w:pPr><w:spacing w:before="0" w:after="50"/></w:pPr>`;
+      const catRun = g.category
+        ? `<w:r>${rpr({bold:true,pt:10,color:'1A1410'})}<w:t xml:space="preserve">${x(g.category)}: </w:t></w:r>`
+        : '';
+      const itemRun = `<w:r>${rpr({pt:10,color:'444444'})}<w:t xml:space="preserve">${x(g.items)}</w:t></w:r>`;
+      body += `<w:p>${ppr}${catRun}${itemRun}</w:p>`;
     });
   }
 
   // Highlights page 1
-  (d.highlights||[]).filter(h=>h.page==='1'&&h.bullets.some(b=>b.text)).forEach(hl=>{
-    body += secHeading(hl.title||'Highlights');
-    hl.bullets.filter(b=>b.text).forEach(b=>{ body += bulletPara(b.text); });
+  (d.highlights||[]).filter(h=>h.page==='1' && h.bullets.some(b=>b.text)).forEach(hl=>{
+    body += sectionHead(hl.title||'Highlights');
+    hl.bullets.filter(b=>b.text).forEach(b=>{ body += bullet(b.text); });
   });
 
   // Certifications
-  if(d.certs&&d.certs.length){
-    body += secHeading(SL.certs);
+  if(d.certs && d.certs.length){
+    body += sectionHead(SL.certs);
     d.certs.forEach(c=>{
-      body += `<w:p>
-        <w:pPr><w:spacing w:before="60" w:after="40"/><w:tabs><w:tab w:val="right" w:pos="9000"/></w:tabs></w:pPr>
-        <w:r><w:rPr><w:b/><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(c.name||'')}</w:t></w:r>
-        <w:r><w:rPr><w:sz w:val="${PT(9.5)}"/><w:szCs w:val="${PT(9.5)}"/><w:color w:val="888888"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:tab/><w:t xml:space="preserve">${x(c.date||'')}${c.issuer?' \u2013 '+x(c.issuer):''}${c.credId?' (ID: '+x(c.credId)+')':''}</w:t></w:r>
-      </w:p>`;
+      const right = [c.date, c.issuer ? '\u2013 '+c.issuer : '', c.credId ? '('+c.credId+')' : ''].filter(Boolean).join(' ');
+      body += entryHeader(c.name||'', right,
+        {bold:true, pt:10, color:'1A1410'},
+        {pt:9.5, color:'888888'});
     });
   }
 
   // Languages
-  if(d.langs&&d.langs.length){
-    body += secHeading(SL.langs);
-    body += `<w:p><w:pPr><w:spacing w:after="80"/></w:pPr>`+
-      d.langs.map(l=>`<w:r><w:rPr><w:b/><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(l.lang)}</w:t></w:r><w:r><w:rPr><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="888888"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve"> \u2013 ${x(l.level)}    </w:t></w:r>`).join('')+`</w:p>`;
+  if(d.langs && d.langs.length){
+    body += sectionHead(SL.langs);
+    const ppr = `<w:pPr><w:spacing w:before="0" w:after="80"/></w:pPr>`;
+    const runs = d.langs.map(l=>
+      `<w:r>${rpr({bold:true,pt:10,color:'1A1410'})}<w:t xml:space="preserve">${x(l.lang)}</w:t></w:r>` +
+      `<w:r>${rpr({pt:10,color:'888888'})}<w:t xml:space="preserve"> \u2013 ${x(l.level)}    </w:t></w:r>`
+    ).join('');
+    body += `<w:p>${ppr}${runs}</w:p>`;
   }
 
   // Volunteer
-  if(d.volunteers&&d.volunteers.length){
-    body += secHeading(SL.volunteer);
+  if(d.volunteers && d.volunteers.length){
+    body += sectionHead(SL.volunteer);
     d.volunteers.forEach(v=>{
-      body += `<w:p>
-        <w:pPr><w:spacing w:before="80" w:after="20"/><w:tabs><w:tab w:val="right" w:pos="9000"/></w:tabs></w:pPr>
-        <w:r><w:rPr><w:b/><w:sz w:val="${PT(10)}"/><w:szCs w:val="${PT(10)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(v.role||'')}</w:t></w:r>
-        <w:r><w:rPr><w:sz w:val="${PT(9.5)}"/><w:szCs w:val="${PT(9.5)}"/><w:color w:val="888888"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:tab/><w:t xml:space="preserve">${x(v.period||'')}</w:t></w:r>
-      </w:p>`;
-      if(v.org) body += para(v.org,{spAfter:30,sz:PT(9.5),color:'C0392B',italic:true});
-      if(v.desc) body += para(v.desc,{spAfter:60,sz:PT(10),color:'444444'});
+      body += entryHeader(v.role||'', v.period||'',
+        {bold:true, pt:10, color:'1A1410'},
+        {pt:9.5, color:'888888'});
+      if(v.org)
+        body += p(v.org, {italic:true, pt:10, color:'C0392B'}, {spBefore:0, spAfter:30});
+      if(v.desc)
+        body += p(v.desc, {pt:10, color:'444444'}, {spBefore:0, spAfter:60});
     });
   }
 
   // Custom
   if(d.customContent){
-    body += secHeading(SL.custom);
-    body += para(d.customContent,{spAfter:80,sz:PT(10),color:'444444'});
+    body += sectionHead(SL.custom);
+    body += p(d.customContent, {pt:10, color:'444444'}, {spBefore:0, spAfter:80});
   }
 
-  // Page 2 — Projects + highlights p2
-  const hasP2=(d.projects&&d.projects.some(p=>p.name||p.desc))||
-              (d.highlights||[]).some(h=>h.page==='2'&&h.bullets.some(b=>b.text));
+  // ── Page 2: Projects + highlights p2 ──
+  const hasP2 = (d.projects && d.projects.some(p=>p.name||p.desc)) ||
+                (d.highlights||[]).some(h=>h.page==='2' && h.bullets.some(b=>b.text));
   if(hasP2){
     body += pageBreak();
-    body += para(d.name||'Your Name',{spAfter:40,bold:true,sz:PT(18),color:'1A1410'});
-    body += para('Page 2 — Projects & Highlights',{spAfter:0,sz:PT(9),color:'888888'});
-    body += hrLine();
+    body += p(d.name||'Your Name', {bold:true, pt:18, color:'1A1410'}, {spBefore:0, spAfter:40});
+    body += p('Projects & Portfolio', {pt:9, color:'888888'}, {spBefore:0, spAfter:0});
+    body += rule('1A1410', 8);
 
-    (d.highlights||[]).filter(h=>h.page==='2'&&h.bullets.some(b=>b.text)).forEach(hl=>{
-      body += secHeading(hl.title||'Highlights');
-      hl.bullets.filter(b=>b.text).forEach(b=>{ body += bulletPara(b.text); });
+    (d.highlights||[]).filter(h=>h.page==='2' && h.bullets.some(b=>b.text)).forEach(hl=>{
+      body += sectionHead(hl.title||'Highlights');
+      hl.bullets.filter(b=>b.text).forEach(b=>{ body += bullet(b.text); });
     });
 
-    if(d.projects&&d.projects.length){
-      body += secHeading(SL.projects);
-      d.projects.forEach(p=>{
-        body += para([
-          {t:p.name||'Untitled',bold:true,sz:PT(11),color:'1A1410'},
-          ...(p.year?[{t:'  \u2014  '+p.year,sz:PT(10),color:'888888'}]:[])
-        ],{spBefore:160,spAfter:20});
-        if(p.role) body += para(p.role,{spAfter:30,sz:PT(10),color:'C0392B',italic:true});
-        if(p.desc) body += para(p.desc,{spAfter:60,sz:PT(10),color:'444444'});
-        if(p.stack) body += `<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>
-          <w:r><w:rPr><w:b/><w:sz w:val="${PT(9.5)}"/><w:szCs w:val="${PT(9.5)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">Tech: </w:t></w:r>
-          <w:r><w:rPr><w:sz w:val="${PT(9.5)}"/><w:szCs w:val="${PT(9.5)}"/><w:color w:val="666666"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(p.stack)}</w:t></w:r></w:p>`;
-        if(p.link) body += `<w:p><w:pPr><w:spacing w:after="100"/></w:pPr>
-          <w:r><w:rPr><w:b/><w:sz w:val="${PT(9.5)}"/><w:szCs w:val="${PT(9.5)}"/><w:color w:val="1A1410"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">Link: </w:t></w:r>
-          <w:r><w:rPr><w:sz w:val="${PT(9.5)}"/><w:szCs w:val="${PT(9.5)}"/><w:color w:val="C0392B"/><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr><w:t xml:space="preserve">${x(p.link)}</w:t></w:r></w:p>`;
+    if(d.projects && d.projects.length){
+      body += sectionHead(SL.projects);
+      d.projects.forEach(proj=>{
+        body += entryHeader(proj.name||'Untitled', proj.year||'',
+          {bold:true, pt:10.5, color:'1A1410'},
+          {pt:9.5, color:'888888'});
+        if(proj.role)
+          body += p(proj.role, {italic:true, pt:10, color:'C0392B'}, {spBefore:0, spAfter:30});
+        if(proj.desc)
+          body += p(proj.desc, {pt:10, color:'444444'}, {spBefore:0, spAfter:40});
+        if(proj.stack){
+          const ppr = `<w:pPr><w:spacing w:before="0" w:after="40"/></w:pPr>`;
+          body += `<w:p>${ppr}` +
+            `<w:r>${rpr({bold:true,pt:9.5,color:'1A1410'})}<w:t xml:space="preserve">Stack: </w:t></w:r>` +
+            `<w:r>${rpr({pt:9.5,color:'555555'})}<w:t xml:space="preserve">${x(proj.stack)}</w:t></w:r>` +
+            `</w:p>`;
+        }
+        if(proj.link)
+          body += p('\uD83D\uDD17 '+proj.link, {pt:9.5, color:'555555'}, {spBefore:0, spAfter:80});
       });
     }
   }
 
-  // ── Assemble docx ZIP ──
-  const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  // ── Assemble OOXML package ──
+  const docXml =
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-  xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
-  mc:Ignorable="w14 wpc">
-  <w:body>
-    ${body}
-    <w:sectPr>
-      <w:pgSz w:w="12240" w:h="15840"/>
-      <w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080" w:header="708" w:footer="708" w:gutter="0"/>
-    </w:sectPr>
-  </w:body>
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+<w:body>
+${body}
+<w:sectPr>
+  <w:pgSz w:w="12240" w:h="15840"/>
+  <w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080"/>
+</w:sectPr>
+</w:body>
 </w:document>`;
 
-  const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  const stylesXml =
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:docDefaults>
+    <w:rPrDefault><w:rPr>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+      <w:sz w:val="20"/><w:szCs w:val="20"/>
+      <w:color w:val="1A1410"/>
+    </w:rPr></w:rPrDefault>
+    <w:pPrDefault><w:pPr>
+      <w:spacing w:after="80" w:line="276" w:lineRule="auto"/>
+    </w:pPr></w:pPrDefault>
+  </w:docDefaults>
+</w:styles>`;
+
+  const contentTypes =
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml"  ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml"   ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+</Types>`;
+
+  const topRels =
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
+
+  const wordRels =
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
 </Relationships>`;
 
-  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:docDefaults>
-    <w:rPrDefault><w:rPr>
-      <w:rFonts w:ascii="Arial" w:hAnsi="Arial"/>
-      <w:sz w:val="20"/><w:szCs w:val="20"/>
-    </w:rPr></w:rPrDefault>
-  </w:docDefaults>
-</w:styles>`;
-
-  const appXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
-  <Application>Résumé Builder</Application>
-</Properties>`;
-
-  const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
-  <Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
-</Types>`;
-
-  const topRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
-</Relationships>`;
-
   const zip = new JSZip();
-  zip.file('[Content_Types].xml', contentTypes);
-  zip.file('_rels/.rels', topRels);
-  zip.file('word/document.xml', docXml);
-  zip.file('word/_rels/document.xml.rels', relsXml);
-  zip.file('word/styles.xml', stylesXml);
-  zip.file('docProps/app.xml', appXml);
+  zip.file('[Content_Types].xml',       contentTypes);
+  zip.file('_rels/.rels',               topRels);
+  zip.file('word/document.xml',         docXml);
+  zip.file('word/_rels/document.xml.rels', wordRels);
+  zip.file('word/styles.xml',           stylesXml);
 
-  const blob = await zip.generateAsync({type:'blob', mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  const blob = await zip.generateAsync({
+    type:'blob',
+    mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    compression:'DEFLATE'
+  });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download=`${(d.name||'resume').replace(/\s+/g,'_')}_resume.docx`; a.click();
+  const a   = document.createElement('a');
+  const filename = `${(d.name||'resume').replace(/\s+/g,'_')}_resume.docx`;
+  a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
-  showToast('✓ Downloaded '+a.download);
+  showToast('✓ Downloaded ' + filename);
 }
 
 function clearAll(){
@@ -2174,60 +2439,115 @@ function autoLoad() {
 
 async function copyToClipboard() {
   const json = JSON.stringify(collectAllData(), null, 2);
+  // Always open the modal so user always gets the text — clipboard API is a bonus
+  showClipboardModal('copy', json);
+  // Also try silent clipboard write in background (works on HTTPS / modern browsers)
   try {
     await navigator.clipboard.writeText(json);
-    showToast('\u2713 Resume data copied to clipboard');
-  } catch(e) {
-    showClipboardModal('copy', json);
-  }
+    // Update modal hint to let user know it also auto-copied
+    const hint = document.getElementById('clipHint');
+    if (hint) { hint.textContent = '✓ Also auto-copied to clipboard!'; hint.style.color = '#1a6b2e'; }
+  } catch(e) { /* silent — user can still manually copy from modal */ }
 }
 
 async function pasteFromClipboard() {
+  // Always show modal — pre-fill it if clipboard API is available
+  let prefill = '';
   try {
     const text = await navigator.clipboard.readText();
-    if (!text.trim()) throw new Error('empty');
-    const d = JSON.parse(text);
-    applyAllData(d);
-    saveStateNow();
-    showToast('\u2713 Resume loaded from clipboard');
-  } catch(e) {
-    showClipboardModal('paste', '');
-  }
+    if (text && text.trim().startsWith('{')) prefill = text;
+  } catch(e) { /* silent — user will paste manually */ }
+  showClipboardModal('paste', prefill);
 }
 
 function showClipboardModal(mode, prefill) {
-  // Remove any existing
   document.getElementById('clipModal')?.remove();
   const overlay = document.createElement('div');
   overlay.id = 'clipModal';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
   const isCopy = mode === 'copy';
+
+  // Safely encode prefill for HTML textarea
+  const safePrefill = isCopy
+    ? prefill.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    : (prefill ? prefill.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '');
+
   overlay.innerHTML = `
-    <div style="background:white;border-radius:10px;padding:24px;width:100%;max-width:540px;font-family:DM Sans,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.25)">
-      <p style="font-size:15px;font-weight:600;margin-bottom:4px">${isCopy ? '\ud83d\udccb Copy Resume Data' : '\ud83d\udce5 Load Resume'}</p>
-      <p style="font-size:12px;color:#888;margin-bottom:12px">${isCopy ? 'Select all text below and copy (Ctrl+A then Ctrl+C)' : 'Paste your resume JSON below (Ctrl+V), then click Load'}</p>
-      <textarea id="clipTA" style="width:100%;height:220px;font-size:11px;font-family:monospace;padding:10px;border:1.5px solid #d4cdc3;border-radius:6px;resize:none;background:#f9f6f0" placeholder="${isCopy ? '' : 'Paste JSON here\u2026'}">${isCopy ? prefill.replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''}</textarea>
-      <p id="clipErr" style="color:#c0392b;font-size:12px;margin-top:4px;display:none">\u26a0 Invalid data \u2014 make sure you copied the full resume JSON</p>
+    <div style="background:white;border-radius:10px;padding:24px;width:100%;max-width:560px;font-family:'DM Sans',sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.25)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <p style="font-size:15px;font-weight:600">${isCopy ? '📋 Copy Resume Data' : '📥 Load Resume'}</p>
+        <button onclick="document.getElementById('clipModal').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#aaa;line-height:1;padding:0 4px">&times;</button>
+      </div>
+      <p id="clipHint" style="font-size:12px;color:#888;margin-bottom:10px">
+        ${isCopy
+          ? 'Your resume data is shown below — press <strong>Ctrl+A</strong> then <strong>Ctrl+C</strong> to copy it.'
+          : prefill
+            ? '✓ Clipboard content loaded below — click <strong>Load Resume</strong> to apply it.'
+            : 'Paste your resume JSON below (<strong>Ctrl+V</strong>), then click <strong>Load Resume</strong>.'}
+      </p>
+      <textarea id="clipTA" style="width:100%;height:240px;font-size:11px;font-family:monospace;padding:10px;border:1.5px solid #d4cdc3;border-radius:6px;resize:vertical;background:#f9f6f0;line-height:1.5" placeholder="${isCopy ? '' : 'Paste JSON here…'}" spellcheck="false">${safePrefill}</textarea>
+      <p id="clipErr" style="color:#c0392b;font-size:12px;margin-top:6px;display:none">⚠ Invalid data — make sure you copied the full resume JSON.</p>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
-        <button id="clipCancel" style="padding:9px 20px;border:1px solid #d4cdc3;background:none;border-radius:5px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:13px">Cancel</button>
-        ${isCopy ? '' : '<button id="clipLoad" style="padding:9px 20px;background:#2b5797;color:white;border:none;border-radius:5px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:13px;font-weight:500">Load Resume</button>'}
+        <button id="clipCancel" style="padding:9px 20px;border:1px solid #d4cdc3;background:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;color:#5c5046">Cancel</button>
+        ${isCopy
+          ? `<button id="clipCopyBtn" style="padding:9px 20px;background:#1a1410;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500">Select All &amp; Copy</button>`
+          : `<button id="clipLoad" style="padding:9px 20px;background:#2b5797;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500">Load Resume</button>`}
       </div>
     </div>`;
+
   document.body.appendChild(overlay);
-  document.getElementById('clipCancel').addEventListener('click', () => overlay.remove());
-  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+
   const ta = document.getElementById('clipTA');
-  setTimeout(() => { ta.focus(); if(isCopy) ta.select(); }, 50);
-  if (!isCopy) {
-    document.getElementById('clipLoad').addEventListener('click', () => {
+
+  // Cancel / backdrop close
+  document.getElementById('clipCancel').addEventListener('click', () => overlay.remove());
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+  if (isCopy) {
+    // Focus + select all on open
+    setTimeout(() => { ta.focus(); ta.select(); }, 60);
+    // "Select All & Copy" button
+    document.getElementById('clipCopyBtn').addEventListener('click', async () => {
+      ta.focus(); ta.select();
       try {
-        const d = JSON.parse(ta.value);
+        await navigator.clipboard.writeText(ta.value);
+        const btn = document.getElementById('clipCopyBtn');
+        btn.textContent = '✓ Copied!';
+        btn.style.background = '#1a6b2e';
+        setTimeout(() => overlay.remove(), 900);
+      } catch(e) {
+        // execCommand fallback for older browsers
+        try { document.execCommand('copy'); showToast('✓ Copied!'); setTimeout(() => overlay.remove(), 600); }
+        catch(e2) { showToast('Use Ctrl+C to copy the selected text'); }
+      }
+    });
+  } else {
+    // If prefill loaded from clipboard, select all to show it's ready
+    setTimeout(() => {
+      ta.focus();
+      if (prefill) { ta.select(); }
+    }, 60);
+
+    document.getElementById('clipLoad').addEventListener('click', () => {
+      const raw = ta.value.trim();
+      if (!raw) { document.getElementById('clipErr').style.display = 'block'; document.getElementById('clipErr').textContent = '⚠ Nothing to load — paste your resume JSON first.'; return; }
+      try {
+        const d = JSON.parse(raw);
         applyAllData(d);
         saveStateNow();
         overlay.remove();
-        showToast('\u2713 Resume loaded');
+        showToast('✓ Resume loaded successfully');
       } catch(err) {
-        document.getElementById('clipErr').style.display = 'block';
+        const errEl = document.getElementById('clipErr');
+        errEl.style.display = 'block';
+        errEl.textContent = '⚠ Invalid JSON — make sure you copied the full resume data.';
+      }
+    });
+
+    // Allow Ctrl+Enter to load
+    ta.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        document.getElementById('clipLoad').click();
       }
     });
   }
