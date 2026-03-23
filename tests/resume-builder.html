@@ -23,384 +23,220 @@
     --tabs-h: 48px;
   }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.6;
-  }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); min-height:100vh; font-size:14px; line-height:1.6; }
 
   /* ── HEADER ── */
-  header {
-    background: var(--ink);
-    color: var(--cream);
-    height: var(--header-h);
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-  }
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px; font-weight: 700;
-    display: flex; align-items: center; gap: 8px;
-    white-space: nowrap;
-  }
-  .logo span { font-style: italic; color: #c9a96e; }
-  .logo-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
-  .header-actions { display: flex; gap: 8px; align-items: center; }
-  .btn {
-    padding: 7px 14px; border-radius: 4px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px; font-weight: 500;
-    cursor: pointer; transition: all 0.2s; border: none; white-space: nowrap;
-  }
-  .btn-ghost { background: transparent; color: var(--cream); border: 1px solid rgba(255,255,255,0.25); }
-  .btn-ghost:hover { background: rgba(255,255,255,0.1); }
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: #a93226; }
-  .btn-label { display: inline; }
+  header { background:var(--ink); color:var(--cream); height:var(--header-h); padding:0 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:200; box-shadow:0 2px 20px rgba(0,0,0,0.3); }
+  .logo { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; display:flex; align-items:center; gap:8px; white-space:nowrap; }
+  .logo span { font-style:italic; color:#c9a96e; }
+  .logo-dot { width:6px; height:6px; background:var(--accent); border-radius:50%; }
+  .header-actions { display:flex; gap:8px; align-items:center; }
+  .btn { padding:7px 14px; border-radius:4px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition:all 0.2s; border:none; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
+  .btn-ghost { background:transparent; color:var(--cream); border:1px solid rgba(255,255,255,0.25); }
+  .btn-ghost:hover { background:rgba(255,255,255,0.1); }
+  .btn-primary { background:var(--accent); color:white; }
+  .btn-primary:hover { background:#a93226; }
+  .btn-docx { background:#2b5797; color:white; }
+  .btn-docx:hover { background:#1e3f6f; }
+  .btn-docx:disabled { background:#888; cursor:not-allowed; }
+  .btn-label { display:inline; }
 
   /* ── MOBILE TABS ── */
-  .mobile-tabs {
-    display: none;
-    position: sticky;
-    top: var(--header-h);
-    z-index: 150;
-    background: var(--ink);
-    height: var(--tabs-h);
-    border-top: 1px solid rgba(255,255,255,0.08);
-  }
-  .mobile-tabs button {
-    flex: 1; background: none; border: none;
-    color: rgba(255,255,255,0.5);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
-    cursor: pointer; height: 100%; transition: all 0.2s;
-    border-bottom: 2px solid transparent;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .mobile-tabs button.active { color: white; border-bottom-color: var(--accent); }
+  .mobile-tabs { display:none; position:sticky; top:var(--header-h); z-index:150; background:var(--ink); height:var(--tabs-h); border-top:1px solid rgba(255,255,255,0.08); }
+  .mobile-tabs button { flex:1; background:none; border:none; color:rgba(255,255,255,0.5); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; cursor:pointer; height:100%; transition:all 0.2s; border-bottom:2px solid transparent; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .mobile-tabs button.active { color:white; border-bottom-color:var(--accent); }
 
-  /* ── DESKTOP LAYOUT ── */
-  .app {
-    display: grid;
-    grid-template-columns: 420px 1fr;
-    min-height: calc(100vh - var(--header-h));
-  }
+  /* ── LAYOUT ── */
+  .app { display:grid; grid-template-columns:420px 1fr; min-height:calc(100vh - var(--header-h)); }
 
-  /* ── EDITOR PANEL ── */
-  .editor {
-    background: var(--panel);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    max-height: calc(100vh - var(--header-h));
-    position: sticky;
-    top: var(--header-h);
-  }
-  .editor-section { border-bottom: 1px solid var(--cream-dark); }
-  .section-header {
-    padding: 15px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    cursor: pointer; user-select: none;
-    background: var(--cream); transition: background 0.15s;
-  }
-  .section-header:hover { background: var(--cream-dark); }
-  .section-title {
-    font-family: 'DM Mono', monospace; font-size: 11px;
-    font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--ink-light); display: flex; align-items: center; gap: 8px;
-  }
-  .section-title::before {
-    content: ''; display: block; width: 3px; height: 14px;
-    background: var(--accent); border-radius: 2px;
-  }
-  .section-chevron { font-size: 12px; color: var(--ink-faint); transition: transform 0.2s; }
-  .section-chevron.open { transform: rotate(180deg); }
-  .section-body {
-    padding: 18px 20px; display: flex; flex-direction: column;
-    gap: 13px; animation: slideDown 0.2s ease;
-  }
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  /* ── EDITOR ── */
+  .editor { background:var(--panel); border-right:1px solid var(--border); overflow-y:auto; max-height:calc(100vh - var(--header-h)); position:sticky; top:var(--header-h); }
+  .editor-section { border-bottom:1px solid var(--cream-dark); }
+  .section-header { padding:15px 20px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; background:var(--cream); transition:background 0.15s; }
+  .section-header:hover { background:var(--cream-dark); }
+  .section-title { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-light); display:flex; align-items:center; gap:8px; }
+  .section-title::before { content:''; display:block; width:3px; height:14px; background:var(--accent); border-radius:2px; }
+  .section-title.page2-marker::before { background:#2b5797; }
+  .section-chevron { font-size:12px; color:var(--ink-faint); transition:transform 0.2s; }
+  .section-chevron.open { transform:rotate(180deg); }
+  .section-body { padding:18px 20px; display:flex; flex-direction:column; gap:13px; animation:slideDown 0.2s ease; }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
 
-  /* Template bar */
-  .template-bar {
-    padding: 12px 20px; background: #faf8f5;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  }
-  .template-bar > label {
-    font-size: 11px; color: var(--ink-faint); white-space: nowrap;
-    font-family: 'DM Mono', monospace; letter-spacing: 1px;
-  }
-  .template-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-  .pill {
-    padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
-    font-size: 12px; cursor: pointer; background: white;
-    color: var(--ink-light); font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-  }
-  .pill.active { background: var(--ink); color: white; border-color: var(--ink); }
-  .pill:hover:not(.active) { border-color: var(--ink-light); }
+  .template-bar { padding:12px 20px; background:#faf8f5; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .template-bar > label { font-size:11px; color:var(--ink-faint); white-space:nowrap; font-family:'DM Mono',monospace; letter-spacing:1px; }
+  .template-pills { display:flex; gap:6px; flex-wrap:wrap; }
+  .pill { padding:5px 12px; border-radius:20px; border:1px solid var(--border); font-size:12px; cursor:pointer; background:white; color:var(--ink-light); font-family:'DM Sans',sans-serif; transition:all 0.15s; }
+  .pill.active { background:var(--ink); color:white; border-color:var(--ink); }
+  .pill:hover:not(.active) { border-color:var(--ink-light); }
 
-  /* Fields */
-  .field-row { display: flex; gap: 10px; }
-  .field { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
-  label {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
-    color: var(--ink-faint); text-transform: uppercase;
-  }
-  input, textarea, select {
-    font-family: 'DM Sans', sans-serif; font-size: 13.5px;
-    color: var(--ink); background: var(--cream);
-    border: 1px solid var(--border); border-radius: 4px;
-    padding: 9px 11px; transition: border-color 0.15s, box-shadow 0.15s;
-    width: 100%; resize: none; -webkit-appearance: none;
-  }
-  input:focus, textarea:focus, select:focus {
-    outline: none; border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(192,57,43,0.1); background: white;
-  }
-  textarea { min-height: 70px; line-height: 1.5; }
+  /* Page 2 divider in editor */
+  .page2-divider { margin:0; padding:10px 20px; background:#eef2f9; border-bottom:1px solid #c5d0e8; display:flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#2b5797; }
+  .page2-divider::before { content:''; flex:1; height:1px; background:#c5d0e8; }
+  .page2-divider::after  { content:''; flex:1; height:1px; background:#c5d0e8; }
 
-  /* Entry cards */
-  .entry-card {
-    background: var(--cream); border: 1px solid var(--border);
-    border-radius: 6px; padding: 13px 14px; transition: border-color 0.15s;
-  }
-  .entry-card:hover { border-color: #bbb; }
-  .entry-card-header {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px;
-  }
-  .entry-card-title {
-    font-size: 11px; font-weight: 500; color: var(--ink-light);
-    font-family: 'DM Mono', monospace; letter-spacing: 0.5px;
-  }
-  .btn-remove {
-    background: none; border: none; color: var(--ink-faint);
-    cursor: pointer; font-size: 15px; padding: 2px 5px; line-height: 1;
-    transition: color 0.15s; border-radius: 3px;
-  }
-  .btn-remove:hover { color: var(--accent); background: rgba(192,57,43,0.07); }
-  .btn-add {
-    background: none; border: 1.5px dashed var(--border);
-    color: var(--ink-light); padding: 10px; border-radius: 5px;
-    cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif;
-    width: 100%; transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .btn-add:hover { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.04); }
+  .field-row { display:flex; gap:10px; }
+  .field { display:flex; flex-direction:column; gap:5px; flex:1; min-width:0; }
+  label { font-size:11px; font-weight:500; letter-spacing:0.5px; color:var(--ink-faint); text-transform:uppercase; }
+  input, textarea, select { font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); background:var(--cream); border:1px solid var(--border); border-radius:4px; padding:9px 11px; transition:border-color 0.15s,box-shadow 0.15s; width:100%; resize:none; -webkit-appearance:none; }
+  input:focus, textarea:focus, select:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(192,57,43,0.1); background:white; }
+  textarea { min-height:70px; line-height:1.5; }
+
+  .entry-card { background:var(--cream); border:1px solid var(--border); border-radius:6px; padding:13px 14px; transition:border-color 0.15s; }
+  .entry-card:hover { border-color:#bbb; }
+  .entry-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:11px; }
+  .entry-card-title { font-size:11px; font-weight:500; color:var(--ink-light); font-family:'DM Mono',monospace; letter-spacing:0.5px; }
+  .btn-remove { background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:15px; padding:2px 5px; line-height:1; transition:color 0.15s; border-radius:3px; }
+  .btn-remove:hover { color:var(--accent); background:rgba(192,57,43,0.07); }
+  .btn-add { background:none; border:1.5px dashed var(--border); color:var(--ink-light); padding:10px; border-radius:5px; cursor:pointer; font-size:13px; font-family:'DM Sans',sans-serif; width:100%; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .btn-add:hover { border-color:var(--accent); color:var(--accent); background:rgba(192,57,43,0.04); }
 
   /* ── PREVIEW ── */
-  .preview {
-    background: #e8e4de; padding: 32px 24px;
-    overflow-y: auto; display: flex; flex-direction: column;
-    align-items: center; gap: 16px;
-  }
-  .preview-label {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: #a09890; align-self: flex-start;
-  }
-  .resume-scaler { width: 100%; display: flex; justify-content: center; }
+  .preview { background:#e8e4de; padding:32px 24px; overflow-y:auto; display:flex; flex-direction:column; align-items:center; gap:16px; }
+  .preview-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#a09890; align-self:flex-start; }
+  .resume-scaler { width:100%; display:flex; flex-direction:column; align-items:center; gap:20px; }
 
   /* ── RESUME PAPER ── */
-  .resume {
-    background: white; width: 700px; min-height: 900px;
-    box-shadow: var(--shadow-lg); padding: 60px 56px;
-    font-family: 'DM Sans', sans-serif; color: #1a1410;
-    font-size: 13px; line-height: 1.6;
-    transform-origin: top center;
-    animation: fadeIn 0.3s ease; flex-shrink: 0;
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .resume { background:white; width:700px; min-height:900px; box-shadow:var(--shadow-lg); padding:60px 56px; font-family:'DM Sans',sans-serif; color:#1a1410; font-size:13px; line-height:1.6; transform-origin:top center; animation:fadeIn 0.3s ease; flex-shrink:0; }
+  .resume.page2 { min-height:600px; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* Page 2 label */
+  .page2-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#7a8aaa; align-self:flex-start; width:700px; padding-left:4px; transform-origin:top left; }
 
   /* ══ CLASSIC ══ */
-  .tpl-classic .resume-name {
-    font-family: 'Playfair Display', serif; font-size: 36px;
-    font-weight: 700; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 4px;
-  }
-  .tpl-classic .resume-title {
-    font-size: 13px; font-weight: 300; color: #6b5f55;
-    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
-  }
-  .tpl-classic .resume-contact {
-    display: flex; flex-wrap: wrap; gap: 5px 16px;
-    font-size: 12px; color: #6b5f55;
-    padding-bottom: 18px; border-bottom: 2px solid #1a1410; margin-bottom: 22px;
-  }
-  .tpl-classic .resume-contact span { display: flex; align-items: center; gap: 4px; }
-  .tpl-classic .section-label {
-    font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600;
-    border-bottom: 1px solid #d4cdc3; padding-bottom: 5px; margin: 18px 0 12px;
-  }
-  .tpl-classic .entry { margin-bottom: 13px; }
-  .tpl-classic .entry-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .tpl-classic .entry-role { font-weight: 600; font-size: 13.5px; }
-  .tpl-classic .entry-date { font-size: 12px; color: #888; white-space: nowrap; flex-shrink: 0; }
-  .tpl-classic .entry-org { font-size: 13px; color: #c0392b; font-style: italic; margin-bottom: 4px; }
-  .tpl-classic .entry-desc { font-size: 12.5px; color: #444; }
-  .tpl-classic .skills-list { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tpl-classic .skill-tag {
-    background: #f4f0ea; border: 1px solid #d4cdc3;
-    border-radius: 3px; padding: 3px 9px; font-size: 12px; color: #4a3f36;
-  }
-  .tpl-classic .summary-text { font-size: 13px; color: #4a3f36; font-style: italic; }
+  .tpl-classic .resume-name { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; letter-spacing:-0.5px; line-height:1.1; margin-bottom:4px; }
+  .tpl-classic .resume-title { font-size:13px; font-weight:300; color:#6b5f55; letter-spacing:1px; text-transform:uppercase; margin-bottom:14px; }
+  .tpl-classic .resume-contact { display:flex; flex-wrap:wrap; gap:5px 16px; font-size:12px; color:#6b5f55; padding-bottom:18px; border-bottom:2px solid #1a1410; margin-bottom:22px; }
+  .tpl-classic .resume-contact span { display:flex; align-items:center; gap:4px; }
+  .tpl-classic .section-label { font-family:'Playfair Display',serif; font-size:15px; font-weight:600; border-bottom:1px solid #d4cdc3; padding-bottom:5px; margin:18px 0 12px; }
+  .tpl-classic .entry { margin-bottom:13px; }
+  .tpl-classic .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .tpl-classic .entry-role { font-weight:600; font-size:13.5px; }
+  .tpl-classic .entry-date { font-size:12px; color:#888; white-space:nowrap; flex-shrink:0; }
+  .tpl-classic .entry-org { font-size:13px; color:#c0392b; font-style:italic; margin-bottom:4px; }
+  .tpl-classic .entry-desc { font-size:12.5px; color:#444; }
+  .tpl-classic .skills-list { display:flex; flex-wrap:wrap; gap:5px; }
+  .tpl-classic .skill-tag { background:#f4f0ea; border:1px solid #d4cdc3; border-radius:3px; padding:3px 9px; font-size:12px; color:#4a3f36; }
+  .tpl-classic .summary-text { font-size:13px; color:#4a3f36; font-style:italic; }
+  .tpl-classic .project-title { font-weight:600; font-size:13.5px; margin-bottom:2px; }
+  .tpl-classic .project-meta { font-size:12px; color:#888; margin-bottom:4px; }
+  .tpl-classic .project-desc { font-size:12.5px; color:#444; margin-bottom:4px; }
+  .tpl-classic .project-tags { display:flex; flex-wrap:wrap; gap:4px; }
+  .tpl-classic .project-tag { background:#f4f0ea; border:1px solid #d4cdc3; border-radius:3px; padding:2px 7px; font-size:11px; color:#4a3f36; }
+  .tpl-classic .project-link { font-size:12px; color:#c0392b; }
 
   /* ══ MODERN ══ */
-  .tpl-modern { display: grid; grid-template-columns: 190px 1fr; padding: 0; }
-  .tpl-modern .resume-sidebar {
-    background: #1a1410; color: #f9f6f0; padding: 40px 24px; min-height: 100%;
-  }
-  .tpl-modern .resume-main { padding: 40px 36px; }
-  .tpl-modern .resume-name {
-    font-family: 'Playfair Display', serif; font-size: 24px;
-    font-weight: 700; line-height: 1.15; margin-bottom: 4px;
-  }
-  .tpl-modern .resume-title {
-    font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
-    color: #c9a96e; margin-bottom: 24px;
-  }
-  .tpl-modern .sidebar-label {
-    font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.8px;
-    text-transform: uppercase; color: #c9a96e;
-    margin: 18px 0 8px; padding-bottom: 5px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .tpl-modern .contact-item { font-size: 11.5px; color: #ccc; margin-bottom: 5px; word-break: break-all; }
-  .tpl-modern .skill-item { font-size: 11.5px; color: #ddd; margin-bottom: 4px; padding-left: 10px; position: relative; }
-  .tpl-modern .skill-item::before { content: '·'; position: absolute; left: 0; color: #c9a96e; }
-  .tpl-modern .section-label {
-    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px;
-    text-transform: uppercase; color: #c0392b; margin: 18px 0 10px;
-  }
-  .tpl-modern .entry { margin-bottom: 13px; }
-  .tpl-modern .entry-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .tpl-modern .entry-role { font-weight: 600; font-size: 13px; }
-  .tpl-modern .entry-date { font-size: 11px; color: #aaa; white-space: nowrap; flex-shrink: 0; }
-  .tpl-modern .entry-org { font-size: 12px; color: #888; margin-bottom: 4px; }
-  .tpl-modern .entry-desc { font-size: 12px; color: #555; }
-  .tpl-modern .summary-text { font-size: 12.5px; color: #555; border-left: 3px solid #c0392b; padding-left: 11px; }
+  .tpl-modern { display:grid; grid-template-columns:190px 1fr; padding:0; }
+  .tpl-modern .resume-sidebar { background:#1a1410; color:#f9f6f0; padding:40px 24px; min-height:100%; }
+  .tpl-modern .resume-main { padding:40px 36px; }
+  .tpl-modern .resume-name { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; line-height:1.15; margin-bottom:4px; }
+  .tpl-modern .resume-title { font-size:10px; letter-spacing:1.2px; text-transform:uppercase; color:#c9a96e; margin-bottom:24px; }
+  .tpl-modern .sidebar-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1.8px; text-transform:uppercase; color:#c9a96e; margin:18px 0 8px; padding-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .tpl-modern .contact-item { font-size:11.5px; color:#ccc; margin-bottom:5px; word-break:break-all; }
+  .tpl-modern .skill-item { font-size:11.5px; color:#ddd; margin-bottom:4px; padding-left:10px; position:relative; }
+  .tpl-modern .skill-item::before { content:'·'; position:absolute; left:0; color:#c9a96e; }
+  .tpl-modern .section-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#c0392b; margin:18px 0 10px; }
+  .tpl-modern .entry { margin-bottom:13px; }
+  .tpl-modern .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .tpl-modern .entry-role { font-weight:600; font-size:13px; }
+  .tpl-modern .entry-date { font-size:11px; color:#aaa; white-space:nowrap; flex-shrink:0; }
+  .tpl-modern .entry-org { font-size:12px; color:#888; margin-bottom:4px; }
+  .tpl-modern .entry-desc { font-size:12px; color:#555; }
+  .tpl-modern .summary-text { font-size:12.5px; color:#555; border-left:3px solid #c0392b; padding-left:11px; }
+  .tpl-modern .project-title { font-weight:600; font-size:13px; margin-bottom:2px; }
+  .tpl-modern .project-meta { font-size:11px; color:#aaa; margin-bottom:4px; }
+  .tpl-modern .project-desc { font-size:12px; color:#555; margin-bottom:4px; }
+  .tpl-modern .project-tags { display:flex; flex-wrap:wrap; gap:4px; }
+  .tpl-modern .project-tag { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:3px; padding:2px 7px; font-size:11px; color:#ccc; }
+  .tpl-modern .project-link { font-size:11px; color:#c9a96e; }
 
   /* ══ MINIMAL ══ */
-  .tpl-minimal .resume-name {
-    font-family: 'DM Sans', sans-serif; font-size: 30px;
-    font-weight: 300; letter-spacing: -1px; margin-bottom: 2px;
-  }
-  .tpl-minimal .resume-title { font-size: 13px; color: #999; margin-bottom: 12px; }
-  .tpl-minimal .resume-contact {
-    display: flex; flex-wrap: wrap; gap: 4px 14px;
-    font-size: 12px; color: #888; margin-bottom: 28px;
-  }
-  .tpl-minimal .section-label {
-    font-size: 10px; font-weight: 500; letter-spacing: 2.5px;
-    text-transform: uppercase; color: #999; margin: 22px 0 10px;
-  }
-  .tpl-minimal .divider { height: 1px; background: #eee; margin-bottom: 10px; }
-  .tpl-minimal .entry { display: grid; grid-template-columns: 90px 1fr; gap: 0 16px; margin-bottom: 12px; }
-  .tpl-minimal .entry-date { font-size: 11px; color: #aaa; padding-top: 2px; }
-  .tpl-minimal .entry-role { font-weight: 500; font-size: 13px; }
-  .tpl-minimal .entry-org { font-size: 12px; color: #888; margin-bottom: 3px; }
-  .tpl-minimal .entry-desc { font-size: 12px; color: #666; }
-  .tpl-minimal .skills-list { display: flex; flex-wrap: wrap; gap: 4px; }
-  .tpl-minimal .skill-tag { border: 1px solid #ddd; border-radius: 2px; padding: 2px 9px; font-size: 12px; color: #666; }
-  .tpl-minimal .summary-text { font-size: 13px; color: #666; }
+  .tpl-minimal .resume-name { font-family:'DM Sans',sans-serif; font-size:30px; font-weight:300; letter-spacing:-1px; margin-bottom:2px; }
+  .tpl-minimal .resume-title { font-size:13px; color:#999; margin-bottom:12px; }
+  .tpl-minimal .resume-contact { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color:#888; margin-bottom:28px; }
+  .tpl-minimal .section-label { font-size:10px; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:#999; margin:22px 0 10px; }
+  .tpl-minimal .divider { height:1px; background:#eee; margin-bottom:10px; }
+  .tpl-minimal .entry { display:grid; grid-template-columns:90px 1fr; gap:0 16px; margin-bottom:12px; }
+  .tpl-minimal .entry-date { font-size:11px; color:#aaa; padding-top:2px; }
+  .tpl-minimal .entry-role { font-weight:500; font-size:13px; }
+  .tpl-minimal .entry-org { font-size:12px; color:#888; margin-bottom:3px; }
+  .tpl-minimal .entry-desc { font-size:12px; color:#666; }
+  .tpl-minimal .skills-list { display:flex; flex-wrap:wrap; gap:4px; }
+  .tpl-minimal .skill-tag { border:1px solid #ddd; border-radius:2px; padding:2px 9px; font-size:12px; color:#666; }
+  .tpl-minimal .summary-text { font-size:13px; color:#666; }
+  .tpl-minimal .project-entry { display:grid; grid-template-columns:90px 1fr; gap:0 16px; margin-bottom:14px; }
+  .tpl-minimal .project-title { font-weight:500; font-size:13px; margin-bottom:2px; }
+  .tpl-minimal .project-meta { font-size:11px; color:#aaa; margin-bottom:3px; }
+  .tpl-minimal .project-desc { font-size:12px; color:#666; margin-bottom:3px; }
+  .tpl-minimal .project-tags { display:flex; flex-wrap:wrap; gap:4px; }
+  .tpl-minimal .project-tag { border:1px solid #ddd; border-radius:2px; padding:2px 7px; font-size:11px; color:#888; }
+  .tpl-minimal .project-link { font-size:11px; color:#666; }
+
+  /* Toast notification */
+  .toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:white; padding:12px 18px; border-radius:6px; font-size:13px; z-index:999; opacity:0; transform:translateY(8px); transition:all 0.25s; pointer-events:none; display:flex; align-items:center; gap:8px; }
+  .toast.show { opacity:1; transform:translateY(0); }
+  .toast.error { background:#c0392b; }
 
   /* ── PRINT ── */
-  @page {
-    margin: 0;
-    size: A4;
-  }
+  @page { margin:0; size:A4; }
   @media print {
-    header, .editor, .mobile-tabs, .preview-label { display: none !important; }
-    .app { display: block; }
-    .preview { padding: 0; background: white; }
-    .resume-scaler { display: block; }
-    .resume { box-shadow: none; width: 100%; padding: 40px; transform: none !important; }
+    header,.editor,.mobile-tabs,.preview-label,.page2-label { display:none !important; }
+    .app { display:block; }
+    .preview { padding:0; background:white; gap:0; }
+    .resume-scaler { gap:0; }
+    .resume { box-shadow:none; width:100%; padding:40px; transform:none !important; page-break-after:always; }
+    .resume.page2 { page-break-after:auto; }
   }
 
   /* ── SCROLLBAR ── */
-  .editor::-webkit-scrollbar { width: 4px; }
-  .editor::-webkit-scrollbar-track { background: var(--cream); }
-  .editor::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .editor::-webkit-scrollbar { width:4px; }
+  .editor::-webkit-scrollbar-track { background:var(--cream); }
+  .editor::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
 
-  /* ═══════════════════════════
-     RESPONSIVE
-  ═══════════════════════════ */
+  /* ── RESPONSIVE ── */
+  @media (max-width:1024px) { .app { grid-template-columns:340px 1fr; } }
 
-  /* Tablet — narrow editor */
-  @media (max-width: 1024px) {
-    .app { grid-template-columns: 340px 1fr; }
+  @media (max-width:768px) {
+    :root { --header-h:52px; --tabs-h:44px; }
+    header { padding:0 14px; }
+    .logo { font-size:18px; }
+    .mobile-tabs { display:flex; }
+    .app { display:block; min-height:auto; }
+    .editor { position:static; max-height:none; border-right:none; border-bottom:1px solid var(--border); }
+    .editor.tab-hidden { display:none; }
+    .preview { padding:20px 12px 40px; min-height:calc(100vh - var(--header-h) - var(--tabs-h)); }
+    .preview.tab-hidden { display:none; }
+    .field-row { flex-direction:column; gap:10px; }
   }
 
-  /* ≤ 768px — stacked tab layout */
-  @media (max-width: 768px) {
-    :root { --header-h: 52px; --tabs-h: 44px; }
-
-    header { padding: 0 14px; }
-    .logo { font-size: 18px; }
-
-    .mobile-tabs { display: flex; }
-
-    .app { display: block; min-height: auto; }
-
-    .editor {
-      position: static; max-height: none;
-      border-right: none; border-bottom: 1px solid var(--border);
-    }
-    .editor.tab-hidden { display: none; }
-
-    .preview {
-      padding: 20px 12px 40px;
-      min-height: calc(100vh - var(--header-h) - var(--tabs-h));
-    }
-    .preview.tab-hidden { display: none; }
-
-    /* Two-column field rows stack to single on mobile */
-    .field-row { flex-direction: column; gap: 10px; }
-  }
-
-  /* ≤ 480px — phones */
-  @media (max-width: 480px) {
-    .btn-label { display: none; }
-    .btn { padding: 7px 10px; }
-    .section-body { padding: 14px; }
-    .section-header { padding: 13px 14px; }
-    .template-bar { padding: 10px 14px; }
-    .preview { padding: 14px 8px 40px; }
+  @media (max-width:480px) {
+    .btn-label { display:none; }
+    .btn { padding:7px 10px; }
+    .section-body { padding:14px; }
+    .section-header { padding:13px 14px; }
+    .template-bar { padding:10px 14px; }
+    .preview { padding:14px 8px 40px; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <span>Résumé</span> Studio
-    <div class="logo-dot"></div>
-  </div>
+  <div class="logo"><span>Résumé</span> Studio<div class="logo-dot"></div></div>
   <div class="header-actions">
-    <button class="btn btn-ghost" onclick="window.print()">⎙ <span class="btn-label">Print / Save PDF</span></button>
-    <button class="btn btn-primary" onclick="clearAll()">✦ <span class="btn-label">New Resume</span></button>
+    <button class="btn btn-docx" id="docxBtn" onclick="exportDocx()">⬇ <span class="btn-label">Export .docx</span></button>
+    <button class="btn btn-ghost" onclick="window.print()">⎙ <span class="btn-label">Print / PDF</span></button>
+    <button class="btn btn-primary" onclick="clearAll()">✦ <span class="btn-label">New</span></button>
   </div>
 </header>
 
-<!-- Mobile-only tabs -->
 <div class="mobile-tabs" id="mobileTabs">
   <button id="tabEdit" class="active" onclick="switchTab('edit')">✏ Edit</button>
   <button id="tabPreview" onclick="switchTab('preview')">👁 Preview</button>
 </div>
 
 <div class="app">
-
-  <!-- EDITOR -->
+  <!-- ── EDITOR ── -->
   <div class="editor" id="editorPanel">
 
     <div class="template-bar">
@@ -420,24 +256,17 @@
       </div>
       <div class="section-body">
         <div class="field-row">
-          <div class="field"><label>First Name</label>
-            <input type="text" id="firstName" placeholder="Jane" oninput="render()" value="Jane"></div>
-          <div class="field"><label>Last Name</label>
-            <input type="text" id="lastName" placeholder="Smith" oninput="render()" value="Smith"></div>
+          <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="Jane" oninput="render()" value="Jane"></div>
+          <div class="field"><label>Last Name</label><input type="text" id="lastName" placeholder="Smith" oninput="render()" value="Smith"></div>
         </div>
-        <div class="field"><label>Professional Title</label>
-          <input type="text" id="jobTitle" placeholder="Senior Product Designer" oninput="render()" value="Senior Product Designer"></div>
+        <div class="field"><label>Professional Title</label><input type="text" id="jobTitle" placeholder="Senior Product Designer" oninput="render()" value="Senior Product Designer"></div>
         <div class="field-row">
-          <div class="field"><label>Email</label>
-            <input type="email" id="email" placeholder="jane@example.com" oninput="render()" value="jane@example.com"></div>
-          <div class="field"><label>Phone</label>
-            <input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="render()" value="+1 (555) 234-5678"></div>
+          <div class="field"><label>Email</label><input type="email" id="email" placeholder="jane@example.com" oninput="render()" value="jane@example.com"></div>
+          <div class="field"><label>Phone</label><input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="render()" value="+1 (555) 234-5678"></div>
         </div>
         <div class="field-row">
-          <div class="field"><label>Location</label>
-            <input type="text" id="location" placeholder="New York, NY" oninput="render()" value="New York, NY"></div>
-          <div class="field"><label>Website / LinkedIn</label>
-            <input type="text" id="website" placeholder="linkedin.com/in/jane" oninput="render()" value="linkedin.com/in/janesmith"></div>
+          <div class="field"><label>Location</label><input type="text" id="location" placeholder="New York, NY" oninput="render()" value="New York, NY"></div>
+          <div class="field"><label>Website / LinkedIn</label><input type="text" id="website" placeholder="linkedin.com/in/jane" oninput="render()" value="linkedin.com/in/janesmith"></div>
         </div>
       </div>
     </div>
@@ -486,223 +315,288 @@
       </div>
     </div>
 
+    <!-- PAGE 2 DIVIDER -->
+    <div class="page2-divider">Page 2 — Projects</div>
+
+    <!-- Projects -->
+    <div class="editor-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title page2-marker">Projects</div>
+        <div class="section-chevron open">▾</div>
+      </div>
+      <div class="section-body" id="projectList"></div>
+    </div>
+
   </div><!-- /editor -->
 
-  <!-- PREVIEW -->
+  <!-- ── PREVIEW ── -->
   <div class="preview" id="previewPanel">
     <div class="preview-label">Live Preview</div>
     <div class="resume-scaler" id="resumeScaler">
       <div id="resumePreview" class="resume tpl-classic"></div>
+      <div class="page2-label" id="page2Label" style="display:none">— Page 2 —</div>
+      <div id="resumePreview2" class="resume page2 tpl-classic" style="display:none"></div>
     </div>
   </div>
+</div>
 
-</div><!-- /app -->
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script>
 /* ── State ── */
 let currentTemplate = 'classic';
 let experiences = [
-  { id:1, role:'Lead Product Designer', org:'Horizon Technologies', start:'2020', end:'Present',
-    desc:'Led end-to-end design for a SaaS platform serving 200K+ users. Built and maintained a company-wide design system, reducing design-to-dev handoff time by 40%.' },
-  { id:2, role:'UX Designer', org:'Beacon Digital Agency', start:'2017', end:'2020',
-    desc:'Delivered UX strategy and visual design for 30+ client projects across fintech, healthcare, and e-commerce sectors.' }
+  {id:1,role:'Lead Product Designer',org:'Horizon Technologies',start:'2020',end:'Present',desc:'Led end-to-end design for a SaaS platform serving 200K+ users. Built and maintained a company-wide design system, reducing design-to-dev handoff time by 40%.'},
+  {id:2,role:'UX Designer',org:'Beacon Digital Agency',start:'2017',end:'2020',desc:'Delivered UX strategy and visual design for 30+ client projects across fintech, healthcare, and e-commerce sectors.'}
 ];
 let educations = [
-  { id:1, degree:'B.S. Interaction Design', school:'Parsons School of Design', start:'2013', end:'2017' }
+  {id:1,degree:'B.S. Interaction Design',school:'Parsons School of Design',start:'2013',end:'2017'}
 ];
-let nextExpId = 3, nextEduId = 2;
+let projects = [
+  {id:1,name:'Design System 3.0',role:'Lead Designer',year:'2023',desc:'Built a scalable, token-based design system adopted by 12 product teams. Includes 300+ components with full Figma and code documentation.',stack:'Figma, Storybook, React, Tokens Studio',link:'github.com/janesmith/ds3'},
+  {id:2,name:'Checkout Redesign',role:'UX Lead',year:'2022',desc:'Redesigned the entire e-commerce checkout flow, reducing cart abandonment by 28% and increasing mobile conversion by 34%.',stack:'Figma, UserTesting, Hotjar',link:''}
+];
+let nextExpId=3, nextEduId=2, nextProjId=3;
+
+/* ── Toast ── */
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError?' error':'');
+  setTimeout(()=>{ t.className='toast'; },3200);
+}
 
 /* ── Mobile tabs ── */
 function switchTab(tab) {
-  const editor  = document.getElementById('editorPanel');
-  const preview = document.getElementById('previewPanel');
-  const te = document.getElementById('tabEdit');
-  const tp = document.getElementById('tabPreview');
-  if (tab === 'edit') {
-    editor.classList.remove('tab-hidden');
-    preview.classList.add('tab-hidden');
+  const editor=document.getElementById('editorPanel');
+  const preview=document.getElementById('previewPanel');
+  const te=document.getElementById('tabEdit');
+  const tp=document.getElementById('tabPreview');
+  if(tab==='edit'){
+    editor.classList.remove('tab-hidden'); preview.classList.add('tab-hidden');
     te.classList.add('active'); tp.classList.remove('active');
   } else {
-    editor.classList.add('tab-hidden');
-    preview.classList.remove('tab-hidden');
+    editor.classList.add('tab-hidden'); preview.classList.remove('tab-hidden');
     te.classList.remove('active'); tp.classList.add('active');
     requestAnimationFrame(scaleResume);
   }
 }
 
-/* ── Scale resume to fit preview column ── */
+/* ── Scale resume ── */
 function scaleResume() {
-  const scaler = document.getElementById('resumeScaler');
-  const resume = document.getElementById('resumePreview');
-  if (!scaler || !resume) return;
-  const RESUME_W = 700;
-  const available = scaler.clientWidth;
-  if (available > 0 && available < RESUME_W) {
-    const scale = available / RESUME_W;
-    resume.style.transform = `scale(${scale})`;
-    resume.style.transformOrigin = 'top center';
-    // Collapse the extra space the un-scaled element would occupy
-    const scaledH = resume.scrollHeight * scale;
-    scaler.style.height = scaledH + 'px';
-    resume.style.marginBottom = '0';
-  } else {
-    resume.style.transform = '';
-    scaler.style.height = '';
-  }
+  const scaler=document.getElementById('resumeScaler');
+  const r1=document.getElementById('resumePreview');
+  const r2=document.getElementById('resumePreview2');
+  const lbl=document.getElementById('page2Label');
+  if(!scaler||!r1) return;
+  const RESUME_W=700;
+  const available=scaler.clientWidth;
+  const scale = (available>0&&available<RESUME_W) ? available/RESUME_W : 1;
+  [r1,r2].forEach(r=>{
+    if(scale<1){
+      r.style.transform=`scale(${scale})`;
+      r.style.transformOrigin='top center';
+    } else {
+      r.style.transform=''; r.style.transformOrigin='';
+    }
+  });
+  if(lbl&&scale<1) { lbl.style.transform=`scale(${scale})`; lbl.style.transformOrigin='top left'; lbl.style.width=(RESUME_W+'px'); }
+  else if(lbl) { lbl.style.transform=''; lbl.style.width=''; }
+  // Fix scaler height for scaled elements
+  if(scale<1){
+    const h1=r1.scrollHeight*scale;
+    const h2=r2.style.display!=='none'?r2.scrollHeight*scale+28:0;
+    scaler.style.height=(h1+h2+40)+'px';
+  } else { scaler.style.height=''; }
 }
 window.addEventListener('resize', scaleResume);
 
 /* ── Template ── */
-function setTemplate(tpl, el) {
-  currentTemplate = tpl;
-  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+function setTemplate(tpl,el){
+  currentTemplate=tpl;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
   render();
 }
 
-/* ── Collapsible sections ── */
-function toggleSection(header) {
-  const chevron = header.querySelector('.section-chevron');
-  const body = header.nextElementSibling;
-  const hidden = body.style.display === 'none';
-  body.style.display = hidden ? '' : 'none';
-  chevron.classList.toggle('open', hidden);
+/* ── Collapsible ── */
+function toggleSection(header){
+  const chevron=header.querySelector('.section-chevron');
+  const body=header.nextElementSibling;
+  const hidden=body.style.display==='none';
+  body.style.display=hidden?'':'none';
+  chevron.classList.toggle('open',hidden);
 }
 
 /* ── Helpers ── */
-function get(id) { return (document.getElementById(id)||{}).value||''; }
-function esc(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function skillTags(skills, cls) {
+function get(id){return (document.getElementById(id)||{}).value||'';}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function skillTags(skills,cls){
   return skills.split(',').map(s=>s.trim()).filter(Boolean)
     .map(s=>`<span class="${cls}">${esc(s)}</span>`).join('');
 }
 
 /* ── Experience ── */
-function addExperience() {
-  experiences.push({id:nextExpId++,role:'',org:'',start:'',end:'',desc:''});
-  renderEditorExperiences(); render();
-}
-function removeExperience(id) {
-  experiences = experiences.filter(e=>e.id!==id);
-  renderEditorExperiences(); render();
-}
-function updateExp(id,field,value) {
-  const e = experiences.find(e=>e.id===id); if(e){e[field]=value;render();}
-}
-function renderEditorExperiences() {
-  document.getElementById('experienceList').innerHTML =
+function addExperience(){experiences.push({id:nextExpId++,role:'',org:'',start:'',end:'',desc:''});renderEditorExperiences();render();}
+function removeExperience(id){experiences=experiences.filter(e=>e.id!==id);renderEditorExperiences();render();}
+function updateExp(id,field,value){const e=experiences.find(e=>e.id===id);if(e){e[field]=value;render();}}
+function renderEditorExperiences(){
+  document.getElementById('experienceList').innerHTML=
     experiences.map((exp,i)=>`
       <div class="entry-card">
-        <div class="entry-card-header">
-          <span class="entry-card-title">Position ${i+1}</span>
-          <button class="btn-remove" onclick="removeExperience(${exp.id})">✕</button>
-        </div>
+        <div class="entry-card-header"><span class="entry-card-title">Position ${i+1}</span>
+          <button class="btn-remove" onclick="removeExperience(${exp.id})">✕</button></div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="field-row">
-            <div class="field"><label>Job Title</label>
-              <input value="${esc(exp.role)}" placeholder="Software Engineer" oninput="updateExp(${exp.id},'role',this.value)"></div>
-            <div class="field"><label>Company</label>
-              <input value="${esc(exp.org)}" placeholder="Acme Corp" oninput="updateExp(${exp.id},'org',this.value)"></div>
+            <div class="field"><label>Job Title</label><input value="${esc(exp.role)}" placeholder="Software Engineer" oninput="updateExp(${exp.id},'role',this.value)"></div>
+            <div class="field"><label>Company</label><input value="${esc(exp.org)}" placeholder="Acme Corp" oninput="updateExp(${exp.id},'org',this.value)"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Start</label>
-              <input value="${esc(exp.start)}" placeholder="2020" oninput="updateExp(${exp.id},'start',this.value)"></div>
-            <div class="field"><label>End</label>
-              <input value="${esc(exp.end)}" placeholder="Present" oninput="updateExp(${exp.id},'end',this.value)"></div>
+            <div class="field"><label>Start</label><input value="${esc(exp.start)}" placeholder="2020" oninput="updateExp(${exp.id},'start',this.value)"></div>
+            <div class="field"><label>End</label><input value="${esc(exp.end)}" placeholder="Present" oninput="updateExp(${exp.id},'end',this.value)"></div>
           </div>
           <div class="field"><label>Description</label>
-            <textarea placeholder="Describe your role and key achievements..." oninput="updateExp(${exp.id},'desc',this.value)">${esc(exp.desc)}</textarea>
-          </div>
-        </div>
-      </div>`).join('') +
+            <textarea placeholder="Describe your role..." oninput="updateExp(${exp.id},'desc',this.value)">${esc(exp.desc)}</textarea></div>
+        </div></div>`).join('')+
     `<button class="btn-add" onclick="addExperience()">＋ Add Position</button>`;
 }
 
 /* ── Education ── */
-function addEducation() {
-  educations.push({id:nextEduId++,degree:'',school:'',start:'',end:''});
-  renderEditorEducations(); render();
-}
-function removeEducation(id) {
-  educations = educations.filter(e=>e.id!==id);
-  renderEditorEducations(); render();
-}
-function updateEdu(id,field,value) {
-  const e = educations.find(e=>e.id===id); if(e){e[field]=value;render();}
-}
-function renderEditorEducations() {
-  document.getElementById('educationList').innerHTML =
+function addEducation(){educations.push({id:nextEduId++,degree:'',school:'',start:'',end:''});renderEditorEducations();render();}
+function removeEducation(id){educations=educations.filter(e=>e.id!==id);renderEditorEducations();render();}
+function updateEdu(id,field,value){const e=educations.find(e=>e.id===id);if(e){e[field]=value;render();}}
+function renderEditorEducations(){
+  document.getElementById('educationList').innerHTML=
     educations.map((edu,i)=>`
       <div class="entry-card">
-        <div class="entry-card-header">
-          <span class="entry-card-title">Degree ${i+1}</span>
-          <button class="btn-remove" onclick="removeEducation(${edu.id})">✕</button>
-        </div>
+        <div class="entry-card-header"><span class="entry-card-title">Degree ${i+1}</span>
+          <button class="btn-remove" onclick="removeEducation(${edu.id})">✕</button></div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="field-row">
-            <div class="field"><label>Degree / Field</label>
-              <input value="${esc(edu.degree)}" placeholder="B.S. Computer Science" oninput="updateEdu(${edu.id},'degree',this.value)"></div>
-            <div class="field"><label>School</label>
-              <input value="${esc(edu.school)}" placeholder="State University" oninput="updateEdu(${edu.id},'school',this.value)"></div>
+            <div class="field"><label>Degree / Field</label><input value="${esc(edu.degree)}" placeholder="B.S. Computer Science" oninput="updateEdu(${edu.id},'degree',this.value)"></div>
+            <div class="field"><label>School</label><input value="${esc(edu.school)}" placeholder="State University" oninput="updateEdu(${edu.id},'school',this.value)"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Start</label>
-              <input value="${esc(edu.start)}" placeholder="2019" oninput="updateEdu(${edu.id},'start',this.value)"></div>
-            <div class="field"><label>End</label>
-              <input value="${esc(edu.end)}" placeholder="2023" oninput="updateEdu(${edu.id},'end',this.value)"></div>
+            <div class="field"><label>Start</label><input value="${esc(edu.start)}" placeholder="2019" oninput="updateEdu(${edu.id},'start',this.value)"></div>
+            <div class="field"><label>End</label><input value="${esc(edu.end)}" placeholder="2023" oninput="updateEdu(${edu.id},'end',this.value)"></div>
           </div>
-        </div>
-      </div>`).join('') +
+        </div></div>`).join('')+
     `<button class="btn-add" onclick="addEducation()">＋ Add Degree</button>`;
 }
 
-/* ── Render resume ── */
-function render() {
-  const preview = document.getElementById('resumePreview');
-  preview.className = `resume tpl-${currentTemplate}`;
+/* ── Projects ── */
+function addProject(){projects.push({id:nextProjId++,name:'',role:'',year:'',desc:'',stack:'',link:''});renderEditorProjects();render();}
+function removeProject(id){projects=projects.filter(p=>p.id!==id);renderEditorProjects();render();}
+function updateProj(id,field,value){const p=projects.find(p=>p.id===id);if(p){p[field]=value;render();}}
+function renderEditorProjects(){
+  document.getElementById('projectList').innerHTML=
+    projects.map((p,i)=>`
+      <div class="entry-card">
+        <div class="entry-card-header"><span class="entry-card-title">Project ${i+1}</span>
+          <button class="btn-remove" onclick="removeProject(${p.id})">✕</button></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="field-row">
+            <div class="field"><label>Project Name</label><input value="${esc(p.name)}" placeholder="My Awesome Project" oninput="updateProj(${p.id},'name',this.value)"></div>
+            <div class="field"><label>Your Role</label><input value="${esc(p.role)}" placeholder="Lead Developer" oninput="updateProj(${p.id},'role',this.value)"></div>
+          </div>
+          <div class="field"><label>Year</label><input value="${esc(p.year)}" placeholder="2023" oninput="updateProj(${p.id},'year',this.value)" style="max-width:120px"></div>
+          <div class="field"><label>Description</label>
+            <textarea placeholder="What did you build? What impact did it have?" oninput="updateProj(${p.id},'desc',this.value)">${esc(p.desc)}</textarea></div>
+          <div class="field"><label>Tech / Tools Used</label>
+            <input value="${esc(p.stack)}" placeholder="React, Node.js, PostgreSQL..." oninput="updateProj(${p.id},'stack',this.value)"></div>
+          <div class="field"><label>Link (optional)</label>
+            <input value="${esc(p.link)}" placeholder="github.com/you/project" oninput="updateProj(${p.id},'link',this.value)"></div>
+        </div></div>`).join('')+
+    `<button class="btn-add" onclick="addProject()">＋ Add Project</button>`;
+}
 
-  const name    = `${get('firstName')} ${get('lastName')}`.trim() || 'Your Name';
-  const title   = get('jobTitle');
-  const email   = get('email');
-  const phone   = get('phone');
-  const loc     = get('location');
-  const website = get('website');
-  const summary = get('summary');
-  const skills  = get('skills');
+/* ── Build project HTML for a given template ── */
+function buildProjectsHtml(tpl) {
+  if(!projects.length) return '';
+  if(tpl==='classic') {
+    return `<div class="section-label">Projects</div>` +
+      projects.map(p=>`
+        <div class="entry" style="margin-bottom:16px">
+          <div class="entry-header">
+            <span class="project-title">${esc(p.name||'Untitled')}</span>
+            <span class="entry-date">${esc(p.year)}</span>
+          </div>
+          ${p.role?`<div class="entry-org">${esc(p.role)}</div>`:''}
+          ${p.desc?`<div class="project-desc">${esc(p.desc)}</div>`:''}
+          ${p.stack?`<div class="project-tags">${p.stack.split(',').map(s=>`<span class="project-tag">${esc(s.trim())}</span>`).join('')}</div>`:''}
+          ${p.link?`<div class="project-link" style="margin-top:4px">🔗 ${esc(p.link)}</div>`:''}
+        </div>`).join('');
+  } else if(tpl==='modern') {
+    return `<div class="section-label">Projects</div>` +
+      projects.map(p=>`
+        <div class="entry" style="margin-bottom:16px">
+          <div class="entry-header">
+            <span class="project-title">${esc(p.name||'Untitled')}</span>
+            <span class="entry-date">${esc(p.year)}</span>
+          </div>
+          ${p.role?`<div class="entry-org">${esc(p.role)}</div>`:''}
+          ${p.desc?`<div class="project-desc">${esc(p.desc)}</div>`:''}
+          ${p.stack?`<div class="project-tags">${p.stack.split(',').map(s=>`<span class="project-tag">${esc(s.trim())}</span>`).join('')}</div>`:''}
+          ${p.link?`<div class="project-link" style="margin-top:4px">🔗 ${esc(p.link)}</div>`:''}
+        </div>`).join('');
+  } else { // minimal
+    return `<div class="section-label">Projects</div><div class="divider"></div>` +
+      projects.map(p=>`
+        <div class="project-entry">
+          <div class="entry-date">${esc(p.year)}</div>
+          <div>
+            <div class="project-title">${esc(p.name||'Untitled')}</div>
+            ${p.role?`<div class="project-meta">${esc(p.role)}</div>`:''}
+            ${p.desc?`<div class="project-desc">${esc(p.desc)}</div>`:''}
+            ${p.stack?`<div class="project-tags">${p.stack.split(',').map(s=>`<span class="project-tag">${esc(s.trim())}</span>`).join('')}</div>`:''}
+            ${p.link?`<div class="project-link" style="margin-top:3px">🔗 ${esc(p.link)}</div>`:''}
+          </div>
+        </div>`).join('');
+  }
+}
 
-  const expHtml = (map) => experiences.map(map).join('');
-  const eduHtml = (map) => educations.map(map).join('');
+/* ── Render ── */
+function render(){
+  const p1=document.getElementById('resumePreview');
+  const p2=document.getElementById('resumePreview2');
+  const lbl=document.getElementById('page2Label');
+  p1.className=`resume tpl-${currentTemplate}`;
+  p2.className=`resume page2 tpl-${currentTemplate}`;
 
-  if (currentTemplate === 'classic') {
-    preview.innerHTML = `
+  const name=`${get('firstName')} ${get('lastName')}`.trim()||'Your Name';
+  const title=get('jobTitle'), email=get('email'), phone=get('phone');
+  const loc=get('location'), website=get('website');
+  const summary=get('summary'), skills=get('skills');
+
+  const expH=experiences.map(e=>`
+    <div class="entry">
+      <div class="entry-header"><span class="entry-role">${esc(e.role||'Role')}</span>
+      <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+      <div class="entry-org">${esc(e.org)}</div>
+      ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
+    </div>`).join('');
+  const eduH=educations.map(e=>`
+    <div class="entry">
+      <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
+      <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+      <div class="entry-org">${esc(e.school)}</div>
+    </div>`).join('');
+
+  if(currentTemplate==='classic'){
+    p1.innerHTML=`
       <div class="resume-name">${esc(name)}</div>
       ${title?`<div class="resume-title">${esc(title)}</div>`:''}
       <div class="resume-contact">
-        ${email?`<span>✉ ${esc(email)}</span>`:''}
-        ${phone?`<span>☎ ${esc(phone)}</span>`:''}
-        ${loc?`<span>◎ ${esc(loc)}</span>`:''}
-        ${website?`<span>⬡ ${esc(website)}</span>`:''}
+        ${email?`<span>✉ ${esc(email)}</span>`:''}${phone?`<span>☎ ${esc(phone)}</span>`:''}
+        ${loc?`<span>◎ ${esc(loc)}</span>`:''}${website?`<span>⬡ ${esc(website)}</span>`:''}
       </div>
       ${summary?`<div class="section-label">Profile</div><div class="summary-text">${esc(summary)}</div>`:''}
-      ${experiences.length?`<div class="section-label">Experience</div>${expHtml(e=>`
-        <div class="entry">
-          <div class="entry-header"><span class="entry-role">${esc(e.role||'Role')}</span>
-          <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
-          <div class="entry-org">${esc(e.org)}</div>
-          ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
-        </div>`)}` : ''}
-      ${educations.length?`<div class="section-label">Education</div>${eduHtml(e=>`
-        <div class="entry">
-          <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
-          <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
-          <div class="entry-org">${esc(e.school)}</div>
-        </div>`)}` : ''}
+      ${experiences.length?`<div class="section-label">Experience</div>${expH}`:''}
+      ${educations.length?`<div class="section-label">Education</div>${eduH}`:''}
       ${skills?`<div class="section-label">Skills</div><div class="skills-list">${skillTags(skills,'skill-tag')}</div>`:''}`;
-
-  } else if (currentTemplate === 'modern') {
-    preview.innerHTML = `
+  } else if(currentTemplate==='modern'){
+    p1.innerHTML=`
       <div class="resume-sidebar">
         <div class="resume-name">${esc(name)}</div>
         ${title?`<div class="resume-title">${esc(title)}</div>`:''}
@@ -715,58 +609,280 @@ function render() {
       </div>
       <div class="resume-main">
         ${summary?`<div class="section-label">About</div><div class="summary-text">${esc(summary)}</div>`:''}
-        ${experiences.length?`<div class="section-label">Experience</div>${expHtml(e=>`
-          <div class="entry">
-            <div class="entry-header"><span class="entry-role">${esc(e.role||'Role')}</span>
-            <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
-            <div class="entry-org">${esc(e.org)}</div>
-            ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
-          </div>`)}` : ''}
-        ${educations.length?`<div class="section-label">Education</div>${eduHtml(e=>`
-          <div class="entry">
-            <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
-            <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
-            <div class="entry-org">${esc(e.school)}</div>
-          </div>`)}` : ''}
+        ${experiences.length?`<div class="section-label">Experience</div>${expH}`:''}
+        ${educations.length?`<div class="section-label">Education</div>${eduH}`:''}
       </div>`;
-
-  } else if (currentTemplate === 'minimal') {
-    preview.innerHTML = `
+  } else {
+    p1.innerHTML=`
       <div class="resume-name">${esc(name)}</div>
       ${title?`<div class="resume-title">${esc(title)}</div>`:''}
       <div class="resume-contact">${[email,phone,loc,website].filter(Boolean).map(v=>esc(v)).join(' · ')}</div>
       ${summary?`<div class="section-label">Summary</div><div class="divider"></div><div class="summary-text">${esc(summary)}</div>`:''}
-      ${experiences.length?`<div class="section-label">Experience</div><div class="divider"></div>${expHtml(e=>`
-        <div class="entry">
-          <div class="entry-date">${esc(e.start)}${e.end?'–'+esc(e.end):''}</div>
-          <div><div class="entry-role">${esc(e.role||'Role')}</div>
-          <div class="entry-org">${esc(e.org)}</div>
-          ${e.desc?`<div class="entry-desc">${esc(e.desc)}</div>`:''}
-          </div></div>`)}` : ''}
-      ${educations.length?`<div class="section-label">Education</div><div class="divider"></div>${eduHtml(e=>`
-        <div class="entry">
-          <div class="entry-date">${esc(e.start)}${e.end?'–'+esc(e.end):''}</div>
-          <div><div class="entry-role">${esc(e.degree||'Degree')}</div>
-          <div class="entry-org">${esc(e.school)}</div></div>
-        </div>`)}` : ''}
+      ${experiences.length?`<div class="section-label">Experience</div><div class="divider"></div>${expH}`:''}
+      ${educations.length?`<div class="section-label">Education</div><div class="divider"></div>${eduH}`:''}
       ${skills?`<div class="section-label">Skills</div><div class="divider"></div><div class="skills-list">${skillTags(skills,'skill-tag')}</div>`:''}`;
+  }
+
+  // Page 2 — projects
+  const hasProjContent = projects.some(p=>p.name||p.desc);
+  if(hasProjContent){
+    lbl.style.display=''; p2.style.display='';
+    if(currentTemplate==='modern'){
+      p2.innerHTML=`
+        <div class="resume-sidebar" style="min-height:auto">
+          <div class="resume-name" style="font-size:18px">${esc(name)}</div>
+          <div class="resume-title">Projects</div>
+        </div>
+        <div class="resume-main">${buildProjectsHtml('modern')}</div>`;
+    } else {
+      p2.innerHTML=buildProjectsHtml(currentTemplate);
+    }
+  } else {
+    lbl.style.display='none'; p2.style.display='none';
   }
 
   requestAnimationFrame(scaleResume);
 }
 
+/* ── Export DOCX via Anthropic API ── */
+async function exportDocx() {
+  const btn = document.getElementById('docxBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ <span class="btn-label">Generating…</span>';
+
+  const name     = `${get('firstName')} ${get('lastName')}`.trim() || 'Your Name';
+  const title    = get('jobTitle');
+  const email    = get('email');
+  const phone    = get('phone');
+  const loc      = get('location');
+  const website  = get('website');
+  const summary  = get('summary');
+  const skills   = get('skills');
+
+  const resumeData = {
+    name, title, email, phone, location: loc, website, summary, skills,
+    experiences, educations, projects
+  };
+
+  const prompt = `You are a JavaScript code generator. Generate a complete Node.js script that creates a professional .docx resume using the 'docx' npm library (v8+).
+
+The resume data is:
+${JSON.stringify(resumeData, null, 2)}
+
+Requirements:
+- Use docx library imports: Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, AlignmentType, BorderStyle, WidthType, ShadingType, HeadingLevel, LevelFormat, PageBreak
+- Page 1: Name (large bold, 32pt), title, contact info in one line, then Summary, Experience, Education, Skills sections
+- Page 2 (separate page via PageBreak): Projects section with name, role, year, description, tech stack, and link for each project. Only include page 2 if there are projects.
+- Use clean professional styling, Arial font, proper spacing
+- For section labels use: bold, 12pt, all caps, with a bottom border paragraph style
+- Skills as comma-separated text
+- Tech stack tags as comma-separated text
+- Output to: output_resume.docx
+- Use: Packer.toBuffer(doc).then(buf => require('fs').writeFileSync('output_resume.docx', buf))
+- Return ONLY the complete JavaScript code, no markdown, no explanation, no backticks.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    let code = data.content.map(c => c.type === 'text' ? c.text : '').join('').trim();
+    // Strip any accidental markdown fences
+    code = code.replace(/^```[a-z]*\n?/i,'').replace(/\n?```$/,'').trim();
+
+    // Send to server-side execution endpoint isn't available in browser —
+    // so we package the code + docx library and trigger a download via a Blob approach.
+    // Since we can't run Node.js in the browser, we'll use docxjs via CDN instead.
+    await generateDocxInBrowser(resumeData);
+
+  } catch(err) {
+    showToast('Export failed: ' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '⬇ <span class="btn-label">Export .docx</span>';
+  }
+}
+
+/* ── Generate DOCX directly in browser using docx library ── */
+async function generateDocxInBrowser(d) {
+  // Dynamically load docx UMD build
+  if (!window.docx) {
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js';
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  const {
+    Document, Packer, Paragraph, TextRun, AlignmentType,
+    BorderStyle, HeadingLevel, LevelFormat, PageBreak,
+    TabStopType, TabStopPosition
+  } = window.docx;
+
+  const PT  = n => n * 20; // half-points to pt
+  const DXA = n => n * 1440; // inches to DXA
+
+  const ACCENT = 'C0392B';
+  const DARK   = '1A1410';
+  const GRAY   = '888888';
+
+  // Helper: horizontal rule paragraph
+  const hrPara = () => new Paragraph({
+    border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: DARK } },
+    spacing: { after: 120 }
+  });
+
+  // Helper: section heading
+  const sectionHead = (text) => new Paragraph({
+    spacing: { before: 240, after: 80 },
+    border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'CCCCCC' } },
+    children: [new TextRun({ text, bold: true, size: PT(12), font: 'Arial', allCaps: true, color: DARK })]
+  });
+
+  // Helper: build contact line
+  const contactParts = [d.email, d.phone, d.location, d.website].filter(Boolean).join('  ·  ');
+
+  const page1Children = [
+    // Name
+    new Paragraph({
+      spacing: { after: 60 },
+      children: [new TextRun({ text: d.name || 'Your Name', bold: true, size: PT(26), font: 'Playfair Display, Georgia, serif', color: DARK })]
+    }),
+    // Title
+    ...(d.title ? [new Paragraph({
+      spacing: { after: 100 },
+      children: [new TextRun({ text: d.title, size: PT(11), font: 'Arial', color: '6B5F55', allCaps: true })]
+    })] : []),
+    // Contact
+    ...(contactParts ? [new Paragraph({
+      spacing: { after: 0 },
+      children: [new TextRun({ text: contactParts, size: PT(10), font: 'Arial', color: GRAY })]
+    })] : []),
+    hrPara(),
+
+    // Summary
+    ...(d.summary ? [
+      sectionHead('Profile'),
+      new Paragraph({ spacing: { after: 160 }, children: [new TextRun({ text: d.summary, size: PT(10.5), font: 'Arial', color: '4A3F36', italics: true })] })
+    ] : []),
+
+    // Experience
+    ...(d.experiences && d.experiences.length ? [
+      sectionHead('Experience'),
+      ...d.experiences.flatMap(e => [
+        new Paragraph({
+          spacing: { before: 120, after: 20 },
+          children: [
+            new TextRun({ text: e.role || 'Role', bold: true, size: PT(11), font: 'Arial', color: DARK }),
+            new TextRun({ text: `\t${e.start}${e.end?' – '+e.end:''}`, size: PT(10), font: 'Arial', color: GRAY }),
+          ],
+          tabStops: [{ type: TabStopType.RIGHT, position: DXA(6.5) }]
+        }),
+        ...(e.org ? [new Paragraph({ spacing:{ after: 40 }, children: [new TextRun({ text: e.org, size: PT(10.5), font: 'Arial', color: ACCENT, italics: true })] })] : []),
+        ...(e.desc ? [new Paragraph({ spacing:{ after: 80 }, children: [new TextRun({ text: e.desc, size: PT(10.5), font: 'Arial', color: '444444' })] })] : []),
+      ])
+    ] : []),
+
+    // Education
+    ...(d.educations && d.educations.length ? [
+      sectionHead('Education'),
+      ...d.educations.flatMap(e => [
+        new Paragraph({
+          spacing: { before: 100, after: 20 },
+          children: [
+            new TextRun({ text: e.degree || 'Degree', bold: true, size: PT(11), font: 'Arial', color: DARK }),
+            new TextRun({ text: `\t${e.start}${e.end?' – '+e.end:''}`, size: PT(10), font: 'Arial', color: GRAY }),
+          ],
+          tabStops: [{ type: TabStopType.RIGHT, position: DXA(6.5) }]
+        }),
+        ...(e.school ? [new Paragraph({ spacing:{ after: 60 }, children: [new TextRun({ text: e.school, size: PT(10.5), font: 'Arial', color: ACCENT, italics: true })] })] : []),
+      ])
+    ] : []),
+
+    // Skills
+    ...(d.skills ? [
+      sectionHead('Skills'),
+      new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text: d.skills, size: PT(10.5), font: 'Arial', color: '4A3F36' })] })
+    ] : []),
+  ];
+
+  const hasProjects = d.projects && d.projects.some(p => p.name || p.desc);
+
+  // Page 2 — Projects
+  const page2Children = hasProjects ? [
+    new Paragraph({ children: [new PageBreak()] }),
+    // Page 2 header: name + "Projects" subtitle
+    new Paragraph({
+      spacing: { after: 40 },
+      children: [new TextRun({ text: d.name || 'Your Name', bold: true, size: PT(20), font: 'Georgia', color: DARK })]
+    }),
+    new Paragraph({
+      spacing: { after: 0 },
+      children: [new TextRun({ text: 'Projects & Portfolio', size: PT(10), font: 'Arial', color: GRAY, allCaps: true })]
+    }),
+    hrPara(),
+    sectionHead('Projects'),
+    ...d.projects.flatMap(p => [
+      new Paragraph({
+        spacing: { before: 160, after: 20 },
+        children: [
+          new TextRun({ text: p.name || 'Untitled', bold: true, size: PT(11.5), font: 'Arial', color: DARK }),
+          ...(p.year ? [new TextRun({ text: `  —  ${p.year}`, size: PT(10), font: 'Arial', color: GRAY })] : []),
+        ]
+      }),
+      ...(p.role ? [new Paragraph({ spacing:{ after: 30 }, children: [new TextRun({ text: p.role, size: PT(10.5), font: 'Arial', color: ACCENT, italics: true })] })] : []),
+      ...(p.desc ? [new Paragraph({ spacing:{ after: 60 }, children: [new TextRun({ text: p.desc, size: PT(10.5), font: 'Arial', color: '444444' })] })] : []),
+      ...(p.stack ? [new Paragraph({ spacing:{ after: 40 }, children: [new TextRun({ text: 'Tech: ', bold: true, size: PT(10), font: 'Arial', color: DARK }), new TextRun({ text: p.stack, size: PT(10), font: 'Arial', color: '666666' })] })] : []),
+      ...(p.link ? [new Paragraph({ spacing:{ after: 100 }, children: [new TextRun({ text: '🔗 ', size: PT(10) }), new TextRun({ text: p.link, size: PT(10), font: 'Arial', color: ACCENT })] })] : []),
+    ])
+  ] : [];
+
+  const doc = new Document({
+    sections: [{
+      properties: {
+        page: {
+          size: { width: 12240, height: 15840 },
+          margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 }
+        }
+      },
+      children: [...page1Children, ...page2Children]
+    }]
+  });
+
+  const buffer = await Packer.toBuffer(doc);
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(d.name||'resume').replace(/\s+/g,'_')}_resume.docx`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ Downloaded ' + a.download);
+}
+
 /* ── Clear ── */
-function clearAll() {
-  if (!confirm('Start a new resume? All current data will be cleared.')) return;
+function clearAll(){
+  if(!confirm('Start a new resume? All current data will be cleared.')) return;
   ['firstName','lastName','jobTitle','email','phone','location','website','summary','skills']
-    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  experiences=[]; educations=[]; nextExpId=1; nextEduId=1;
-  renderEditorExperiences(); renderEditorEducations(); render();
+    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  experiences=[]; educations=[]; projects=[];
+  nextExpId=1; nextEduId=1; nextProjId=1;
+  renderEditorExperiences(); renderEditorEducations(); renderEditorProjects(); render();
 }
 
 /* ── Init ── */
 renderEditorExperiences();
 renderEditorEducations();
+renderEditorProjects();
 render();
 </script>
 </body>
