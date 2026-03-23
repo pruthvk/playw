@@ -1,0 +1,157 @@
+{
+  "firstName": "Pruthvinath",
+  "lastName": "Kalapuram",
+  "jobTitle": "Senior Devops Engineer",
+  "email": "pruthvi92@hotmail.com",
+  "phone": "9538903681",
+  "location": "Bengaluru",
+  "website": "github.com/mchen-devops",
+  "summary": "Results-driven Senior DevOps Engineer with 7 years of experience designing and implementing scalable cloud infrastructure and CI/CD pipelines. Proven expertise in container orchestration, infrastructure automation, and maintaining high-availability systems across AWS and Azure environments. Passionate about fostering DevOps culture and reducing deployment friction through innovative tooling and practices.",
+  "label_profile": "Profile",
+  "label_experience": "Experience",
+  "label_education": "Education",
+  "label_skills": "Skills",
+  "label_projects": "Projects",
+  "label_certs": "Certifications",
+  "label_langs": "Languages",
+  "label_volunteer": "Volunteer",
+  "label_custom": "Additional Info",
+  "customContent": "",
+  "template": "classic",
+  "experiences": [
+    {
+      "id": 1,
+      "role": "Senior DevOps Engineer",
+      "org": "LTTS",
+      "start": "Mar 2021",
+      "end": "Present",
+      "bullets": [
+        {
+          "id": 6,
+          "text": "Architected and deployed Kubernetes-based microservices platform serving 50M+ daily requests, reducing infrastructure costs by 35% through auto-scaling and resource optimization"
+        },
+        {
+          "id": 7,
+          "text": "Implemented GitOps workflows using ArgoCD and Terraform, decreasing deployment time from 2 hours to 15 minutes and achieving 99.97% uptime SLA"
+        },
+        {
+          "id": 8,
+          "text": "Led migration of legacy monolith applications to containerized services on AWS EKS, mentoring team of 4 junior engineers on cloud-native best practices"
+        },
+        {
+          "id": 9,
+          "text": "Developed comprehensive observability stack using Prometheus, Grafana, and ELK, reducing mean time to resolution (MTTR) by 60%"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "role": "DevOps Engineer",
+      "org": "Rebaca Technologies",
+      "start": "Jun 2018",
+      "end": "Feb 2021",
+      "bullets": [
+        {
+          "id": 10,
+          "text": "Built and maintained CI/CD pipelines using Jenkins and GitLab CI for 25+ microservices, enabling 200+ production deployments per month"
+        },
+        {
+          "id": 11,
+          "text": "Automated infrastructure provisioning with Terraform and Ansible across multi-region AWS environments, managing 300+ EC2 instances and associated resources"
+        },
+        {
+          "id": 12,
+          "text": "Implemented security hardening measures and compliance automation for PCI-DSS requirements, passing audits with zero critical findings"
+        },
+        {
+          "id": 13,
+          "text": "Established disaster recovery procedures and automated backup strategies, achieving RPO of 1 hour and RTO of 4 hours"
+        }
+      ]
+    }
+  ],
+  "educations": [
+    {
+      "id": 1,
+      "degree": "Bachelor of Technology in Information Technology",
+      "school": "RGMCET, Nandyal",
+      "start": "Jun 2009",
+      "end": "May 2013"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "Multi-Cloud Disaster Recovery Automation",
+      "role": "Lead Engineer",
+      "year": "2023",
+      "desc": "Designed and implemented automated disaster recovery solution spanning AWS and Azure, with one-click failover capability and continuous data replication for critical services",
+      "stack": "Terraform, Python, AWS Lambda, Azure Functions, PostgreSQL, Redis, Ansible",
+      "link": ""
+    },
+    {
+      "id": 2,
+      "name": "Internal Developer Platform",
+      "role": "Core Contributor",
+      "year": "2022",
+      "desc": "Built self-service platform enabling developers to provision environments, deploy applications, and manage resources through unified interface, reducing environment setup time from days to minutes",
+      "stack": "Kubernetes, ArgoCD, Backstage, Terraform, Python, React, PostgreSQL",
+      "link": ""
+    }
+  ],
+  "highlights": [
+    {
+      "id": 1,
+      "title": "Key Achievements",
+      "page": "2",
+      "bullets": [
+        {
+          "id": 1,
+          "text": "Reduced cloud infrastructure costs by $420K annually through rightsizing initiatives and implementation of spot instances"
+        },
+        {
+          "id": 2,
+          "text": "Achieved 99.97% uptime across production systems while increasing deployment frequency from weekly to multiple times daily"
+        },
+        {
+          "id": 3,
+          "text": "Spearheaded company-wide migration to Kubernetes, training 30+ developers and establishing center of excellence for container orchestration"
+        }
+      ]
+    }
+  ],
+  "skillGroups": [
+    {
+      "id": 1,
+      "category": "Cloud & Infrastructure",
+      "items": "AWS (EC2, EKS, S3, Lambda, RDS, CloudFormation), Azure (AKS, VMs, DevOps), Google Cloud Platform, Terraform, CloudFormation, Infrastructure as Code"
+    },
+    {
+      "id": 2,
+      "category": "Containers & Orchestration",
+      "items": "Docker, Kubernetes, Helm, ArgoCD, Docker Compose, Amazon EKS, Azure AKS, Container Registry, Istio"
+    },
+    {
+      "id": 3,
+      "category": "CI/CD & Automation",
+      "items": "Jenkins, GitLab CI/CD, GitHub Actions, CircleCI, Ansible, Chef, Puppet, Bash, Python, Groovy"
+    },
+    {
+      "id": 4,
+      "category": "Monitoring & Logging",
+      "items": "Prometheus, Grafana, ELK Stack (Elasticsearch, Logstash, Kibana), Datadog, New Relic, CloudWatch, Splunk, Jaeger"
+    }
+  ],
+  "certs": [],
+  "langs": [],
+  "volunteers": [],
+  "nextExpId": 5,
+  "nextEduId": 2,
+  "nextProjId": 3,
+  "nextHlId": 2,
+  "nextBulletId": 8,
+  "nextCertId": 1,
+  "nextLangId": 1,
+  "nextVolId": 2,
+  "nextSgId": 5
+}
