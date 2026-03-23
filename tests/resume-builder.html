@@ -241,6 +241,65 @@
   .tpl-minimal .exp-bullet-list li { font-size:12px; color:#555; padding:2px 0 2px 13px; position:relative; line-height:1.5; }
   .tpl-minimal .exp-bullet-list li::before { content:'–'; position:absolute; left:0; color:#aaa; }
 
+  /* ── DATE PICKER ── */
+  .date-picker { display:flex; gap:5px; align-items:center; flex-wrap:nowrap; }
+  .date-picker select { flex:1; min-width:0; font-size:12.5px; padding:7px 6px; background-image:none; }
+  .date-picker .year-select { max-width:72px; }
+  .date-present-toggle { display:flex; align-items:center; gap:4px; white-space:nowrap; font-size:11.5px; color:var(--ink-light); cursor:pointer; padding:4px 0; flex-shrink:0; }
+  .date-present-toggle input[type=checkbox] { width:14px; height:14px; accent-color:var(--accent); cursor:pointer; margin:0; padding:0; border-radius:3px; -webkit-appearance:auto; }
+
+  /* ── UNDO/REDO BAR ── */
+  .undo-bar { display:flex; gap:4px; padding:8px 20px; background:#faf8f5; border-bottom:1px solid var(--border); align-items:center; }
+  .btn-undo-redo { background:none; border:1px solid var(--border); color:var(--ink-light); padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.15s; display:flex; align-items:center; gap:4px; }
+  .btn-undo-redo:hover:not(:disabled) { background:var(--cream-dark); border-color:#bbb; }
+  .btn-undo-redo:disabled { opacity:0.35; cursor:not-allowed; }
+  .undo-spacer { flex:1; }
+  .char-count { font-size:11px; color:var(--ink-faint); font-family:'DM Mono',monospace; }
+  .char-count.warn { color:#e67e22; }
+  .char-count.over { color:var(--accent); font-weight:600; }
+
+  /* ── DRAG HANDLE ── */
+  .drag-handle { cursor:grab; color:var(--ink-faint); font-size:14px; padding:2px 4px; flex-shrink:0; user-select:none; line-height:1; }
+  .drag-handle:active { cursor:grabbing; }
+  .entry-card.drag-over { border:2px dashed #6c3fc5; background:#f5f0ff; }
+  .entry-card.dragging { opacity:0.45; }
+
+  /* ── DUPLICATE BTN ── */
+  .btn-dup { background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; padding:3px 6px; line-height:1; transition:color 0.15s; border-radius:3px; }
+  .btn-dup:hover { color:#2b5797; background:rgba(43,87,151,0.07); }
+
+  /* ── REFINE BULLET ── */
+  .bullet-row .btn-refine { background:none; border:none; cursor:pointer; font-size:12px; padding:3px 5px; border-radius:3px; color:#9e9488; transition:all 0.15s; flex-shrink:0; }
+  .bullet-row .btn-refine:hover { color:#6c3fc5; background:rgba(108,63,197,0.08); }
+  .bullet-row .btn-refine.spinning { animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* ── ATS SCORE PANEL ── */
+  .ats-panel { margin:0; padding:10px 20px 14px; background:#fafaf8; border-bottom:1px solid var(--cream-dark); }
+  .ats-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; cursor:pointer; }
+  .ats-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-light); display:flex; align-items:center; gap:6px; }
+  .ats-score-badge { font-family:'DM Mono',monospace; font-size:13px; font-weight:700; padding:2px 10px; border-radius:12px; }
+  .ats-score-badge.good { background:#d4edda; color:#1a6b2e; }
+  .ats-score-badge.ok   { background:#fff3cd; color:#856404; }
+  .ats-score-badge.poor { background:#fde8e8; color:#a02020; }
+  .ats-issues { display:flex; flex-direction:column; gap:5px; }
+  .ats-issue { font-size:12px; padding:5px 10px; border-radius:4px; display:flex; align-items:flex-start; gap:7px; line-height:1.4; }
+  .ats-issue.warn { background:#fffbea; color:#7a5c00; border-left:3px solid #e6b800; }
+  .ats-issue.info { background:#eef5ff; color:#1a3f7a; border-left:3px solid #4a90d9; }
+  .ats-issue.good { background:#edfaf2; color:#1a5c32; border-left:3px solid #34a853; }
+
+  /* ── KEYWORDS PANEL ── */
+  .keywords-panel { padding:10px 20px 14px; background:#faf8f5; border-bottom:1px solid var(--cream-dark); }
+  .keywords-header { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-light); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+  .keyword-chips { display:flex; flex-wrap:wrap; gap:5px; }
+  .keyword-chip { padding:3px 10px; border-radius:12px; font-size:11.5px; cursor:pointer; border:1px solid; transition:all 0.15s; font-family:'DM Sans',sans-serif; }
+  .keyword-chip.missing { background:#fff8f0; color:#c0392b; border-color:#e8b4a8; }
+  .keyword-chip.missing:hover { background:#fde8e8; }
+  .keyword-chip.present { background:#edfaf2; color:#1a6b2e; border-color:#a8d8b8; cursor:default; }
+  .keyword-chip-hint { font-size:11px; color:var(--ink-faint); font-style:italic; }
+  .btn-kw-refresh { background:none; border:none; font-size:11px; color:#6c3fc5; cursor:pointer; font-family:'DM Sans',sans-serif; padding:0; }
+  .btn-kw-refresh:hover { text-decoration:underline; }
+
   .toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:white; padding:12px 18px; border-radius:6px; font-size:13px; z-index:999; opacity:0; transform:translateY(8px); transition:all 0.25s; pointer-events:none; display:flex; align-items:center; gap:8px; }
   .toast.show { opacity:1; transform:translateY(0); }
   .toast.error { background:#c0392b; }
@@ -315,6 +374,34 @@
       </div>
     </div>
 
+    <!-- Undo / Redo bar -->
+    <div class="undo-bar">
+      <button class="btn-undo-redo" id="btnUndo" onclick="undo()" disabled title="Undo (Ctrl+Z)">↩ Undo</button>
+      <button class="btn-undo-redo" id="btnRedo" onclick="redo()" disabled title="Redo (Ctrl+Y)">↪ Redo</button>
+      <div class="undo-spacer"></div>
+      <span class="char-count" id="summaryCharCount"></span>
+    </div>
+
+    <!-- ATS Score -->
+    <div class="ats-panel" id="atsPanel">
+      <div class="ats-header" onclick="toggleAts()">
+        <span class="ats-title">⚡ ATS Score</span>
+        <span class="ats-score-badge ok" id="atsBadge">—</span>
+      </div>
+      <div id="atsIssues" class="ats-issues"></div>
+    </div>
+
+    <!-- Keywords -->
+    <div class="keywords-panel" id="keywordsPanel">
+      <div class="keywords-header">
+        <span>🔑 Role Keywords</span>
+        <button class="btn-kw-refresh" onclick="fetchKeywords()" id="kwRefreshBtn">Refresh ↻</button>
+      </div>
+      <div class="keyword-chips" id="keywordChips">
+        <span class="keyword-chip-hint">Auto-fill a role to see suggested keywords</span>
+      </div>
+    </div>
+
     <!-- PAGE 1 DIVIDER -->
     <div class="page-divider p1">Page 1</div>
 
@@ -353,7 +440,7 @@
           <input class="section-heading-input" id="label_profile" value="Profile" placeholder="Profile" oninput="render()" title="Edit heading shown on resume">
         </div>
         <div class="field"><label>Professional Summary</label>
-          <textarea id="summary" placeholder="A brief statement about your career goals and expertise..." oninput="render()">Accomplished product designer with 8+ years crafting intuitive digital experiences at scale. Known for translating complex user needs into elegant, data-informed design solutions that drive business outcomes.</textarea>
+          <textarea id="summary" placeholder="A brief statement about your career goals and expertise..." oninput="render();updateCharCount()">Accomplished product designer with 8+ years crafting intuitive digital experiences at scale. Known for translating complex user needs into elegant, data-informed design solutions that drive business outcomes.</textarea>
         </div>
       </div>
     </div>
@@ -449,20 +536,20 @@
 /* ── State ── */
 let currentTemplate = 'classic';
 let experiences = [
-  {id:1,role:'Lead Product Designer',org:'Horizon Technologies',start:'2020',end:'Present',
+  {id:1,role:'Lead Product Designer',org:'Horizon Technologies',start:'Mar 2020',end:'Present',
    bullets:[
     {id:1,text:'Led end-to-end design for a SaaS platform serving 200K+ users, owning the full product design lifecycle'},
     {id:2,text:'Built and maintained a company-wide design system, reducing design-to-dev handoff time by 40%'},
     {id:3,text:'Managed and mentored a team of 5 designers across 3 product squads'},
    ]},
-  {id:2,role:'UX Designer',org:'Beacon Digital Agency',start:'2017',end:'2020',
+  {id:2,role:'UX Designer',org:'Beacon Digital Agency',start:'Jun 2017',end:'Feb 2020',
    bullets:[
     {id:4,text:'Delivered UX strategy and visual design for 30+ client projects across fintech, healthcare, and e-commerce'},
     {id:5,text:'Increased client NPS scores by an average of 22 points through usability improvements'},
    ]}
 ];
 let educations = [
-  {id:1,degree:'B.S. Interaction Design',school:'Parsons School of Design',start:'2013',end:'2017'}
+  {id:1,degree:'B.S. Interaction Design',school:'Parsons School of Design',start:'Sep 2013',end:'May 2017'}
 ];
 let projects = [
   {id:1,name:'Design System 3.0',role:'Lead Designer',year:'2023',
@@ -543,47 +630,157 @@ function toggleSection(header){
 function get(id){return (document.getElementById(id)||{}).value||'';}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-/* ── Experience ── */
+/* ── Claude API helper — works both locally and on GitHub Pages / external hosts ── */
+async function callClaude(prompt, maxTokens=2000) {
+  const payload = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: maxTokens,
+    messages: [{ role: 'user', content: prompt }]
+  };
+  const DIRECT = 'https://api.anthropic.com/v1/messages';
+  // Try direct first (works inside claude.ai / local); fall back to allorigins proxy
+  const tryFetch = async (url, body, headers) => {
+    const r = await fetch(url, { method:'POST', headers, body: JSON.stringify(body) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  };
+  // Attempt direct call
+  try {
+    return await tryFetch(DIRECT, payload, { 'Content-Type': 'application/json' });
+  } catch(e) {
+    // CORS blocked — route through allorigins proxy
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT);
+    return await tryFetch(proxyUrl, payload, { 'Content-Type': 'application/json' });
+  }
+}
+
+/* ── Date picker helpers ── */
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CUR_YEAR = new Date().getFullYear();
+
+function parseDate(val) {
+  // Accepts "MMM YYYY", "YYYY", "Present"
+  if (!val || val === 'Present') return { month:'', year:'' };
+  const parts = val.trim().split(' ');
+  if (parts.length === 2 && MONTHS.includes(parts[0])) return { month: parts[0], year: parts[1] };
+  if (parts.length === 1 && /^\d{4}$/.test(parts[0])) return { month:'', year: parts[0] };
+  return { month:'', year:'' };
+}
+
+function formatDate(month, year) {
+  if (!year) return '';
+  return month ? `${month} ${year}` : year;
+}
+
+function monthSelect(val, onchangeStr) {
+  const { month } = parseDate(val);
+  return `<select class="month-select" onchange="${onchangeStr}" style="flex:1.4">
+    <option value="">Month</option>
+    ${MONTHS.map(m => `<option value="${m}" ${month===m?'selected':''}>${m}</option>`).join('')}
+  </select>`;
+}
+
+function yearSelect(val, onchangeStr) {
+  const { year } = parseDate(val);
+  const years = Array.from({length:36}, (_,i) => String(CUR_YEAR - i));
+  return `<select class="year-select" onchange="${onchangeStr}">
+    <option value="">Year</option>
+    ${years.map(y => `<option value="${y}" ${year===y?'selected':''}>${y}</option>`).join('')}
+  </select>`;
+}
+
+function datePicker(val, isEnd, expId, field, entityType) {
+  // entityType: 'exp' | 'edu'
+  const isPresent = val === 'Present';
+  const { month, year } = parseDate(val);
+  const updateFn = entityType === 'exp'
+    ? `saveState();updateExp(${expId},'${field}',this.dataset.val||this.value)`
+    : `updateEdu(${expId},'${field}',this.dataset.val||this.value)`;
+
+  const onMonthChange = entityType === 'exp'
+    ? `saveState();(function(sel){const y=sel.closest('.date-picker').querySelector('.year-select').value;updateExp(${expId},'${field}',formatDate(sel.value,y));})(this)`
+    : `(function(sel){const y=sel.closest('.date-picker').querySelector('.year-select').value;updateEdu(${expId},'${field}',formatDate(sel.value,y));})(this)`;
+
+  const onYearChange = entityType === 'exp'
+    ? `saveState();(function(sel){const m=sel.closest('.date-picker').querySelector('.month-select').value;updateExp(${expId},'${field}',formatDate(m,sel.value));})(this)`
+    : `(function(sel){const m=sel.closest('.date-picker').querySelector('.month-select').value;updateEdu(${expId},'${field}',formatDate(m,sel.value));})(this)`;
+
+  const onPresentChange = entityType === 'exp'
+    ? `saveState();updateExp(${expId},'${field}',this.checked?'Present':'');(function(cb){cb.closest('.date-picker').querySelectorAll('select').forEach(s=>s.disabled=cb.checked);})(this)`
+    : `updateEdu(${expId},'${field}',this.checked?'Present':'');(function(cb){cb.closest('.date-picker').querySelectorAll('select').forEach(s=>s.disabled=cb.checked);})(this)`;
+
+  return `<div class="date-picker">
+    <select class="month-select" onchange="${onMonthChange}" ${isPresent?'disabled':''}>
+      <option value="">Month</option>
+      ${MONTHS.map(m=>`<option value="${m}" ${month===m?'selected':''}>${m}</option>`).join('')}
+    </select>
+    <select class="year-select" onchange="${onYearChange}" ${isPresent?'disabled':''}>
+      <option value="">Year</option>
+      ${Array.from({length:36},(_,i)=>String(CUR_YEAR-i)).map(y=>`<option value="${y}" ${year===y?'selected':''}>${y}</option>`).join('')}
+    </select>
+    ${isEnd?`<label class="date-present-toggle"><input type="checkbox" ${isPresent?'checked':''} onchange="${onPresentChange}"> Present</label>`:''}
+  </div>`;
+}
+
+
 function addExperience(){
+  saveState();
   experiences.push({id:nextExpId++,role:'',org:'',start:'',end:'',bullets:[{id:nextBulletId++,text:''}]});
   renderEditorExperiences();render();
 }
-function removeExperience(id){experiences=experiences.filter(e=>e.id!==id);renderEditorExperiences();render();}
+function removeExperience(id){saveState();experiences=experiences.filter(e=>e.id!==id);renderEditorExperiences();render();}
 function updateExp(id,f,v){const e=experiences.find(e=>e.id===id);if(e){e[f]=v;render();}}
 function addExpBullet(expId){
   const e=experiences.find(e=>e.id===expId);
-  if(e){e.bullets.push({id:nextBulletId++,text:''});renderEditorExperiences();render();}
+  if(e){saveState();e.bullets.push({id:nextBulletId++,text:''});renderEditorExperiences();render();}
 }
 function removeExpBullet(expId,bId){
   const e=experiences.find(e=>e.id===expId);
-  if(e&&e.bullets.length>1){e.bullets=e.bullets.filter(b=>b.id!==bId);renderEditorExperiences();render();}
+  if(e&&e.bullets.length>1){saveState();e.bullets=e.bullets.filter(b=>b.id!==bId);renderEditorExperiences();render();}
 }
 function updateExpBullet(expId,bId,val){
   const e=experiences.find(e=>e.id===expId);
   if(e){const b=e.bullets.find(b=>b.id===bId);if(b){b.text=val;render();}}
 }
 function renderEditorExperiences(){
-  document.getElementById('experienceList').innerHTML=
+  const list = document.getElementById('experienceList');
+  list.innerHTML =
     experiences.map((exp,i)=>`
-      <div class="entry-card">
-        <div class="entry-card-header"><span class="entry-card-title">Position ${i+1}</span>
-          <button class="btn-remove" onclick="removeExperience(${exp.id})">✕</button></div>
+      <div class="entry-card" draggable="true" data-exp-id="${exp.id}"
+           ondragstart="expDragStart(event,${exp.id})"
+           ondragover="expDragOver(event)"
+           ondrop="expDrop(event,${exp.id})"
+           ondragend="expDragEnd(event)">
+        <div class="entry-card-header">
+          <span class="drag-handle" title="Drag to reorder">⠿</span>
+          <span class="entry-card-title">Position ${i+1}</span>
+          <div class="entry-card-actions">
+            <button class="btn-dup" onclick="duplicateExperience(${exp.id})" title="Duplicate">⧉</button>
+            <button class="btn-remove" onclick="removeExperience(${exp.id})">✕</button>
+          </div>
+        </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="field-row">
-            <div class="field"><label>Job Title</label><input value="${esc(exp.role)}" placeholder="Software Engineer" oninput="updateExp(${exp.id},'role',this.value)"></div>
-            <div class="field"><label>Company</label><input value="${esc(exp.org)}" placeholder="Acme Corp" oninput="updateExp(${exp.id},'org',this.value)"></div>
+            <div class="field"><label>Job Title</label><input value="${esc(exp.role)}" placeholder="Software Engineer" oninput="saveState();updateExp(${exp.id},'role',this.value)"></div>
+            <div class="field"><label>Company</label><input value="${esc(exp.org)}" placeholder="Acme Corp" oninput="saveState();updateExp(${exp.id},'org',this.value)"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Start</label><input value="${esc(exp.start)}" placeholder="2020" oninput="updateExp(${exp.id},'start',this.value)"></div>
-            <div class="field"><label>End</label><input value="${esc(exp.end)}" placeholder="Present" oninput="updateExp(${exp.id},'end',this.value)"></div>
+            <div class="field"><label>Start</label>${datePicker(exp.start, false, exp.id, 'start', 'exp')}</div>
+            <div class="field"><label>End</label>${datePicker(exp.end, true, exp.id, 'end', 'exp')}</div>
           </div>
           <div class="field">
             <label>Responsibilities / Achievements</label>
             <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px">
               ${exp.bullets.map(b=>`
-                <div class="bullet-row">
+                <div class="bullet-row" draggable="true" data-bid="${b.id}"
+                     ondragstart="bulletDragStart(event,${exp.id},${b.id})"
+                     ondragover="bulletDragOver(event)"
+                     ondrop="bulletDrop(event,${exp.id},${b.id})"
+                     ondragend="bulletDragEnd(event)">
+                  <span class="drag-handle" style="font-size:12px">⠿</span>
                   <span class="bullet-dot">▸</span>
-                  <input value="${esc(b.text)}" placeholder="Describe a key achievement or responsibility…" oninput="updateExpBullet(${exp.id},${b.id},this.value)">
+                  <input value="${esc(b.text)}" placeholder="Describe a key achievement or responsibility…" oninput="saveState();updateExpBullet(${exp.id},${b.id},this.value)">
+                  <button class="btn-refine" onclick="refineBullet(${exp.id},${b.id},this)" title="Rewrite with AI ✦">✦</button>
                   <button class="btn-remove" onclick="removeExpBullet(${exp.id},${b.id})" title="Remove"${exp.bullets.length===1?' disabled style="opacity:0.3"':''}>✕</button>
                 </div>`).join('')}
             </div>
@@ -591,6 +788,8 @@ function renderEditorExperiences(){
           </div>
         </div></div>`).join('')+
     `<button class="btn-add" onclick="addExperience()">＋ Add Position</button>`;
+  // Re-attach drag events after DOM update
+  attachExpDrag();
 }
 
 /* ── Education ── */
@@ -609,8 +808,8 @@ function renderEditorEducations(){
             <div class="field"><label>School</label><input value="${esc(edu.school)}" placeholder="State University" oninput="updateEdu(${edu.id},'school',this.value)"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Start</label><input value="${esc(edu.start)}" placeholder="2019" oninput="updateEdu(${edu.id},'start',this.value)"></div>
-            <div class="field"><label>End</label><input value="${esc(edu.end)}" placeholder="2023" oninput="updateEdu(${edu.id},'end',this.value)"></div>
+            <div class="field"><label>Start</label>${datePicker(edu.start, false, edu.id, 'start', 'edu')}</div>
+            <div class="field"><label>End</label>${datePicker(edu.end, true, edu.id, 'end', 'edu')}</div>
           </div>
         </div></div>`).join('')+
     `<button class="btn-add" onclick="addEducation()">＋ Add Degree</button>`;
@@ -910,6 +1109,7 @@ function render(){
   }
 
   requestAnimationFrame(scaleResume);
+  updateAts();
 }
 
 /* ── DOCX Export ── */
@@ -1090,10 +1290,10 @@ Return ONLY valid JSON (no markdown, no explanation) matching this exact structu
   "website": "string",
   "summary": "string (2-3 sentences)",
   "experiences": [
-    { "role": "string", "org": "string", "start": "YYYY", "end": "YYYY or Present", "bullets": ["achievement or responsibility 1", "achievement or responsibility 2", "achievement or responsibility 3"] }
+    { "role": "string", "org": "string", "start": "MMM YYYY (e.g. Jan 2020)", "end": "MMM YYYY or Present", "bullets": ["achievement or responsibility 1", "achievement or responsibility 2", "achievement or responsibility 3"] }
   ],
   "educations": [
-    { "degree": "string", "school": "string", "start": "YYYY", "end": "YYYY" }
+    { "degree": "string", "school": "string", "start": "MMM YYYY (e.g. Sep 2015)", "end": "MMM YYYY (e.g. May 2019)" }
   ],
   "skillGroups": [
     { "category": "string", "items": "comma-separated skills" }
@@ -1116,22 +1316,15 @@ Rules:
 - Experience years should add up correctly relative to ${selectedExp} years total experience`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const data = await res.json();
+    const data = await callClaude(prompt, 2000);
     let raw = data.content.map(c => c.type === 'text' ? c.text : '').join('').trim();
     raw = raw.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
     const d = JSON.parse(raw);
     applyAutofillData(d);
     closeAutofill();
     showToast('✓ Resume generated for ' + role + ' · ' + selectedExp + ' yrs exp');
+    // auto-load keywords for this role
+    setTimeout(() => fetchKeywords(), 400);
   } catch(err) {
     showToast('Generation failed: ' + err.message, true);
   } finally {
@@ -1212,13 +1405,263 @@ function applyAutofillData(d) {
   render();
 }
 
+/* ══════════════════════════════════════
+   UNDO / REDO
+══════════════════════════════════════ */
+const MAX_HISTORY = 50;
+let undoStack = [], redoStack = [], isSaving = false;
 
+function getSnapshot() {
+  return JSON.stringify({
+    experiences, educations, projects, highlights, skillGroups,
+    firstName:get('firstName'), lastName:get('lastName'), jobTitle:get('jobTitle'),
+    email:get('email'), phone:get('phone'), location:get('location'),
+    website:get('website'), summary:get('summary'),
+    lp:get('label_profile'), le:get('label_experience'),
+    led:get('label_education'), ls:get('label_skills'), lpr:get('label_projects'),
+  });
+}
+function applySnapshot(snap) {
+  const d = JSON.parse(snap);
+  experiences=d.experiences; educations=d.educations;
+  projects=d.projects; highlights=d.highlights; skillGroups=d.skillGroups;
+  const ids = {firstName:d.firstName,lastName:d.lastName,jobTitle:d.jobTitle,
+    email:d.email,phone:d.phone,location:d.location,website:d.website,summary:d.summary,
+    label_profile:d.lp,label_experience:d.le,label_education:d.led,label_skills:d.ls,label_projects:d.lpr};
+  Object.entries(ids).forEach(([id,val])=>{const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;});
+  renderEditorExperiences(); renderEditorEducations(); renderEditorProjects();
+  renderEditorHighlights(); renderEditorSkillGroups();
+  render(); updateCharCount(); updateAts();
+}
+function saveState() {
+  if (isSaving) return;
+  const snap = getSnapshot();
+  if (undoStack.length && undoStack[undoStack.length-1]===snap) return;
+  undoStack.push(snap);
+  if (undoStack.length>MAX_HISTORY) undoStack.shift();
+  redoStack=[];
+  updateUndoButtons();
+}
+function undo() {
+  if (undoStack.length<2) return;
+  redoStack.push(undoStack.pop());
+  isSaving=true; applySnapshot(undoStack[undoStack.length-1]); isSaving=false;
+  updateUndoButtons();
+}
+function redo() {
+  if (!redoStack.length) return;
+  const snap=redoStack.pop(); undoStack.push(snap);
+  isSaving=true; applySnapshot(snap); isSaving=false;
+  updateUndoButtons();
+}
+function updateUndoButtons() {
+  const u=document.getElementById('btnUndo'),r=document.getElementById('btnRedo');
+  if(u) u.disabled=undoStack.length<2;
+  if(r) r.disabled=!redoStack.length;
+}
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}
+  if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}
+});
+
+/* ── Char count ── */
+function updateCharCount() {
+  const el=document.getElementById('summaryCharCount');
+  if(!el) return;
+  const words=get('summary').trim().split(/\s+/).filter(Boolean).length;
+  el.textContent=words+' words';
+  el.className='char-count'+(words>80?' over':words>60?' warn':'');
+}
+
+/* ── Drag & Drop — Experience cards ── */
+let dragExpId=null;
+function attachExpDrag(){}
+function expDragStart(e,id){ dragExpId=id; e.dataTransfer.effectAllowed='move'; setTimeout(()=>e.target.classList.add('dragging'),0); }
+function expDragOver(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; e.currentTarget.classList.add('drag-over'); }
+function expDrop(e,targetId){
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  if(dragExpId===targetId) return;
+  const fi=experiences.findIndex(x=>x.id===dragExpId), ti=experiences.findIndex(x=>x.id===targetId);
+  if(fi<0||ti<0) return;
+  experiences.splice(ti,0,experiences.splice(fi,1)[0]);
+  saveState(); renderEditorExperiences(); render();
+}
+function expDragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('.entry-card').forEach(c=>c.classList.remove('drag-over')); dragExpId=null; }
+
+/* ── Drag & Drop — Bullets ── */
+let dragBulletExpId=null, dragBulletId=null;
+function bulletDragStart(e,expId,bId){ dragBulletExpId=expId; dragBulletId=bId; e.dataTransfer.effectAllowed='move'; e.stopPropagation(); setTimeout(()=>e.currentTarget.style.opacity='0.4',0); }
+function bulletDragOver(e){ e.preventDefault(); e.stopPropagation(); }
+function bulletDrop(e,expId,targetBId){
+  e.preventDefault(); e.stopPropagation();
+  if(dragBulletExpId!==expId||dragBulletId===targetBId) return;
+  const exp=experiences.find(x=>x.id===expId); if(!exp) return;
+  const fi=exp.bullets.findIndex(b=>b.id===dragBulletId), ti=exp.bullets.findIndex(b=>b.id===targetBId);
+  if(fi<0||ti<0) return;
+  exp.bullets.splice(ti,0,exp.bullets.splice(fi,1)[0]);
+  saveState(); renderEditorExperiences(); render();
+}
+function bulletDragEnd(e){ e.currentTarget.style.opacity=''; dragBulletExpId=null; dragBulletId=null; }
+
+/* ── Duplicate experience ── */
+function duplicateExperience(id) {
+  const orig=experiences.find(e=>e.id===id); if(!orig) return;
+  const copy={...orig,id:nextExpId++,bullets:orig.bullets.map(b=>({id:nextBulletId++,text:b.text}))};
+  experiences.splice(experiences.findIndex(e=>e.id===id)+1,0,copy);
+  saveState(); renderEditorExperiences(); render(); showToast('Position duplicated');
+}
+
+/* ── Refine bullet with Claude ── */
+async function refineBullet(expId,bId,btn) {
+  const exp=experiences.find(e=>e.id===expId); if(!exp) return;
+  const bullet=exp.bullets.find(b=>b.id===bId);
+  if(!bullet||!bullet.text.trim()){showToast('Add text first',true);return;}
+  btn.classList.add('spinning'); btn.disabled=true;
+  const role=get('jobTitle')||'professional';
+  const prompt=`Rewrite this resume bullet point to be stronger, more specific, and results-oriented. Use a strong action verb. Keep it under 20 words. Return ONLY the rewritten bullet, no explanation, no quotes, no punctuation at end.\n\nRole: ${role}\nOriginal: ${bullet.text}`;
+  try {
+    const data=await callClaude(prompt, 120);
+    const refined=data.content.map(c=>c.type==='text'?c.text:'').join('').trim().replace(/^["']|["']$/g,'').replace(/\.$/,'');
+    saveState(); bullet.text=refined; renderEditorExperiences(); render(); showToast('✦ Bullet refined');
+  } catch(err){ showToast('Refine failed: '+err.message,true); }
+  finally{ btn.classList.remove('spinning'); btn.disabled=false; }
+}
+
+/* ── ATS Score ── */
+let atsVisible=true;
+function toggleAts(){ atsVisible=!atsVisible; document.getElementById('atsIssues').style.display=atsVisible?'':'none'; }
+function updateAts() {
+  const badge=document.getElementById('atsBadge'),issuesEl=document.getElementById('atsIssues');
+  if(!badge||!issuesEl) return;
+  const issues=[];
+  const allText=experiences.flatMap(e=>e.bullets.map(b=>b.text)).join(' ').toLowerCase();
+  const summary=get('summary'); const summaryWords=summary.trim().split(/\s+/).filter(Boolean).length;
+  const totalBullets=experiences.flatMap(e=>e.bullets.filter(b=>b.text)).length;
+  const hasMetrics=/\d+%|\d+x|\$[\d,]+|\d+\s*(users|clients|projects|teams|points)/i.test(allText);
+  const weakCount=experiences.flatMap(e=>e.bullets.filter(b=>{
+    const w=(b.text.trim().split(' ')[0]||'').toLowerCase();
+    return ['responsible','helped','worked','assisted','involved','participated'].includes(w);
+  })).length;
+  let score=100;
+  if(!get('email')){issues.push({cls:'warn',msg:'⚠ No email address'});score-=15;}
+  if(!get('firstName')){issues.push({cls:'warn',msg:'⚠ No name'});score-=10;}
+  if(!summary){issues.push({cls:'warn',msg:'⚠ Add a Profile / Summary section'});score-=10;}
+  else if(summaryWords>80){issues.push({cls:'warn',msg:`⚠ Summary is ${summaryWords} words — keep under 60`});score-=5;}
+  if(!experiences.length){issues.push({cls:'warn',msg:'⚠ No experience entries'});score-=20;}
+  if(totalBullets<3&&experiences.length){issues.push({cls:'warn',msg:'⚠ Aim for 2–4 bullets per role'});score-=10;}
+  if(!hasMetrics&&totalBullets>0){issues.push({cls:'info',msg:'💡 Add metrics — numbers make bullets 38% more likely to be noticed'});score-=8;}
+  if(weakCount>0){issues.push({cls:'info',msg:`💡 ${weakCount} bullet(s) use weak openers — try action verbs like "Delivered", "Reduced", "Built"`});score-=5*weakCount;}
+  if(!skillGroups.length){issues.push({cls:'warn',msg:'⚠ No skills section — ATS heavily filters on skills keywords'});score-=15;}
+  if(!issues.length) issues.push({cls:'good',msg:'✓ Looking good — ATS-friendly resume!'});
+  score=Math.max(0,Math.min(100,score));
+  badge.textContent=score+'%';
+  badge.className='ats-score-badge '+(score>=80?'good':score>=55?'ok':'poor');
+  issuesEl.innerHTML=issues.map(i=>`<div class="ats-issue ${i.cls}">${i.msg}</div>`).join('');
+}
+
+/* ── Role Keywords ── */
+let cachedKwRole='', currentKeywords=[];
+async function fetchKeywords() {
+  const role=get('af_role')||get('jobTitle');
+  if(!role.trim()){showToast('Enter a job role or title first',true);return;}
+  if(role===cachedKwRole&&currentKeywords.length){renderKeywords();return;}
+  const btn=document.getElementById('kwRefreshBtn'); if(btn) btn.textContent='Loading…';
+  const prompt=`List exactly 16 important ATS resume keywords for a "${role}". Return ONLY a JSON array of strings. No markdown, no explanation.`;
+  try {
+    const data=await callClaude(prompt, 300);
+    let raw=data.content.map(c=>c.type==='text'?c.text:'').join('').trim().replace(/^```json?\s*/i,'').replace(/\s*```$/,'').trim();
+    currentKeywords=JSON.parse(raw); cachedKwRole=role; renderKeywords();
+  } catch(err){ showToast('Keywords failed: '+err.message,true); }
+  finally{ if(btn) btn.textContent='Refresh ↻'; }
+}
+function renderKeywords() {
+  const el=document.getElementById('keywordChips'); if(!el) return;
+  const resumeText=[get('summary'),...experiences.flatMap(e=>e.bullets.map(b=>b.text)),...skillGroups.map(g=>g.items)].join(' ').toLowerCase();
+  el.innerHTML=currentKeywords.map(kw=>{
+    const present=resumeText.includes(kw.toLowerCase());
+    return `<span class="keyword-chip ${present?'present':'missing'}" title="${present?'Present in resume':'Click to add to Skills'}"
+      onclick="${present?'':` addKeywordToSkills('${kw.replace(/'/g,"\\'").replace(/"/g,'\\"')}');this.className='keyword-chip present'`}">${esc(kw)}${present?' ✓':' +'}</span>`;
+  }).join('');
+}
+function addKeywordToSkills(kw) {
+  if (skillGroups.length > 0) {
+    // Try to find the best matching category by checking if the keyword
+    // is conceptually similar to existing category names or their items
+    const kwLower = kw.toLowerCase();
+
+    // Score each group: prefer one whose name or items partially match
+    let bestGroup = null, bestScore = -1;
+    skillGroups.forEach(g => {
+      let score = 0;
+      const catLower = g.category.toLowerCase();
+      const itemsLower = g.items.toLowerCase();
+
+      // Exact category keyword match (e.g. keyword "Python" in "Programming" category)
+      if (catLower.includes(kwLower) || kwLower.includes(catLower)) score += 3;
+
+      // Category semantic hints
+      const techTerms = ['javascript','python','java','sql','react','node','aws','docker','kubernetes',
+        'typescript','go','rust','c++','html','css','git','linux','bash','api','rest','graphql',
+        'terraform','ansible','jenkins','ci/cd','devops','cloud','database','redis','postgres'];
+      const softTerms = ['agile','scrum','kanban','jira','communication','leadership','teamwork',
+        'stakeholder','presentation','documentation'];
+      const testTerms = ['selenium','cypress','jest','pytest','junit','testng','qa','testing',
+        'automation','manual','regression','performance','load','postman'];
+      const designTerms = ['figma','sketch','xd','photoshop','illustrator','ux','ui','wireframe',
+        'prototype','design','typography','accessibility'];
+      const dataTerms = ['tableau','power bi','excel','spark','hadoop','kafka','airflow','dbt',
+        'pandas','numpy','sklearn','tensorflow','pytorch','ml','ai','analytics','statistics'];
+
+      const kwGroup = techTerms.includes(kwLower) ? 'tech'
+        : softTerms.includes(kwLower) ? 'soft'
+        : testTerms.includes(kwLower) ? 'test'
+        : designTerms.includes(kwLower) ? 'design'
+        : dataTerms.includes(kwLower) ? 'data' : 'other';
+
+      const catGroup = techTerms.some(t=>catLower.includes(t)) || ['programming','languages','tools','frameworks','technical','engineering','development'].some(t=>catLower.includes(t)) ? 'tech'
+        : ['test','qa','quality','automation'].some(t=>catLower.includes(t)) ? 'test'
+        : ['design','ux','ui','visual'].some(t=>catLower.includes(t)) ? 'design'
+        : ['data','analytics','science','ml','ai'].some(t=>catLower.includes(t)) ? 'data'
+        : ['soft','communication','leadership','management'].some(t=>catLower.includes(t)) ? 'soft'
+        : 'other';
+
+      if (kwGroup !== 'other' && kwGroup === catGroup) score += 4;
+
+      // If items in this group already contain similar terms
+      const existingItems = itemsLower.split(',').map(s=>s.trim());
+      if (existingItems.some(item => techTerms.includes(item) && kwGroup==='tech')) score += 2;
+      if (existingItems.some(item => testTerms.includes(item) && kwGroup==='test')) score += 2;
+      if (existingItems.some(item => designTerms.includes(item) && kwGroup==='design')) score += 2;
+
+      if (score > bestScore) { bestScore = score; bestGroup = g; }
+    });
+
+    if (bestGroup && bestScore > 0) {
+      bestGroup.items = bestGroup.items ? bestGroup.items + ', ' + kw : kw;
+    } else {
+      // No good match — add to last group as fallback
+      const last = skillGroups[skillGroups.length-1];
+      last.items = last.items ? last.items + ', ' + kw : kw;
+    }
+  } else {
+    skillGroups.push({id:nextSgId++, category:'Skills', items:kw});
+  }
+  saveState(); renderEditorSkillGroups(); render(); renderKeywords();
+  showToast(`"${kw}" added to Skills`);
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
 renderEditorExperiences();
 renderEditorEducations();
 renderEditorProjects();
 renderEditorHighlights();
 renderEditorSkillGroups();
 render();
+updateCharCount();
+updateAts();
+saveState(); // seed undo stack
 </script>
 <!-- Auto-fill Modal -->
 <div class="modal-overlay" id="autofillModal" style="display:none" onclick="handleModalOverlayClick(event)">
