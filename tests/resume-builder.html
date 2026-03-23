@@ -315,6 +315,10 @@
   .tpl-minimal .summary-text { font-size: 13px; color: #666; }
 
   /* ── PRINT ── */
+  @page {
+    margin: 0;
+    size: A4;
+  }
   @media print {
     header, .editor, .mobile-tabs, .preview-label { display: none !important; }
     .app { display: block; }
