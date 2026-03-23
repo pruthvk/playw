@@ -370,9 +370,8 @@
   <div class="header-actions">
     <button class="btn btn-autofill" onclick="openAutofill()">✦ <span class="btn-label">Auto-Fill</span></button>
     <button class="btn btn-docx" id="docxBtn" onclick="exportDocx()">⬇ <span class="btn-label">Export .docx</span></button>
-    <button class="btn btn-ghost" onclick="exportJSON()" title="Save resume data as JSON">💾 <span class="btn-label">Save</span></button>
-    <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()" title="Load resume from JSON">📂 <span class="btn-label">Load</span></button>
-    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(this)">
+    <button class="btn btn-ghost" onclick="copyToClipboard()" title="Copy resume data to clipboard">📋 <span class="btn-label">Copy</span></button>
+    <button class="btn btn-ghost" onclick="pasteFromClipboard()" title="Paste resume data from clipboard">📥 <span class="btn-label">Paste</span></button>
     <button class="btn btn-ghost" onclick="window.print()">⎙ <span class="btn-label">Print</span></button>
     <button class="btn btn-primary" onclick="clearAll()">✦ <span class="btn-label">New</span></button>
   </div>
@@ -824,15 +823,15 @@ function addExperience(){
   experiences.push({id:nextExpId++,role:'',org:'',start:'',end:'',bullets:[{id:nextBulletId++,text:''}]});
   renderEditorExperiences();render();
 }
-function removeExperience(id){saveState();experiences=experiences.filter(e=>e.id!==id);renderEditorExperiences();render();}
+function removeExperience(id){saveStateNow();experiences=experiences.filter(e=>e.id!==id);renderEditorExperiences();render();}
 function updateExp(id,f,v){const e=experiences.find(e=>e.id===id);if(e){e[f]=v;render();}}
 function addExpBullet(expId){
   const e=experiences.find(e=>e.id===expId);
-  if(e){saveState();e.bullets.push({id:nextBulletId++,text:''});renderEditorExperiences();render();}
+  if(e){saveStateNow();e.bullets.push({id:nextBulletId++,text:''});renderEditorExperiences();render();}
 }
 function removeExpBullet(expId,bId){
   const e=experiences.find(e=>e.id===expId);
-  if(e&&e.bullets.length>1){saveState();e.bullets=e.bullets.filter(b=>b.id!==bId);renderEditorExperiences();render();}
+  if(e&&e.bullets.length>1){saveStateNow();e.bullets=e.bullets.filter(b=>b.id!==bId);renderEditorExperiences();render();}
 }
 function updateExpBullet(expId,bId,val){
   const e=experiences.find(e=>e.id===expId);
@@ -1248,7 +1247,10 @@ async function exportDocx(){
       experiences, educations, projects, highlights, skillGroups,
       certs, langs, volunteers
     });
-  } catch(err){ showToast('Export failed: '+err.message,true); }
+  } catch(err){
+    console.error('DOCX error:', err);
+    showToast('Export failed: '+err.message, true);
+  }
   finally { btn.disabled=false; btn.innerHTML='⬇ <span class="btn-label">Export .docx</span>'; }
 }
 
@@ -1257,10 +1259,18 @@ async function generateDocxInBrowser(d){
     await new Promise((res,rej)=>{
       const s=document.createElement('script');
       s.src='https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js';
-      s.onload=res; s.onerror=rej; document.head.appendChild(s);
+      s.onload=()=>{
+        if(window.docx&&window.docx.Document) res();
+        else rej(new Error('docx library did not load correctly'));
+      };
+      s.onerror=()=>rej(new Error('Failed to load docx library from CDN'));
+      document.head.appendChild(s);
     });
   }
-  const {Document,Packer,Paragraph,TextRun,BorderStyle,PageBreak,TabStopType}=window.docx;
+  const D = window.docx;
+  const {Document,Packer,Paragraph,TextRun,BorderStyle,PageBreak} = D;
+  // TabStopType may be nested differently across versions
+  const TabStopType = D.TabStopType || (D.TabStop && D.TabStop.TabStopType) || {RIGHT:'right'};
   const PT=n=>n*20, DXA=n=>n*1440;
   const ACCENT='C0392B', DARK='1A1410', GRAY='888888';
 
@@ -1577,31 +1587,33 @@ function applyAutofillData(d) {
 ══════════════════════════════════════ */
 const MAX_HISTORY = 50;
 let undoStack = [], redoStack = [], isSaving = false;
+let _undoTimer = null;
 
 function getSnapshot() {
   return JSON.stringify({
     experiences, educations, projects, highlights, skillGroups,
+    certs, langs, volunteers,
     firstName:get('firstName'), lastName:get('lastName'), jobTitle:get('jobTitle'),
     email:get('email'), phone:get('phone'), location:get('location'),
-    website:get('website'), summary:get('summary'),
+    website:get('website'), summary:get('summary'), customContent:get('customContent'),
     lp:get('label_profile'), le:get('label_experience'),
     led:get('label_education'), ls:get('label_skills'), lpr:get('label_projects'),
   });
 }
-function applySnapshot(snap) {
-  const d = JSON.parse(snap);
-  experiences=d.experiences; educations=d.educations;
-  projects=d.projects; highlights=d.highlights; skillGroups=d.skillGroups;
-  const ids = {firstName:d.firstName,lastName:d.lastName,jobTitle:d.jobTitle,
-    email:d.email,phone:d.phone,location:d.location,website:d.website,summary:d.summary,
-    label_profile:d.lp,label_experience:d.le,label_education:d.led,label_skills:d.ls,label_projects:d.lpr};
-  Object.entries(ids).forEach(([id,val])=>{const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;});
-  renderEditorExperiences(); renderEditorEducations(); renderEditorProjects();
-  renderEditorHighlights(); renderEditorSkillGroups();
-  render(); updateCharCount(); updateAts();
-}
+
+// Debounced — for typing (waits 800ms after user stops)
 function saveState() {
   if (isSaving) return;
+  clearTimeout(_undoTimer);
+  _undoTimer = setTimeout(_commitSnapshot, 800);
+}
+// Immediate — for structural changes (add/remove/reorder/duplicate)
+function saveStateNow() {
+  if (isSaving) return;
+  clearTimeout(_undoTimer);
+  _commitSnapshot();
+}
+function _commitSnapshot() {
   const snap = getSnapshot();
   if (undoStack.length && undoStack[undoStack.length-1]===snap) return;
   undoStack.push(snap);
@@ -1609,6 +1621,24 @@ function saveState() {
   redoStack=[];
   updateUndoButtons();
 }
+
+function applySnapshot(snap) {
+  const d = JSON.parse(snap);
+  experiences=d.experiences||[]; educations=d.educations||[];
+  projects=d.projects||[]; highlights=d.highlights||[]; skillGroups=d.skillGroups||[];
+  certs=d.certs||[]; langs=d.langs||[]; volunteers=d.volunteers||[];
+  const ids = {firstName:d.firstName,lastName:d.lastName,jobTitle:d.jobTitle,
+    email:d.email,phone:d.phone,location:d.location,website:d.website,
+    summary:d.summary,customContent:d.customContent,
+    label_profile:d.lp,label_experience:d.le,label_education:d.led,
+    label_skills:d.ls,label_projects:d.lpr};
+  Object.entries(ids).forEach(([id,val])=>{const el=document.getElementById(id);if(el&&val!==undefined)el.value=val||'';});
+  renderEditorExperiences(); renderEditorEducations(); renderEditorProjects();
+  renderEditorHighlights(); renderEditorSkillGroups();
+  renderCerts(); renderLangs(); renderVolunteers();
+  render(); updateCharCount(); updateAts();
+}
+
 function undo() {
   if (undoStack.length<2) return;
   redoStack.push(undoStack.pop());
@@ -1651,7 +1681,7 @@ function expDrop(e,targetId){
   const fi=experiences.findIndex(x=>x.id===dragExpId), ti=experiences.findIndex(x=>x.id===targetId);
   if(fi<0||ti<0) return;
   experiences.splice(ti,0,experiences.splice(fi,1)[0]);
-  saveState(); renderEditorExperiences(); render();
+  saveStateNow(); renderEditorExperiences(); render();
 }
 function expDragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('.entry-card').forEach(c=>c.classList.remove('drag-over')); dragExpId=null; }
 
@@ -1666,7 +1696,7 @@ function bulletDrop(e,expId,targetBId){
   const fi=exp.bullets.findIndex(b=>b.id===dragBulletId), ti=exp.bullets.findIndex(b=>b.id===targetBId);
   if(fi<0||ti<0) return;
   exp.bullets.splice(ti,0,exp.bullets.splice(fi,1)[0]);
-  saveState(); renderEditorExperiences(); render();
+  saveStateNow(); renderEditorExperiences(); render();
 }
 function bulletDragEnd(e){ e.currentTarget.style.opacity=''; dragBulletExpId=null; dragBulletId=null; }
 
@@ -1675,7 +1705,7 @@ function duplicateExperience(id) {
   const orig=experiences.find(e=>e.id===id); if(!orig) return;
   const copy={...orig,id:nextExpId++,bullets:orig.bullets.map(b=>({id:nextBulletId++,text:b.text}))};
   experiences.splice(experiences.findIndex(e=>e.id===id)+1,0,copy);
-  saveState(); renderEditorExperiences(); render(); showToast('Position duplicated');
+  saveStateNow(); renderEditorExperiences(); render(); showToast('Position duplicated');
 }
 
 /* ── Refine bullet with Claude ── */
@@ -1689,7 +1719,7 @@ async function refineBullet(expId,bId,btn) {
   try {
     const data=await callClaude(prompt, 120);
     const refined=data.content.map(c=>c.type==='text'?c.text:'').join('').trim().replace(/^["']|["']$/g,'').replace(/\.$/,'');
-    saveState(); bullet.text=refined; renderEditorExperiences(); render(); showToast('✦ Bullet refined');
+    saveStateNow(); bullet.text=refined; renderEditorExperiences(); render(); showToast('✦ Bullet refined');
   } catch(err){ showToast('Refine failed: '+err.message,true); }
   finally{ btn.classList.remove('spinning'); btn.disabled=false; }
 }
@@ -1813,7 +1843,7 @@ function addKeywordToSkills(kw) {
   } else {
     skillGroups.push({id:nextSgId++, category:'Skills', items:kw});
   }
-  saveState(); renderEditorSkillGroups(); render(); renderKeywords();
+  saveStateNow(); renderEditorSkillGroups(); render(); renderKeywords();
   showToast(`"${kw}" added to Skills`);
 }
 
@@ -1977,30 +2007,45 @@ function autoLoad() {
   return false;
 }
 
-function exportJSON() {
-  const data = JSON.stringify(collectAllData(), null, 2);
-  const blob = new Blob([data], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const name = (get('firstName')+' '+get('lastName')).trim()||'resume';
-  a.href=url; a.download=name.replace(/\s+/g,'_')+'_resume.json'; a.click();
-  URL.revokeObjectURL(url);
-  showToast('✓ Saved as JSON');
+async function copyToClipboard() {
+  try {
+    const json = JSON.stringify(collectAllData(), null, 2);
+    await navigator.clipboard.writeText(json);
+    showToast('✓ Resume data copied to clipboard');
+  } catch(e) {
+    // Fallback: show in a textarea modal for manual copy
+    const ta = document.createElement('textarea');
+    ta.value = JSON.stringify(collectAllData(), null, 2);
+    ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;height:300px;z-index:9999;padding:12px;font-size:12px;font-family:monospace;border-radius:8px;border:2px solid #6c3fc5';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    showToast('Select all & copy (Ctrl+A, Ctrl+C), then close');
+    ta.addEventListener('blur', () => ta.remove());
+  }
 }
 
-function importJSON(input) {
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const d = JSON.parse(e.target.result);
-      applyAllData(d);
-      saveState();
-      showToast('✓ Resume loaded');
-    } catch(err) { showToast('Invalid JSON file', true); }
-  };
-  reader.readAsText(file);
-  input.value = '';
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    const d = JSON.parse(text);
+    applyAllData(d);
+    saveState();
+    showToast('✓ Resume loaded from clipboard');
+  } catch(e) {
+    // Fallback: prompt user to paste into a textarea
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+    overlay.innerHTML = `<div style="background:white;border-radius:10px;padding:24px;width:100%;max-width:500px">
+      <p style="font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;margin-bottom:12px">Paste your resume JSON below:</p>
+      <textarea id="pasteTarget" style="width:100%;height:200px;font-size:12px;font-family:monospace;padding:10px;border:1px solid #d4cdc3;border-radius:6px;resize:none" placeholder="Paste JSON here…"></textarea>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+        <button onclick="this.closest('div[style]').remove()" style="padding:8px 16px;border:1px solid #d4cdc3;background:none;border-radius:4px;cursor:pointer;font-family:DM Sans,sans-serif">Cancel</button>
+        <button onclick="(function(){try{const d=JSON.parse(document.getElementById('pasteTarget').value);applyAllData(d);saveState();showToast('✓ Loaded');document.querySelector('div[style*=inset]').remove();}catch(e){showToast('Invalid JSON',true);}})()" style="padding:8px 16px;background:#2b5797;color:white;border:none;border-radius:4px;cursor:pointer;font-family:DM Sans,sans-serif">Load</button>
+      </div>
+    </div>`;
+    document.body.appendChild(overlay);
+    setTimeout(() => document.getElementById('pasteTarget')?.focus(), 50);
+  }
 }
 
 /* ══════════════════════════════════════
@@ -2025,7 +2070,7 @@ async function improveWholeResume() {
       } catch(e) { /* skip on error */ }
     }
   }
-  saveState(); renderEditorExperiences(); render();
+  saveStateNow(); renderEditorExperiences(); render();
   btns.forEach(b=>b.disabled=false);
   showToast(`✓ Strengthened ${improved} bullets`);
 }
