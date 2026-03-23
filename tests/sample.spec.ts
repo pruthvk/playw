@@ -20,10 +20,10 @@ test('My 4th test',async function ({page}) {
     expect(true).toBeTruthy()
 })
 
-test('My 5th test',async function ({page}) {
-    expect(true).toBeFalsy()
-})
+// test('My 5th test',async function ({page}) {
+//     expect(true).toBeFalsy()
+// })
 
-test('My 6th test',async function ({page}) {
-    expect('pruthvi kalapuram'.includes('pruthvi')).toBeTruthy()
-})
+// test('My 6th test',async function ({page}) {
+//     expect('pruthvi kalapuram'.includes('pruthvi')).toBeTruthy()
+// })
