@@ -198,7 +198,8 @@ tr:last-child td{border-bottom:none;}
     <h2>🎯 Career Engine Pro</h2>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
       <button class="btn btn-purple" onclick="exportJSON()">⬇ Export</button>
-      <button class="btn btn-teal"   onclick="document.getElementById('importFile').click()">⬆ Import</button>
+      <button class="btn btn-teal"   onclick="document.getElementById('importFile').click()">⬆ Import File</button>
+      <button class="btn btn-teal"   onclick="importFromClipboard()">📋 Import Clipboard</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
       <button class="btn btn-success" onclick="undo()">↩ Undo</button>
       <button class="btn btn-success" onclick="redo()">↪ Redo</button>
@@ -981,24 +982,71 @@ function exportJSON(){
   let data=JSON.stringify({experiences,education,gapReasons,nextId,nextEduId},null,2);
   showExportModal(data, `career-${toDateStr(new Date())}.json`);
 }
+/* Shared import logic used by both file and clipboard import */
+function parseAndImport(jsonStr){
+  let p=JSON.parse(jsonStr);
+  if(!Array.isArray(p.experiences)) throw new Error('Invalid format');
+  pushHistory();
+  nextId=p.nextId||1; nextEduId=p.nextEduId||1; gapReasons=p.gapReasons||{};
+  experiences=p.experiences.map(hydrateExp); education=(p.education||[]).map(hydrateEdu);
+  saveToStorage(); render();
+  showModal(`✅ Imported ${experiences.length} experience + ${education.length} education entries.`);
+}
+
+/* Import from file */
 function importJSON(evt){
   let file=evt.target.files[0]; if(!file) return;
   let r=new FileReader();
   r.onload=e=>{
-    try{
-      let p=JSON.parse(e.target.result);
-      if(!Array.isArray(p.experiences)) throw 0;
-      pushHistory();
-      nextId=p.nextId||1; nextEduId=p.nextEduId||1;
-      gapReasons=p.gapReasons||{};
-      experiences=p.experiences.map(hydrateExp);
-      education  =(p.education||[]).map(hydrateEdu);
-      saveToStorage(); render();
-      showModal(`✅ Imported ${experiences.length} experience + ${education.length} education entries.`);
-    }catch{showModal('❌ Import failed: invalid file.');}
+    try{ parseAndImport(e.target.result); }
+    catch(err){ showModal('❌ Import failed: '+(err.message||'invalid file.')); }
     evt.target.value='';
   };
   r.readAsText(file);
+}
+
+/* Import from clipboard */
+function importFromClipboard(){
+  let existing=document.getElementById('clipboardImportModal');
+  if(existing) existing.remove();
+  let b=document.createElement('div'); b.id='clipboardImportModal'; b.className='modal-overlay';
+  b.innerHTML=`
+    <div class="modal-box" style="max-width:560px;text-align:left;">
+      <h4 style="margin-bottom:8px;">📋 Import from Clipboard</h4>
+      <p style="margin-bottom:10px;font-size:12px;color:#666;">
+        Paste your exported JSON below and click <strong>Import</strong>.
+        You can copy the JSON from the Export modal using the Copy to Clipboard button.
+      </p>
+      <textarea id="clipboardPasteArea" placeholder="Paste your JSON here…"
+        style="width:100%;height:200px;font-size:11px;font-family:monospace;
+        border:1px solid #ddd;border-radius:6px;padding:8px;resize:vertical;
+        background:#f9f9f9;"></textarea>
+      <div id="clipboardImportMsg" style="font-size:12px;color:#c62828;margin-top:6px;min-height:16px;"></div>
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="btn btn-primary" onclick="doClipboardImport()">⬆ Import</button>
+        <button class="btn btn-grey" onclick="document.getElementById('clipboardImportModal').remove()">Cancel</button>
+      </div>
+    </div>`;
+  document.body.appendChild(b);
+  if(navigator.clipboard && navigator.clipboard.readText){
+    navigator.clipboard.readText().then(text=>{
+      let ta=document.getElementById('clipboardPasteArea');
+      if(ta && text.trim().startsWith('{')) ta.value=text;
+    }).catch(()=>{});
+  }
+  setTimeout(()=>{ let ta=document.getElementById('clipboardPasteArea'); if(ta) ta.focus(); },100);
+}
+
+function doClipboardImport(){
+  let ta=document.getElementById('clipboardPasteArea');
+  let msg=document.getElementById('clipboardImportMsg');
+  if(!ta||!ta.value.trim()){ if(msg) msg.textContent='⚠ Please paste your JSON first.'; return; }
+  try{
+    parseAndImport(ta.value.trim());
+    document.getElementById('clipboardImportModal')?.remove();
+  }catch(err){
+    if(msg) msg.textContent='❌ Invalid JSON — '+(err.message||'please check your data and try again.');
+  }
 }
 
 /* ══════════════════════════════════════════════════
