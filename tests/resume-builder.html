@@ -113,7 +113,7 @@
   .resume-scaler { width:100%; display:flex; flex-direction:column; align-items:center; gap:20px; }
 
   /* ── RESUME PAPER ── */
-  .resume { background:white; width:700px; min-height:900px; box-shadow:var(--shadow-lg); padding:60px 56px; font-family:'DM Sans',sans-serif; color:#1a1410; font-size:13px; line-height:1.6; transform-origin:top center; animation:fadeIn 0.3s ease; flex-shrink:0; }
+  .resume { background:white; width:794px; min-height:1123px; box-shadow:var(--shadow-lg); padding:64px 60px; font-family:'DM Sans',sans-serif; color:#1a1410; font-size:13px; line-height:1.6; transform-origin:top center; animation:fadeIn 0.3s ease; flex-shrink:0; }
   .resume.page2 { min-height:600px; }
   /* ── Universal layout fixes across all templates ── */
   .resume .entry-header { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
@@ -126,7 +126,7 @@
   .resume .skill-group-name::after { content:': '; }
   .resume .skill-group-items { word-break:break-word; overflow-wrap:anywhere; }
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-  .page2-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#7a8aaa; align-self:flex-start; width:700px; padding-left:4px; transform-origin:top left; }
+  .page2-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#7a8aaa; align-self:flex-start; width:794px; padding-left:4px; transform-origin:top left; }
 
   /* ══ CLASSIC ══ */
   .tpl-classic .resume-name { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; letter-spacing:-0.5px; line-height:1.1; margin-bottom:4px; }
@@ -407,6 +407,41 @@
   .btn-kw-refresh { background:none; border:none; font-size:11px; color:#6c3fc5; cursor:pointer; font-family:'DM Sans',sans-serif; padding:0; }
   .btn-kw-refresh:hover { text-decoration:underline; }
 
+  /* ── Section page badge & drag ── */
+
+
+  .section-header-controls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .section-drag-handle { margin-left:auto; }
+  /* ── Section page zones ── */
+  .edsec-on-p2 > .section-header { background:#f0f4fa !important; border-left:3px solid #2b5797; }
+  .edsec-on-p2 > .section-header .section-title { color:#2b5797; }
+  .edsec-on-p2 > .section-header .section-title::before { background:#2b5797; }
+  .sec-drop-zone { padding:10px 20px; border:2px dashed transparent; border-radius:4px;
+    font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px;
+    color:var(--ink-faint); text-align:center; transition:all 0.2s; cursor:default; }
+  .sec-drop-zone.sec-zone-active { border-color:#2b5797 !important; background:#eef2f9 !important; color:#2b5797 !important; }
+  .sec-zone-p1 { background:#f0f4f9; border-color:#c5d0e8; color:#2b5797; }
+  .sec-zone-p2 { background:#eef2f9; border-color:#c5d0e8; color:#2b5797; }
+  .edsec-dragging { opacity:0.4; }
+  .edsec-drag-over-top { border-top:2px solid #6c3fc5 !important; }
+  .edsec-drag-over-bottom { border-bottom:2px solid #6c3fc5 !important; }
+
+
+
+  /* ── Section page toggle ── */
+  .sec-page-toggle {
+    font-family:'DM Mono',monospace; font-size:10px; font-weight:700;
+    padding:2px 8px; border-radius:10px; cursor:pointer; border:1.5px solid;
+    transition:all 0.2s; flex-shrink:0; line-height:1.4;
+    background:#fff3f0; color:var(--accent); border-color:var(--accent);
+  }
+  .sec-page-toggle:hover { opacity:0.75; transform:scale(1.05); }
+  .sec-page-toggle.on-p2 { background:#eef2f9; color:#2b5797; border-color:#2b5797; }
+  /* Tint panel when on page 2 */
+  .edsec-on-p2 > .section-header { background:#f0f4fa !important; border-left:3px solid #2b5797; }
+  .edsec-on-p2 > .section-header .section-title { color:#2b5797; }
+  .edsec-on-p2 > .section-header .section-title::before { background:#2b5797; }
+
   .toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:white; padding:12px 18px; border-radius:6px; font-size:13px; z-index:999; opacity:0; transform:translateY(8px); transition:all 0.25s; pointer-events:none; display:flex; align-items:center; gap:8px; }
   .toast.show { opacity:1; transform:translateY(0); }
   .toast.error { background:#c0392b; }
@@ -583,6 +618,7 @@
     <div class="page-divider p1">Page 1</div>
 
     <!-- Personal Info -->
+    <!-- Page 2 drop zone -->
     <div class="editor-section">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Personal Info</div>
@@ -636,11 +672,11 @@
         <div id="experienceList"></div>
       </div>
     </div>
-
     <!-- Education -->
-    <div class="editor-section">
+    <div class="editor-section" id="edsec_edu">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Education</div>
+        <button class="sec-page-toggle" id="sectoggle_edu" onclick="event.stopPropagation();toggleSecPage('edu')" title="Move to Page 2">P1</button>
         <div class="section-chevron open">▾</div>
       </div>
       <div class="section-body">
@@ -653,9 +689,10 @@
     </div>
 
     <!-- Skills -->
-    <div class="editor-section">
+    <div class="editor-section" id="edsec_skills">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Skills</div>
+        <button class="sec-page-toggle" id="sectoggle_skills" onclick="event.stopPropagation();toggleSecPage('skills')" title="Move to Page 2">P1</button>
         <div class="section-chevron open">▾</div>
       </div>
       <div class="section-body">
@@ -677,9 +714,10 @@
     </div>
 
     <!-- Certifications -->
-    <div class="editor-section">
+    <div class="editor-section" id="edsec_certs">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Certifications</div>
+        <button class="sec-page-toggle" id="sectoggle_certs" onclick="event.stopPropagation();toggleSecPage('certs')" title="Move to Page 2">P1</button>
         <div class="section-chevron open">▾</div>
       </div>
       <div class="section-body">
@@ -692,9 +730,10 @@
     </div>
 
     <!-- Languages -->
-    <div class="editor-section">
+    <div class="editor-section" id="edsec_langs">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Languages</div>
+        <button class="sec-page-toggle" id="sectoggle_langs" onclick="event.stopPropagation();toggleSecPage('langs')" title="Move to Page 2">P1</button>
         <div class="section-chevron open">▾</div>
       </div>
       <div class="section-body">
@@ -707,9 +746,10 @@
     </div>
 
     <!-- Volunteer -->
-    <div class="editor-section">
+    <div class="editor-section" id="edsec_volunteer">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Volunteer / Extracurricular</div>
+        <button class="sec-page-toggle" id="sectoggle_volunteer" onclick="event.stopPropagation();toggleSecPage('volunteer')" title="Move to Page 2">P1</button>
         <div class="section-chevron open">▾</div>
       </div>
       <div class="section-body">
@@ -722,9 +762,10 @@
     </div>
 
     <!-- Custom Section -->
-    <div class="editor-section">
+    <div class="editor-section" id="edsec_custom">
       <div class="section-header" onclick="toggleSection(this)">
         <div class="section-title">Custom Section</div>
+        <button class="sec-page-toggle" id="sectoggle_custom" onclick="event.stopPropagation();toggleSecPage('custom')" title="Move to Page 2">P1</button>
         <div class="section-chevron open">▾</div>
       </div>
       <div class="section-body">
@@ -838,6 +879,13 @@ let skillGroups = [
 ];
 let nextSgId = 4;
 
+/* ── Section page assignments (which page each section renders on) ── */
+// 'edu','skills','certs','langs','volunteer','custom' can be '1' or '2'
+// order arrays control the sequence within each page
+// Two page arrays — drag sections between pages freely
+let p1Order = ['edu','skills','certs','langs','volunteer','custom'];
+let p2Order = [];
+
 /* ── Toast ── */
 function showToast(msg,isError=false){
   const t=document.getElementById('toast');
@@ -847,6 +895,99 @@ function showToast(msg,isError=false){
 }
 
 /* ── Mobile tabs ── */
+/* ── Section page & order controls ── */
+function buildPageSections(pg, tpl) {
+  const arr = pg === '1' ? p1Order : p2Order;
+  return arr.map(key => buildSectionHtml(key, tpl)).join('');
+}
+
+function toggleSecPage(key) {
+  if (p1Order.includes(key)) {
+    p1Order.splice(p1Order.indexOf(key), 1);
+    p2Order.push(key);
+  } else {
+    p2Order.splice(p2Order.indexOf(key), 1);
+    p1Order.push(key);
+  }
+  updateSectionBadges();
+  saveStateNow();
+  render();
+}
+
+function updateSectionBadges() {
+  [...p1Order, ...p2Order].forEach(key => {
+    const btn   = document.getElementById('sectoggle_' + key);
+    const panel = document.getElementById('edsec_' + key);
+    const onP2  = p2Order.includes(key);
+    if (btn) {
+      btn.textContent = onP2 ? 'P2' : 'P1';
+      btn.classList.toggle('on-p2', onP2);
+      btn.title = onP2 ? 'Click to move back to Page 1' : 'Click to move to Page 2';
+    }
+    if (panel) panel.classList.toggle('edsec-on-p2', onP2);
+  });
+}
+
+
+function buildSectionHtml(key, tpl) {
+  const certsLbl    = esc(get('label_certs')     || 'Certifications');
+  const langsLbl    = esc(get('label_langs')      || 'Languages');
+  const volLbl      = esc(get('label_volunteer')  || 'Volunteer');
+  const custLbl     = esc(get('label_custom')     || 'Additional Info');
+  const eduLbl      = esc(get('label_education')  || 'Education');
+  const skillsLbl   = esc(get('label_skills')     || 'Skills');
+  const customContent = get('customContent');
+
+  // Education HTML (shared)
+  const eduH = educations.map(e=>`
+    <div class="entry">
+      <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
+      <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
+      <div class="entry-org">${esc(e.school)}</div>
+    </div>`).join('');
+
+  switch(key) {
+    case 'edu':
+      return educations.length
+        ? `<div class="section-label">${eduLbl}</div>${tpl==='minimal'?'<div class="divider"></div>':''}${eduH}`
+        : '';
+    case 'skills':
+      return buildSkillsHtml(tpl);
+    case 'certs':
+      return certs.length
+        ? `<div class="section-label">${certsLbl}</div>`+
+          certs.map(c=>`<div class="entry" style="margin-bottom:8px">
+            <div class="entry-header"><span class="entry-role">${esc(c.name)}</span><span class="entry-date">${esc(c.date)}</span></div>
+            <div class="entry-org">${esc(c.issuer)}${c.credId?` · <span style="font-size:11px;color:#999">${esc(c.credId)}</span>`:''}</div>
+          </div>`).join('')
+        : '';
+    case 'langs':
+      return langs.length
+        ? `<div class="section-label">${langsLbl}</div>`+
+          `<div style="display:flex;flex-wrap:wrap;gap:6px 20px;font-size:12.5px;margin-bottom:8px">`+
+          langs.map(l=>`<span><strong>${esc(l.lang)}</strong> <span style="color:#888;font-size:11.5px">${esc(l.level)}</span></span>`).join('')+
+          `</div>`
+        : '';
+    case 'volunteer':
+      return volunteers.length
+        ? `<div class="section-label">${volLbl}</div>`+
+          volunteers.map(v=>`<div class="entry" style="margin-bottom:10px">
+            <div class="entry-header"><span class="entry-role">${esc(v.role)}</span><span class="entry-date">${esc(v.period)}</span></div>
+            <div class="entry-org">${esc(v.org)}</div>
+            ${v.desc?`<div class="entry-desc">${esc(v.desc)}</div>`:''}
+          </div>`).join('')
+        : '';
+    case 'custom':
+      return customContent
+        ? `<div class="section-label">${custLbl}</div>`+
+          `<div style="font-size:12.5px;color:#444;line-height:1.6;white-space:pre-wrap">${esc(customContent)}</div>`
+        : '';
+    default: return '';
+  }
+}
+
+
+
 function switchTab(tab){
   const ed=document.getElementById('editorPanel'),pv=document.getElementById('previewPanel');
   const te=document.getElementById('tabEdit'),tp=document.getElementById('tabPreview');
@@ -860,7 +1001,7 @@ function scaleResume(){
   const r1=document.getElementById('resumePreview'),r2=document.getElementById('resumePreview2');
   const lbl=document.getElementById('page2Label');
   if(!scaler||!r1)return;
-  const W=700,avail=scaler.clientWidth;
+  const W=794,avail=scaler.clientWidth;
   const scale=(avail>0&&avail<W)?avail/W:1;
   [r1,r2].forEach(r=>{r.style.transform=scale<1?`scale(${scale})`:'';r.style.transformOrigin='top center';});
   if(lbl){lbl.style.transform=scale<1?`scale(${scale})`:'';lbl.style.transformOrigin='top left';lbl.style.width=scale<1?(W+'px'):'';}
@@ -1184,10 +1325,7 @@ function updateBullet(hlId,bId,val){
   const h=highlights.find(h=>h.id===hlId);
   if(h){const b=h.bullets.find(b=>b.id===bId);if(b){b.text=val;render();}}
 }
-function toggleHlPage(id){
-  const h=highlights.find(h=>h.id===id);
-  if(h){h.page=h.page==='1'?'2':'1';renderEditorHighlights();render();}
-}
+
 
 function renderEditorHighlights(){
   document.getElementById('highlightList').innerHTML=
@@ -1196,9 +1334,7 @@ function renderEditorHighlights(){
         <div class="entry-card-header">
           <span class="entry-card-title">Bullet Section ${i+1}</span>
           <div class="entry-card-actions">
-            <span class="page-badge ${hl.page==='1'?'p1':'p2'}" onclick="toggleHlPage(${hl.id})" title="Click to move to Page ${hl.page==='1'?'2':'1'}">
-              Pg ${hl.page}
-            </span>
+
             <button class="btn-remove" onclick="removeHighlight(${hl.id})">✕</button>
           </div>
         </div>
@@ -1246,8 +1382,8 @@ function renderEditorProjects(){
 }
 
 /* ── Bullet section HTML builder ── */
-function buildHighlightHtml(pg, tpl) {
-  const items = highlights.filter(h=>h.page===pg && h.bullets.some(b=>b.text));
+function buildHighlightHtml(tpl) {
+  const items = highlights.filter(h=>h.bullets.some(b=>b.text));
   if(!items.length) return '';
   return items.map(hl=>{
     const validBullets = hl.bullets.filter(b=>b.text);
@@ -1332,46 +1468,14 @@ function render(){
       ${bulletsHtml}
     </div>`;
   }).join('');
-  const eduH=educations.map(e=>`
-    <div class="entry">
-      <div class="entry-header"><span class="entry-role">${esc(e.degree||'Degree')}</span>
-      <span class="entry-date">${esc(e.start)}${e.end?' – '+esc(e.end):''}</span></div>
-      <div class="entry-org">${esc(e.school)}</div>
-    </div>`).join('');
+  // eduH now built inside buildSectionHtml per section
 
-  /* ── extra sections shared across templates ── */
-  const certsLbl = esc(get('label_certs')||'Certifications');
-  const langsLbl  = esc(get('label_langs')||'Languages');
-  const volLbl    = esc(get('label_volunteer')||'Volunteer');
-  const custLbl   = esc(get('label_custom')||'Additional Info');
-  const customContent = get('customContent');
+  /* ── Sections assembled by page assignment & order ── */
+  const p1Sections = buildPageSections('1', tpl);
+  const p2Sections = buildPageSections('2', tpl);
 
-  const certsH = certs.length ? `<div class="section-label">${certsLbl}</div>`+
-    certs.map(c=>`<div class="entry" style="margin-bottom:8px">
-      <div class="entry-header"><span class="entry-role">${esc(c.name)}</span><span class="entry-date">${esc(c.date)}</span></div>
-      <div class="entry-org">${esc(c.issuer)}${c.credId?` · <span style="font-size:11px;color:#999">${esc(c.credId)}</span>`:''}</div>
-    </div>`).join('') : '';
-
-  const langsH = langs.length ? `<div class="section-label">${langsLbl}</div>`+
-    `<div style="display:flex;flex-wrap:wrap;gap:6px 20px;font-size:12.5px">`+
-    langs.map(l=>`<span><strong>${esc(l.lang)}</strong> <span style="color:#888;font-size:11.5px">${esc(l.level)}</span></span>`).join('')+
-    `</div>` : '';
-
-  const volH = volunteers.length ? `<div class="section-label">${volLbl}</div>`+
-    volunteers.map(v=>`<div class="entry" style="margin-bottom:10px">
-      <div class="entry-header"><span class="entry-role">${esc(v.role)}</span><span class="entry-date">${esc(v.period)}</span></div>
-      <div class="entry-org">${esc(v.org)}</div>
-      ${v.desc?`<div class="entry-desc">${esc(v.desc)}</div>`:''}
-    </div>`).join('') : '';
-
-  const customH = customContent ? `<div class="section-label">${custLbl}</div>`+
-    `<div style="font-size:12.5px;color:#444;line-height:1.6;white-space:pre-wrap">${esc(customContent)}</div>` : '';
-
-  const extraSections = certsH + langsH + volH + customH;
-
-  const hl1 = buildHighlightHtml('1', tpl);
-  const hl2 = buildHighlightHtml('2', tpl);
-  const skillsHtml = buildSkillsHtml(tpl);
+  const hlHtml = buildHighlightHtml(tpl);
+  const skillsHtml = ''; // handled via buildPageSections
 
   /* PAGE 1 */
   if(tpl==='classic'){
@@ -1384,8 +1488,7 @@ function render(){
       </div>
       ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="summary-text">${esc(summary)}</div>`:''}
       ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div>${expH}`:''}
-      ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
-      ${skillsHtml}${hl1}${extraSections}`;
+      ${p1Sections}${hlHtml}`;
   } else if(tpl==='modern'){
     p1.innerHTML=`
       <div class="resume-sidebar">
@@ -1396,13 +1499,12 @@ function render(){
         ${phone?`<div class="contact-item">☎ ${esc(phone)}</div>`:''}
         ${loc?`<div class="contact-item">◎ ${esc(loc)}</div>`:''}
         ${website?`<div class="contact-item">⬡ ${esc(website)}</div>`:''}
-        ${skillsHtml}
+        ${buildSkillsHtml(tpl)}
       </div>
       <div class="resume-main">
         ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="summary-text">${esc(summary)}</div>`:''}
         ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div>${expH}`:''}
-        ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
-        ${hl1}${extraSections}
+        ${p1Sections}${hlHtml}
       </div>`;
   } else if(tpl==='executive'){
     p1.innerHTML=`
@@ -1414,8 +1516,7 @@ function render(){
       </div>
       ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="summary-text">${esc(summary)}</div>`:''}
       ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div>${expH}`:''}
-      ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
-      ${skillsHtml}${hl1}${extraSections}`;
+      ${p1Sections}${hlHtml}`;
   } else if(tpl==='creative'){
     // Creative: teal header band + two-column body (main | aside)
     const asideContact = [
@@ -1437,11 +1538,10 @@ function render(){
         <div class="cr-main">
           ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="summary-text">${esc(summary)}</div>`:''}
           ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div>${expH}`:''}
-          ${educations.length?`<div class="section-label">${esc(LBL.education)}</div>${eduH}`:''}
-          ${hl1}${extraSections}
+          ${p1Sections}${hlHtml}
         </div>
         <div class="cr-aside">
-          ${skillsHtml?`<div class="aside-label">${esc(LBL.skills)}</div>${skillsHtml}`:''}
+          ${buildSkillsHtml(tpl) ? `<div class="aside-label">${esc(LBL.skills)}</div>${buildSkillsHtml(tpl)}` : ''}
         </div>
       </div>`;
   } else {
@@ -1451,12 +1551,11 @@ function render(){
       <div class="resume-contact">${[email?`<span>✉ ${esc(email)}</span>`:'',phone?`<span>☎ ${esc(phone)}</span>`:'',loc?`<span>◎ ${esc(loc)}</span>`:'',website?`<span>⬡ ${esc(website)}</span>`:''].filter(Boolean).join('')}</div>
       ${summary?`<div class="section-label">${esc(LBL.profile)}</div><div class="divider"></div><div class="summary-text">${esc(summary)}</div>`:''}
       ${experiences.length?`<div class="section-label">${esc(LBL.experience)}</div><div class="divider"></div>${expH}`:''}
-      ${educations.length?`<div class="section-label">${esc(LBL.education)}</div><div class="divider"></div>${eduH}`:''}
-      ${skillsHtml}${hl1}${extraSections}`;
+      ${p1Sections}${hlHtml}`;
   }
 
   /* PAGE 2 */
-  const hasP2 = projects.some(p=>p.name||p.desc) || hl2;
+  const hasP2 = projects.some(p=>p.name||p.desc) || p2Order.length > 0;
   if(hasP2){
     lbl.style.display=''; p2.style.display='';
     const projHtml = buildProjectsHtml(tpl);
@@ -1466,7 +1565,7 @@ function render(){
           <div class="resume-name" style="font-size:18px">${esc(name)}</div>
           <div class="resume-title">Page 2</div>
         </div>
-        <div class="resume-main">${hl2}${projHtml}</div>`;
+        <div class="resume-main">${p2Sections}${projHtml}</div>`;
     } else if(tpl==='creative'){
       p2.innerHTML=`
         <div class="cr-header" style="padding:24px 48px">
@@ -1474,11 +1573,11 @@ function render(){
           <div class="resume-title">Projects &amp; More</div>
         </div>
         <div class="cr-body">
-          <div class="cr-main">${hl2}${projHtml}</div>
+          <div class="cr-main">${p2Sections}${projHtml}</div>
           <div class="cr-aside"></div>
         </div>`;
     } else {
-      p2.innerHTML=hl2+projHtml;
+      p2.innerHTML=p2Sections+projHtml;
     }
   } else {
     lbl.style.display='none'; p2.style.display='none';
@@ -1844,6 +1943,8 @@ function clearAll(){
   skillGroups=[];certs=[];langs=[];volunteers=[];
   nextSgId=1;nextExpId=1;nextEduId=1;nextProjId=1;nextHlId=1;nextBulletId=1;
   nextCertId=1;nextLangId=1;nextVolId=1;
+  p1Order.splice(0,p1Order.length,'edu','skills','certs','langs','volunteer','custom');
+  p2Order.splice(0,p2Order.length);
   ['label_profile','label_experience','label_education','label_skills','label_projects',
    'label_certs','label_langs','label_volunteer','label_custom']
     .forEach((id,i)=>{ const el=document.getElementById(id);
@@ -2028,6 +2129,7 @@ function getSnapshot() {
     website:get('website'), summary:get('summary'), customContent:get('customContent'),
     lp:get('label_profile'), le:get('label_experience'),
     led:get('label_education'), ls:get('label_skills'), lpr:get('label_projects'),
+    p1Order:[...p1Order], p2Order:[...p2Order],
   });
 }
 
@@ -2054,6 +2156,8 @@ function _commitSnapshot() {
 
 function applySnapshot(snap) {
   const d = JSON.parse(snap);
+  if(d.p1Order) p1Order.splice(0, p1Order.length, ...d.p1Order);
+  if(d.p2Order) p2Order.splice(0, p2Order.length, ...d.p2Order);
   experiences=d.experiences||[]; educations=d.educations||[];
   projects=d.projects||[]; highlights=d.highlights||[]; skillGroups=d.skillGroups||[];
   certs=d.certs||[]; langs=d.langs||[]; volunteers=d.volunteers||[];
@@ -2066,7 +2170,7 @@ function applySnapshot(snap) {
   renderEditorExperiences(); renderEditorEducations(); renderEditorProjects();
   renderEditorHighlights(); renderEditorSkillGroups();
   renderCerts(); renderLangs(); renderVolunteers();
-  render(); updateCharCount(); updateAts();
+  updateSectionBadges(); render(); updateCharCount(); updateAts();
 }
 
 function undo() {
@@ -2395,6 +2499,7 @@ function collectAllData() {
     label_langs:get('label_langs'), label_volunteer:get('label_volunteer'),
     label_custom:get('label_custom'), customContent:get('customContent'),
     template: currentTemplate,
+    p1Order: [...p1Order], p2Order: [...p2Order],
     experiences, educations, projects, highlights, skillGroups,
     certs, langs, volunteers,
     nextExpId, nextEduId, nextProjId, nextHlId, nextBulletId,
@@ -2408,6 +2513,8 @@ function applyAllData(d) {
    'label_profile','label_experience','label_education','label_skills','label_projects',
    'label_certs','label_langs','label_volunteer','label_custom','customContent'].forEach(k=>setVal(k,d[k]));
 
+  if(d.p1Order) p1Order.splice(0, p1Order.length, ...d.p1Order);
+  if(d.p2Order) p2Order.splice(0, p2Order.length, ...d.p2Order);
   if(d.template) { currentTemplate=d.template; document.querySelectorAll('.pill').forEach(p=>{ p.classList.toggle('active', p.textContent.toLowerCase()===d.template); }); }
   experiences = d.experiences||[]; educations = d.educations||[];
   projects = d.projects||[]; highlights = d.highlights||[];
@@ -2681,6 +2788,7 @@ renderVolunteers();
 // Try to restore from localStorage; if nothing saved, keep defaults
 const restored = autoLoad();
 if (!restored) { render(); }
+updateSectionBadges();
 updateCharCount();
 updateAts();
 saveStateNow(); // seed undo stack
