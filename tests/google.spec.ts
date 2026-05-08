@@ -1,7 +1,7 @@
 import {test,expect } from '@playwright/test'
 
 test('Veirfy the application Title',async ({page})=>{
-    await page.goto ('http://google.com')
+    await page.goto ('https://google.com')
 
     const url = await page.url()
 

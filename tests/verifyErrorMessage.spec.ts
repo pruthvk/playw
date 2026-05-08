@@ -8,9 +8,16 @@ test('verify error message',async({page})=>{
 
     await page.locator('//button[@type="submit"]').click()
 
-    const errorMessage = page.locator('//p[contains(@text(),"Invalid credentials")]')
+    const errorMessage = await page.locator('//p[contains(@class,"alert")]').textContent()
 
-    console.log('Error message is : ' + await errorMessage.textContent())
+    console.log('Error message is : ' + errorMessage)
+    
     console.error(errorMessage)
+    
+    // expect(errorMessage).toContain('Invalid credentials')
+
+    expect(errorMessage?.includes('Invalid credential')).toBeTruthy()
+
+    expect(errorMessage==='Invalid credential').toBeTruthy()
 
 });
