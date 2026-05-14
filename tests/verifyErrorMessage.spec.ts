@@ -18,6 +18,6 @@ test('verify error message',async({page})=>{
 
     expect(errorMessage?.includes('Invalid credential')).toBeTruthy()
 
-    expect(errorMessage==='Invalid credential').toBeTruthy()
+    expect(errorMessage==='Invalid credentials').toBeTruthy()
 
 });
