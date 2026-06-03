@@ -1,8 +1,14 @@
+/// <reference types="node" />
 import { defineConfig, devices } from '@playwright/test';
+
+// Generate a unique folder suffix using the current date and time
+const currentDateTime = new Date().toISOString().replace(/[:.]/g, "-").slice(0, -5);
+const uniqueHTMLFolder = `playwright-report/report-${currentDateTime}`;
+const uniqueAllureFolder = `allure-results/results-${currentDateTime}`; // Added for Allure
 
 /**
  * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * https://github.com
  */
 // import dotenv from 'dotenv';
 // import path from 'path';
@@ -21,9 +27,16 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html'],['allure-playwright']],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+    /* Set timeout to 60 seconds per test */
+    timeout: 60000,
+    
+  /* Reporter to use. Updated to capture history for both reporters. */
+  reporter: [
+    ['html', { outputFolder: uniqueHTMLFolder }],
+    ['allure-playwright', { resultsDir: uniqueAllureFolder }]
+  ],
+  
+  /* Shared settings for all the projects below. See https://playwright.dev. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
