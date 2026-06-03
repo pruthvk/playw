@@ -1,29 +1,84 @@
-import {test,expect} from '@playwright/test'
+import { test } from '@playwright/test';
+import { LoginPage } from './pages/LoginPage';
 
-test('valid login',async({page})=>{
+const validCredentials = { username: 'Admin', password: 'admin123' };
+const invalidCredentials = [
+  { username: 'Admin', password: 'wrongPassword', description: 'invalid password' },
+  { username: 'wrongUser', password: 'admin123', description: 'invalid username' },
+];
 
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login')
+test.describe('OrangeHRM login page', () => {
+  let loginPage: LoginPage;
 
-    console.log(await page.viewportSize().width)
-    console.log(await page.viewportSize().height)
-    
-    await page.getByPlaceholder('username', { exact: true }).fill('Admin')
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    await loginPage.goto();
+  });
 
-    await page.locator('input[name="password"]').fill('admin123')
+  test.describe('page appearance', () => {
+    test('should display login page fields and submit button', async () => {
+      await loginPage.expectLoginFormVisible();
+    });
+  });
 
-    await page.locator('//button[@type="submit"]').click()
+  test.describe('login flow', () => {
+    test('valid login should navigate to dashboard and logout successfully', async () => {
+      await loginPage.login(validCredentials.username, validCredentials.password);
+      await loginPage.expectDashboardVisible();
+      await loginPage.logout();
+    });
 
-    await page.waitForTimeout(3000)
+    for (const scenario of invalidCredentials) {
+      test(`should show invalid credentials error for ${scenario.description}`, async () => {
+        await loginPage.login(scenario.username, scenario.password);
+        await loginPage.expectInvalidCredentialsError();
+      });
+    }
 
-    await expect(page).toHaveURL(/dashboard/)
+    test('should allow retry after invalid credentials', async () => {
+      await loginPage.login(validCredentials.username, 'wrongPassword');
+      await loginPage.expectInvalidCredentialsError();
+      await loginPage.login(validCredentials.username, validCredentials.password);
+      await loginPage.expectDashboardVisible();
+      await loginPage.logout();
+    });
+  });
 
-    await page.getByAltText('profile picture').first().click()
+  test.describe('validation errors', () => {
+    test('missing username and password should show required messages', async () => {
+      await loginPage.submit();
 
-    await page.getByText('Logout').click()
+      await loginPage.expectRequiredErrorCount(2);
+      await loginPage.expectRequiredErrorText(0);
+      await loginPage.expectRequiredErrorText(1);
+    });
 
-    // await page.waitForTimeout(10000)
+    test('missing username should show a required message for username only', async () => {
+      await loginPage.fillPassword(validCredentials.password);
+      await loginPage.submit();
 
-    await expect(page).toHaveURL(/login/)
-    
-    // await page.locator('[name="username"]').type('Admin')
+      await loginPage.expectRequiredErrorCount(1);
+      await loginPage.expectRequiredErrorText(0);
+    });
+
+    test('missing password should show a required message for password only', async () => {
+      await loginPage.fillUsername(validCredentials.username);
+      await loginPage.submit();
+
+      await loginPage.expectRequiredErrorCount(1);
+      await loginPage.expectRequiredErrorText(0);
+    });
+
+    test('should clear validation error after missing username is corrected', async () => {
+      await loginPage.fillPassword(validCredentials.password);
+      await loginPage.submit();
+      await loginPage.expectRequiredErrorCount(1);
+
+      await loginPage.fillUsername(validCredentials.username);
+      await loginPage.submit();
+
+      await loginPage.expectDashboardVisible();
+      await loginPage.logout();
+    });
+  });
 });

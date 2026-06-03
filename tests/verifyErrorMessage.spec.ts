@@ -1,23 +1,16 @@
-import {test,expect} from '@playwright/test'
+import { test } from '@playwright/test';
+import { LoginPage } from './pages/LoginPage';
 
-test('verify error message',async({page})=>{
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login')
+test.describe('OrangeHRM login coverage', () => {
+  let loginPage: LoginPage;
 
-    await page.getByPlaceholder('Username', { exact: true }).fill('Admin')
-    await page.locator('input[name="password"]').fill('admin1234')
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    await loginPage.goto();
+  });
 
-    await page.locator('//button[@type="submit"]').click()
-
-    const errorMessage = await page.locator('//p[contains(@class,"alert")]').textContent()
-
-    console.log('Error message is : ' + errorMessage)
-    
-    console.error(errorMessage)
-    
-    // expect(errorMessage).toContain('Invalid credentials')
-
-    expect(errorMessage?.includes('Invalid credential')).toBeTruthy()
-
-    expect(errorMessage==='Invalid credentials').toBeTruthy()
-
+  test('invalid credentials should show an error banner', async () => {
+    await loginPage.login('Admin', 'admin1234');
+    await loginPage.expectInvalidCredentialsError();
+  });
 });
