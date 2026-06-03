@@ -1,2 +1,0 @@
-Page url is  https://www.google.com/?gws_rd=ssl
-Title is Google
