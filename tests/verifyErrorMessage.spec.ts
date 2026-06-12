@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test } from './testFixtures';
 import { LoginPage } from './pages/LoginPage';
 
 test.describe('OrangeHRM login coverage', () => {

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './testFixtures';
 
 // Use destructuring { page } to access the page fixture
 test('my first test', async ({ page }) => {
