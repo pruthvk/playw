@@ -15,27 +15,25 @@ test.describe('OrangeHRM login page', () => {
     await loginPage.goto();
   });
 
-  test.describe('page appearance', () => {
-    test('should display login page fields and submit button', async () => {
-      await loginPage.expectLoginFormVisible();
-    });
+  test('should display login form fields and submit button', async () => {
+    await loginPage.expectLoginFormVisible();
   });
 
   test.describe('login flow', () => {
-    test('valid login should navigate to dashboard and logout successfully', async () => {
+    test('should login successfully with valid credentials', async () => {
       await loginPage.login(validCredentials.username, validCredentials.password);
       await loginPage.expectDashboardVisible();
       await loginPage.logout();
     });
 
     for (const scenario of invalidCredentials) {
-      test(`should show invalid credentials error for ${scenario.description}`, async () => {
+      test(`should show invalid credentials message for ${scenario.description}`, async () => {
         await loginPage.login(scenario.username, scenario.password);
         await loginPage.expectInvalidCredentialsError();
       });
     }
 
-    test('should allow retry after invalid credentials', async () => {
+    test('should allow retry after an invalid login attempt', async () => {
       await loginPage.login(validCredentials.username, 'wrongPassword');
       await loginPage.expectInvalidCredentialsError();
       await loginPage.login(validCredentials.username, validCredentials.password);
@@ -44,39 +42,35 @@ test.describe('OrangeHRM login page', () => {
     });
   });
 
-  test.describe('validation errors', () => {
-    test('missing username and password should show required messages', async () => {
+  test.describe('field validation', () => {
+    test('should show required errors when username and password are empty', async () => {
       await loginPage.submit();
-
       await loginPage.expectRequiredErrorCount(2);
       await loginPage.expectRequiredErrorText(0);
       await loginPage.expectRequiredErrorText(1);
     });
 
-    test('missing username should show a required message for username only', async () => {
+    test('should show required error when username is empty', async () => {
       await loginPage.fillPassword(validCredentials.password);
       await loginPage.submit();
-
       await loginPage.expectRequiredErrorCount(1);
       await loginPage.expectRequiredErrorText(0);
     });
 
-    test('missing password should show a required message for password only', async () => {
+    test('should show required error when password is empty', async () => {
       await loginPage.fillUsername(validCredentials.username);
       await loginPage.submit();
-
       await loginPage.expectRequiredErrorCount(1);
       await loginPage.expectRequiredErrorText(0);
     });
 
-    test('should clear validation error after missing username is corrected', async () => {
+    test('should clear validation error after missing username is fixed', async () => {
       await loginPage.fillPassword(validCredentials.password);
       await loginPage.submit();
       await loginPage.expectRequiredErrorCount(1);
 
       await loginPage.fillUsername(validCredentials.username);
       await loginPage.submit();
-
       await loginPage.expectDashboardVisible();
       await loginPage.logout();
     });

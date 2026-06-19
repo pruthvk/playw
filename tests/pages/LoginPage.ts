@@ -7,6 +7,7 @@ export class LoginPage {
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly submitButton: Locator;
+  readonly forgotPasswordLink: Locator;
   readonly loginErrorBanner: Locator;
   readonly requiredInputErrors: Locator;
 
@@ -15,8 +16,9 @@ export class LoginPage {
     this.usernameInput = page.locator('input[name="username"]');
     this.passwordInput = page.locator('input[name="password"]');
     this.submitButton = page.locator('button[type="submit"]');
-    this.loginErrorBanner = page.locator('//p[contains(@class,"alert")]');
-    this.requiredInputErrors = page.locator('span.oxd-input-field-error-message');
+    this.forgotPasswordLink = page.getByRole('link', { name: /forgot your password\?/i });
+    this.loginErrorBanner = page.locator('[role="alert"], //p[contains(@class,"alert")]').first();
+    this.requiredInputErrors = page.locator('span.oxd-input-field-error-message, [class*="error-message"]');
   }
 
   async goto() {
@@ -60,6 +62,18 @@ export class LoginPage {
     await this.fillUsername(username);
     await this.fillPassword(password);
     await this.submit();
+  }
+
+  async gotoForgotPasswordPage() {
+    await expect(this.forgotPasswordLink).toBeVisible({ timeout: 10000 });
+    await this.forgotPasswordLink.click();
+  }
+
+  async expectForgotPasswordPageVisible() {
+    await this.page.waitForURL(/requestPasswordReset|passwordReset/, { timeout: 15000 });
+    await expect(this.page.getByRole('heading', { name: /reset password/i })).toBeVisible({ timeout: 15000 });
+    await expect(this.page.getByRole('textbox', { name: /username/i })).toBeVisible({ timeout: 15000 });
+    await expect(this.page.getByRole('button', { name: /reset password/i })).toBeVisible({ timeout: 15000 });
   }
 
   async expectDashboardVisible() {
